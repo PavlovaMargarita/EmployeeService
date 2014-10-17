@@ -1,0 +1,18 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!--<property name="hibernate.hbm2dll.auto">create</property>-->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <!--<property name="hibernate.show_sql">true</property>-->
+        <!--<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>-->
+        <mapping class="com.itechart.model.Company" />
+        <mapping class="com.itechart.model.Department" />
+        <mapping class="com.itechart.model.Address" />
+        <mapping class="com.itechart.model.Employee" />
+        <mapping class="com.itechart.model.PositionInCompany" />
+        <mapping class="com.itechart.model.Project" />
+        <mapping class="com.itechart.model.User" />
+    </session-factory>
+</hibernate-configuration>

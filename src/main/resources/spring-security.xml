@@ -8,6 +8,7 @@
 
     <http auto-config="true">
         <intercept-url pattern="/user**" access="ROLE_USER" />
+        <form-login default-target-url="/user"/>
     </http>
 
     <authentication-manager>

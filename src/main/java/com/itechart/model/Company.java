@@ -9,7 +9,8 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @Column(columnDefinition = "INT unsigned")
+    private Long id;
 
     @Column(nullable = false, name = "company_name")
     private String companyName;
@@ -32,11 +33,11 @@ public class Company {
         formerEmployeeList = new ArrayList<Employee>();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

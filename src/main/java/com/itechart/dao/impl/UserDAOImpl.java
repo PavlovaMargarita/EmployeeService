@@ -2,18 +2,13 @@ package com.itechart.dao.impl;
 
 import com.itechart.dao.UserDAO;
 import com.itechart.model.User;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by Margarita on 17.10.2014.
  */
-@Service
-public class UserDAOImpl implements UserDAO {
-
-    @Autowired
-    private SessionFactory sessionFactory;
+@Repository
+public class UserDAOImpl extends Base implements UserDAO {
 
     @Override
     public void createUser(User user) {

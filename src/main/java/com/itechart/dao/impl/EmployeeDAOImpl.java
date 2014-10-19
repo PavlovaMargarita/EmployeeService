@@ -2,18 +2,13 @@ package com.itechart.dao.impl;
 
 import com.itechart.dao.EmployeeDAO;
 import com.itechart.model.Employee;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by Margarita on 17.10.2014.
  */
-@Service
-public class EmployeeDAOImpl implements EmployeeDAO {
-
-    @Autowired
-    private SessionFactory sessionFactory;
+@Repository
+public class EmployeeDAOImpl extends Base implements EmployeeDAO {
 
     @Override
     public void createEmployee(Employee employee) {

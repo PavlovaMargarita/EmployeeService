@@ -12,7 +12,8 @@ import java.util.List;
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @Column(columnDefinition = "INT unsigned")
+    private Long id;
 
     @Column(nullable = false)
     private String projectName;
@@ -24,11 +25,11 @@ public class Project {
         employeeList = new ArrayList<Employee>();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

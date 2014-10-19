@@ -35,6 +35,10 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private UserDAO userDAO;
+
+    @Autowired
+    private CountryDAO countryDAO;
+
     @Override
     @Transactional
     public List readCompany() {
@@ -88,5 +92,11 @@ public class CompanyServiceImpl implements CompanyService {
     public void createDepartmentEmployee(Department department, Employee employee) {
         departmentDAO.createDepartment(department);
         employeeDAO.createEmployee(employee);
+    }
+
+    @Override
+    @Transactional
+    public void createCountry(Country country) {
+        countryDAO.createCountry(country);
     }
 }

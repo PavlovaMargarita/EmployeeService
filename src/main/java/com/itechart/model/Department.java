@@ -13,14 +13,18 @@ public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @Column(columnDefinition = "INT unsigned")
+    private Long id;
 
     @Column(nullable = false, name = "department_name")
     private String departmentName;
 
-    @ManyToOne
-    @JoinColumn(name = "address_id", nullable = true)
-    private Address address;
+    @ManyToMany
+    @JoinTable(name = "department_address", joinColumns = {
+            @JoinColumn(name = "department_id", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "address_id",
+                    nullable = false, updatable = false) })
+    private List<Address> addressList;
 
     @OneToMany(mappedBy = "mainDepartment", cascade = CascadeType.ALL)
     @Column(nullable = true)
@@ -50,11 +54,11 @@ public class Department {
         employeeList = new ArrayList<Employee>();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -66,12 +70,12 @@ public class Department {
         this.departmentName = departmentName;
     }
 
-    public Address getAddress() {
-        return address;
+    public List<Address> getAddressList() {
+        return addressList;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
     }
 
     public List<Department> getSubDepartment() {

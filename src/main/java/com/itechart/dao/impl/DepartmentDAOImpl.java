@@ -2,17 +2,13 @@ package com.itechart.dao.impl;
 
 import com.itechart.dao.DepartmentDAO;
 import com.itechart.model.Department;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by Margarita on 16.10.2014.
  */
-@Service
-public class DepartmentDAOImpl implements DepartmentDAO {
-    @Autowired
-    private SessionFactory sessionFactory;
+@Repository
+public class DepartmentDAOImpl extends Base implements DepartmentDAO {
 
     @Override
     public void createDepartment(Department department) {

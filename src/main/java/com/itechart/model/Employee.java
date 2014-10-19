@@ -15,7 +15,8 @@ import java.util.List;
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @Column(columnDefinition = "INT unsigned")
+    private Long id;
 
     @Column(nullable = false)
     private String f_name;
@@ -29,8 +30,9 @@ public class Employee {
     @Column(nullable = false)
     private SexEnum sex;
 
-    @Column(nullable = false)
-    private String country;
+    @OneToOne
+    @JoinColumn(name = "country_id", nullable = false)
+    private Country country;
 
     @Column(nullable = false)
     private String city;
@@ -42,10 +44,10 @@ public class Employee {
     private Integer house;
 
     @Column(nullable = false)
-    private Integer flat;
+    private String flat;
 
-    @Column(nullable = false, name="photo_address")
-    private String photoAddress;
+    @Column(nullable = false, name="photo_url")
+    private String photoURL;
 
     @ManyToOne
     @JoinColumn(name = "office_address_id", nullable = true)
@@ -78,11 +80,11 @@ public class Employee {
         projectList = new ArrayList<Project>();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -118,11 +120,11 @@ public class Employee {
         this.sex = sex;
     }
 
-    public String getCountry() {
+    public Country getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(Country country) {
         this.country = country;
     }
 
@@ -150,20 +152,20 @@ public class Employee {
         this.house = house;
     }
 
-    public Integer getFlat() {
+    public String getFlat() {
         return flat;
     }
 
-    public void setFlat(Integer flat) {
+    public void setFlat(String flat) {
         this.flat = flat;
     }
 
-    public String getPhotoAddress() {
-        return photoAddress;
+    public String getPhotoURL() {
+        return photoURL;
     }
 
-    public void setPhotoAddress(String photoAddress) {
-        this.photoAddress = photoAddress;
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 
     public Address getAddress() {

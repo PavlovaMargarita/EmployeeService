@@ -1,5 +1,6 @@
 package com.itechart;
 
+import com.itechart.enumProperty.RoleEnum;
 import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
 import com.itechart.service.CompanyService;
@@ -36,7 +37,7 @@ public class Main {
         department.setCompany(company);
 
         Country country = new Country();
-        country.setCountry("test");
+        country.setCountry("test2");
         companyService.createCountry(country);
 
         Address address = new Address();
@@ -94,6 +95,7 @@ public class Main {
         user.setLogin("qwe");
         user.setPassword("qwe");
         user.setEmployee(employee);
+        user.setRole(RoleEnum.ROLE_ADMIN);
         companyService.createUser(user);
 
     }

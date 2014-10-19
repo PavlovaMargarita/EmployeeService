@@ -1,5 +1,7 @@
 package com.itechart.model;
 
+import com.itechart.enumProperty.RoleEnum;
+
 import javax.persistence.*;
 
 /**
@@ -18,6 +20,10 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
 
     @OneToOne
     @JoinColumn(name = "employee_id", nullable = false)
@@ -49,6 +55,14 @@ public class User {
         this.password = password;
     }
 
+    public RoleEnum getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEnum role) {
+        this.role = role;
+    }
+
     public Employee getEmployee() {
         return employee;
     }
@@ -56,4 +70,6 @@ public class User {
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
+
+
 }

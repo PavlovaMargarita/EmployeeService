@@ -1,6 +1,5 @@
 package com.itechart.service.impl;
 
-import com.itechart.dao.CountryDAO;
 import com.itechart.model.Country;
 import com.itechart.repository.CountryRepository;
 import com.itechart.service.CompanyService;

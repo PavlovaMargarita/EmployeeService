@@ -6,8 +6,8 @@ import com.itechart.service.CompanyService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.*;
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Margarita on 16.10.2014.
@@ -71,7 +71,7 @@ public class Main {
         employee.setS_name("q");
         employee.setSex(SexEnum.FEMALE);
         employee.setStreet("q");
-        employee.setDateOfBirth(new Date(10, 10, 2010));
+        employee.setDateOfBirth(java.sql.Date.valueOf("2010-10-10"));
         employee.setPhotoURL("qwe");
         employee.setAddress(address);
 //        employee.setDepartmentList(department);
@@ -90,7 +90,6 @@ public class Main {
         department.setDeputyHeadEmployee(employee);
         companyService.createDepartment(department);
 
-//        companyService.createDepartmentEmployee(department, employee);
         User user = new User();
         user.setLogin("qwe");
         user.setPassword("qwe");

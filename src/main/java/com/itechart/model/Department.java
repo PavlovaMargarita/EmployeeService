@@ -3,7 +3,7 @@ package com.itechart.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.itechart.model.Employee;
 /**
  * Created by Margarita on 16.10.2014.
  */
@@ -41,11 +41,11 @@ public class Department {
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
     private List<Employee> employeeList;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "head_of_department_id", nullable = false)
     private Employee headEmployee;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "deputy_head_of_department_id", nullable = false)
     private Employee deputyHeadEmployee;
 
@@ -125,4 +125,5 @@ public class Department {
     public void setMainDepartment(Department mainDepartment) {
         this.mainDepartment = mainDepartment;
     }
+
 }

@@ -16,6 +16,5 @@ public interface CompanyService {
     public void createPositionInCompany(PositionInCompany positionInCompany);
     public void createProject(Project project);
     public void createUser(User user);
-    public void createDepartmentEmployee(Department department, Employee employee);
     public void createCountry(Country country);
 }

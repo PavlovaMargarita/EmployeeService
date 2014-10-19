@@ -1,7 +1,7 @@
 package com.itechart.service.impl;
 
-import com.itechart.dao.*;
 import com.itechart.model.*;
+import com.itechart.repository.*;
 import com.itechart.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,87 +16,80 @@ import java.util.List;
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
-    private CompanyDAO companyDAO;
+    private CompanyRepository companyRepository;
 
     @Autowired
-    private DepartmentDAO departmentDAO;
+    private DepartmentRepository departmentRepository;
 
     @Autowired
-    private AddressDAO addressDAO;
+    private AddressRepository addressRepository;
 
     @Autowired
-    private EmployeeDAO employeeDAO;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
-    private PositionInCompanyDAO positionInCompanyDAO;
+    private PositionInCompanyRepository positionInCompanyRepository;
 
     @Autowired
-    private ProjectDAO projectDAO;
+    private ProjectRepository projectRepository;
 
     @Autowired
-    private UserDAO userDAO;
+    private UserRepository userRepository;
 
     @Autowired
-    private CountryDAO countryDAO;
+    private CountryRepository countryDAO;
 
     @Override
     @Transactional
     public List readCompany() {
-        return  companyDAO.readCompany();
+        return  companyRepository.findAll();
     }
 
     @Override
     @Transactional
     public void createCompany(Company company) {
-        companyDAO.createCompany(company);
+        companyRepository.save(company);
     }
 
     @Override
     @Transactional
     public void createDepartment(Department department) {
-        departmentDAO.createDepartment(department);
+        departmentRepository.save(department);
     }
 
     @Override
     @Transactional
     public void createAddress(Address address) {
-        addressDAO.createAddress(address);
+        addressRepository.save(address);
     }
 
     @Override
     @Transactional
     public void createEmployee(Employee employee) {
-        employeeDAO.createEmployee(employee);
+        employeeRepository.save(employee);
     }
 
     @Override
     @Transactional
     public void createPositionInCompany(PositionInCompany positionInCompany) {
-        positionInCompanyDAO.createPosition(positionInCompany);
+        positionInCompanyRepository.save(positionInCompany);
     }
 
     @Override
     @Transactional
     public void createProject(Project project) {
-        projectDAO.createProject(project);
+        projectRepository.save(project);
     }
 
     @Override
     @Transactional
     public void createUser(User user) {
-        userDAO.createUser(user);
-    }
-
-    @Override
-    @Transactional
-    public void createDepartmentEmployee(Department department, Employee employee) {
-        departmentDAO.createDepartment(department);
-        employeeDAO.createEmployee(employee);
+        userRepository.save(user);
     }
 
     @Override
     @Transactional
     public void createCountry(Country country) {
-        countryDAO.createCountry(country);
+        countryDAO.save(country);
     }
 }

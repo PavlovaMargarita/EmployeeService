@@ -45,4 +45,8 @@
 
     <jpa:repositories base-package="com.itechart.repository"/>
 
+    <bean id="customUserDetailsService"
+          class="com.itechart.service.impl.CustomUserDetailService">
+    </bean>
+
 </beans>

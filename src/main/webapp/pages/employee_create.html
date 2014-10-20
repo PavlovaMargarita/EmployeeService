@@ -10,18 +10,18 @@
             <hr>
 
             <label id="label-surname">Введите корректную фамилию</label>
-            <input type="hidden" class="form-control" name="id" id="id" ng-model="contact.id"/>
+            <input type="hidden" class="form-control" name="id" id="id" ng-model="employee.id"/>
 
             <div class="input-group" id="div-surname">
                 <span class="input-group-addon">Фамилия </span>
-                <input type="text" class="form-control" name="surname" id="surname" ng-model="contact.surname"/>
+                <input type="text" class="form-control" name="s_name" id="s_name" ng-model="employee.s_name"/>
             </div>
 
             <label id="label-name">Введите корректное имя</label>
 
             <div class="input-group" id="div-name">
                 <span class="input-group-addon">Имя</span>
-                <input type="text" class="form-control" id="name" name="name" ng-model="contact.name"/>
+                <input type="text" class="form-control" id="f_name" name="f_name" ng-model="employee.f_name"/>
             </div>
 
         </div>
@@ -33,7 +33,14 @@
             <div class="input-group">
                 <span class="input-group-addon">Дата рождения</span>
                 <input type="date" class="form-control" name="date-of-birth" id="date-of-birth"
-                       ng-model="contact.dateOfBirth"/>
+                       ng-model="employee.dateOfBirth"/>
+            </div>
+
+            <div class="input-group" id="div-sex">
+                <span class="input-group-addon">Пол</span>
+                <select class="form-control" name="sex" id="sex" data-ng-model="sex.id"
+                        ng-options="s.id as s.value for p in positions">
+                </select>
             </div>
         </div>
 
@@ -41,7 +48,7 @@
             <h3>Адрес</h3>
             <hr>
 
-            <label id="label-city">Введите корректный город</label>
+
 
             <div class="input-group" id="div-country">
                 <span class="input-group-addon">Страна</span>
@@ -50,30 +57,31 @@
                 </select>
             </div>
 
+            <label id="label-city">Введите корректный город</label>
             <div class="input-group" id="div-city">
                 <span class="input-group-addon">Город</span>
-                <input type="text" class="form-control" name="city" id="city" ng-model="contact.city"/>
+                <input type="text" class="form-control" name="city" id="city" ng-model="employee.city"/>
             </div>
 
             <label id="label-street">Введите корректную улицу</label>
 
             <div class="input-group" id="div-street">
                 <span class="input-group-addon">Улица</span>
-                <input type="text" class="form-control" name="street" id="street" ng-model="contact.street">
+                <input type="text" class="form-control" name="street" id="street" ng-model="employee.street">
             </div>
 
             <label id="label-home">Введите корректный номер дома</label>
 
             <div class="input-group" id="div-home">
                 <span class="input-group-addon">Дом</span>
-                <input type="text" class="form-control" name="house" id="house" ng-model="contact.house">
+                <input type="text" class="form-control" name="house" id="house" ng-model="employee.house">
             </div>
 
             <label id="label-flat">Введите корректный номер квартиры</label>
 
             <div class="input-group" id="div-flat">
                 <span class="input-group-addon">Квартира</span>
-                <input type="text" class="form-control" name="flat" id="flat" ng-model="contact.flat">
+                <input type="text" class="form-control" name="flat" id="flat" ng-model="employee.flat">
             </div>
         </div>
 

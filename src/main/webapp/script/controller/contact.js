@@ -1,4 +1,4 @@
-app.controller("contactListController", function ($scope, $rootScope, $http) {
+app.controller("employeeListController", function ($scope, $rootScope, $http) {
 
     var response = $http({
         method: "get",
@@ -8,11 +8,11 @@ app.controller("contactListController", function ($scope, $rootScope, $http) {
         mimeType: 'application/json'
     });
     response.success(function (data) {
-        $scope.contacts = data;
+        $scope.employees = data;
     });
 });
 
-app.controller("contactCreateController", function ($scope, $rootScope, $http, $location, $route) {
+app.controller("employeeCreateController", function ($scope, $rootScope, $http, $location, $route) {
 
     var departments = $http({
         method: "get",
@@ -58,22 +58,27 @@ app.controller("contactCreateController", function ($scope, $rootScope, $http, $
         $scope.positions = data;
     });
 
+    $scope.save = {};
     $scope.save.doClick = function(){
         var response = $http({
             method: "post",
             url: "/EmployeeService/employee/saveEmployeeCreate",
             data: {
-                surname: $scope.contact.surname,
-                name: $scope.contact.name,
-                patronymic: $scope.contact.patronymic,
-                dateOfBirth: $scope.contact.dateOfBirth,
-                email: $scope.contact.email,
-                city: $scope.contact.city,
-                street: $scope.contact.street,
-                home: $scope.contact.home,
-                flat: $scope.contact.flat,
-                phones: phones
-            }
+                f_name: $scope.employee.f_name,
+                s_name: $scope.employee.s_name,
+                dateOfBirth: $scope.employee.dateOfBirth,
+                countryId: $scope.country.id,
+                city: $scope.employee.city,
+                street: $scope.employee.street,
+                house: $scope.employee.house,
+                flat: $scope.employee.flat,
+                addressId: $scope.address.id,
+                departmentId: $scope.department.id,
+                positionInCompany: $scope.position.id
+            },
+            dataType: 'json',
+            contentType: 'application/json',
+            mimeType: 'application/json'
         });
         response.success(function () {
             $location.path('/contactList');

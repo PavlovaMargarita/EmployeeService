@@ -1,5 +1,9 @@
 package com.itechart.dto;
 
+import com.itechart.enumProperty.SexEnum;
+
+import java.sql.Date;
+
 /**
  * Created by Margarita on 20.10.2014.
  */
@@ -8,7 +12,18 @@ public class EmployeeDTO {
     private Long id;
     private String f_name;
     private String s_name;
-    private DepartmentDTO departmentDTO;
+    private Date dateOfBirth;
+    private SexEnum sex;
+    private Long countryId;
+    private String city;
+    private String street;
+    private Integer house;
+    private String flat;
+    private Long addressId;
+    private Long departmentId;
+    private String departmentName;
+    private Long positionInCompany;
+
     public EmployeeDTO(){}
 
     public Long getId() {
@@ -35,11 +50,91 @@ public class EmployeeDTO {
         this.s_name = s_name;
     }
 
-    public DepartmentDTO getDepartmentDTO() {
-        return departmentDTO;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDepartmentDTO(DepartmentDTO departmentDTO) {
-        this.departmentDTO = departmentDTO;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public SexEnum getSex() {
+        return sex;
+    }
+
+    public void setSex(SexEnum sex) {
+        this.sex = sex;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public Integer getHouse() {
+        return house;
+    }
+
+    public void setHouse(Integer house) {
+        this.house = house;
+    }
+
+    public String getFlat() {
+        return flat;
+    }
+
+    public void setFlat(String flat) {
+        this.flat = flat;
+    }
+
+    public Long getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Long countryId) {
+        this.countryId = countryId;
+    }
+
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public Long getPositionInCompany() {
+        return positionInCompany;
+    }
+
+    public void setPositionInCompany(Long positionInCompany) {
+        this.positionInCompany = positionInCompany;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 }

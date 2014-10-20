@@ -25,18 +25,18 @@ app.config(function($routeProvider){
             templateUrl: 'pages/authorization.html',
             controller: 'authorizationController'
         } )
-        .when('/contactList', {
-            templateUrl: 'pages/contact_list.html',
-            controller: 'contactListController'
+        .when('/employeeList', {
+            templateUrl: 'pages/employee_list.html',
+            controller: 'employeeListController'
         } )
-        .when('/contactCreate', {
-            templateUrl: 'pages/contact_create.html',
-            controller: 'contactCreateController'
+        .when('/employeeCreate', {
+            templateUrl: 'pages/employee_create.html',
+            controller: 'employeeCreateController'
         } )
 
-        .when('/contactCorrect/:id', {
-            templateUrl: 'pages/contact_create.html',
-            controller: 'contactCorrectController'
+        .when('/employeeCorrect/:id', {
+            templateUrl: 'pages/employee_create.html',
+            controller: 'employeeCorrectController'
         } )
 
 });

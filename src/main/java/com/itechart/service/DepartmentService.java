@@ -1,9 +1,11 @@
 package com.itechart.service;
 
-import java.util.*;
+import com.itechart.dto.DepartmentDTO;
+
+import java.util.List;
 /**
  * Created by Margarita on 20.10.2014.
  */
 public interface DepartmentService {
-    public List readDepartmentList();
+    public List<DepartmentDTO> readDepartmentList();
 }

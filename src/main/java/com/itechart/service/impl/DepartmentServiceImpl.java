@@ -20,9 +20,9 @@ public class DepartmentServiceImpl implements DepartmentService{
     private DepartmentRepository departmentRepository;
 
     @Override
-    public List readDepartmentList() {
+    public List<DepartmentDTO> readDepartmentList() {
         List <Department> departmentList = departmentRepository.findAll();
-        List departmentDTOList = new ArrayList();
+        List <DepartmentDTO> departmentDTOList = new ArrayList();
         for(Department department: departmentList){
             departmentDTOList.add(departmentToDepartmentDTO(department));
         }

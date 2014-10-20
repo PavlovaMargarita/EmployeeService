@@ -1,5 +1,6 @@
 package com.itechart.controller;
 
+import com.itechart.dto.DepartmentDTO;
 import com.itechart.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class DepartmentController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/departmentList")
     @ResponseBody
-    public List departmentList(){
+    public List<DepartmentDTO> departmentList(){
         return departmentService.readDepartmentList();
     }
 }

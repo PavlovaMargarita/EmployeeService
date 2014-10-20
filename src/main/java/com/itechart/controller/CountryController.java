@@ -1,7 +1,7 @@
 package com.itechart.controller;
 
-import com.itechart.dto.EmployeeDTO;
-import com.itechart.service.EmployeeService;
+import com.itechart.dto.CountryDTO;
+import com.itechart.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,17 +14,14 @@ import java.util.List;
  * Created by Margarita on 20.10.2014.
  */
 @Controller
-@RequestMapping("/EmployeeService/employee")
-public class EmployeeController {
-
+@RequestMapping("/EmployeeService/country")
+public class CountryController {
     @Autowired
-    private EmployeeService employeeService;
+    private CountryService countryService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/employeeList")
+    @RequestMapping(method = RequestMethod.GET, value = "/countryList")
     @ResponseBody
-    public List<EmployeeDTO> employeeList(){
-        return employeeService.readEmployeeList();
+    public List<CountryDTO> countryList(){
+        return countryService.readCountryList();
     }
-
-
 }

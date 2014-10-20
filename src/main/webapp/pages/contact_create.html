@@ -43,6 +43,13 @@
 
             <label id="label-city">Введите корректный город</label>
 
+            <div class="input-group" id="div-country">
+                <span class="input-group-addon">Страна</span>
+                <select class="form-control" name="country" id="country" data-ng-model="country.id"
+                        ng-options="c.id as c.country for c in countries">
+                </select>
+            </div>
+
             <div class="input-group" id="div-city">
                 <span class="input-group-addon">Город</span>
                 <input type="text" class="form-control" name="city" id="city" ng-model="contact.city"/>
@@ -70,6 +77,27 @@
             </div>
         </div>
 
+        <!--<label id="label-contact">Выберите отдел</label>-->
+        <div class="input-group" id="div-department">
+            <span class="input-group-addon">Отдел</span>
+            <select class="form-control" name="department" id="department" data-ng-model="department.id"
+                    ng-options="d.id as d.department for d in departments">
+            </select>
+        </div>
+
+        <div class="input-group" id="div-department-address">
+            <span class="input-group-addon">Адрес офиса</span>
+            <select class="form-control" name="department_address" id="department_address" data-ng-model="address.id"
+                    ng-options="a.id as a.fullAddress for a in addresses">
+            </select>
+        </div>
+
+        <div class="input-group" id="div-position">
+            <span class="input-group-addon">Должность</span>
+            <select class="form-control" name="position" id="position" data-ng-model="position.id"
+                    ng-options="p.id as p.position for p in positions">
+            </select>
+        </div>
 
         <div class="button-save-div">
             <button type="button" class="btn btn-primary" ng-click="save.doClick()"> Сохранить</button>

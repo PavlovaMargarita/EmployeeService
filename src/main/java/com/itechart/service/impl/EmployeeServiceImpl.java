@@ -23,13 +23,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public List readEmployeeList() {
+    public List <EmployeeDTO> readEmployeeList() {
         List<Employee> employeeList = employeeRepository.findAll();
-        List result = new ArrayList();
+        List <EmployeeDTO> employeeDTOList = new ArrayList();
         for(Employee employee: employeeList){
-            result.add(employeeToEmployeeDTO(employee));
+            employeeDTOList.add(employeeToEmployeeDTO(employee));
         }
-        return result;
+        return employeeDTOList;
     }
 
     @Override

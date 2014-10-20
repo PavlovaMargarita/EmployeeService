@@ -10,6 +10,6 @@ import org.springframework.data.repository.query.Param;
  */
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("SELECT u FROM user u  WHERE u.login = :login")
+    @Query("SELECT u FROM User u  WHERE u.login = :login")
     public User readUser(@Param("login") String login);
 }

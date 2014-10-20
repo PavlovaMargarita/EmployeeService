@@ -37,7 +37,7 @@ public class CompanyServiceImpl implements CompanyService {
     private UserRepository userRepository;
 
     @Autowired
-    private CountryRepository countryDAO;
+    private CountryRepository countryRepository;
 
     @Override
     @Transactional
@@ -90,6 +90,11 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @Transactional
     public void createCountry(Country country) {
-        countryDAO.save(country);
+        countryRepository.save(country);
+    }
+
+    @Override
+    public User readUser(String login) {
+        return userRepository.readUser(login);
     }
 }

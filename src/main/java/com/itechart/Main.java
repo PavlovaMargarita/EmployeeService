@@ -92,11 +92,12 @@ public class Main {
         companyService.createDepartment(department);
 
         User user = new User();
-        user.setLogin("qwe");
+        user.setLogin("qwe2");
         user.setPassword("qwe");
         user.setEmployee(employee);
         user.setRole(RoleEnum.ROLE_ADMIN);
         companyService.createUser(user);
-
+        User test = companyService.readUser("qwe2");
+        System.out.println(test.getPassword());
     }
 }

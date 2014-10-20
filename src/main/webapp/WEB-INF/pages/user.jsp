@@ -13,5 +13,6 @@
 <body>
  Hello dear user!<br/>
 <a href="/j_spring_security_logout">Logout</a>
+ <a href="/">Back to home(without logout)</a>
 </body>
 </html>

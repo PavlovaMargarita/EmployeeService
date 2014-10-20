@@ -17,4 +17,5 @@ public interface CompanyService {
     public void createProject(Project project);
     public void createUser(User user);
     public void createCountry(Country country);
+    public User readUser(String login);
 }

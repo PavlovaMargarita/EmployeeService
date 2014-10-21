@@ -107,6 +107,11 @@
             </select>
         </div>
 
+        <div class="input-group">
+            <span class="input-group-addon">Дата окончания контракта</span>
+            <input type="date" class="form-control" name="contract-end-date" id="contract-end-date"
+                   ng-model="employee.contractEndDate"/>
+        </div>
         <div class="button-save-div">
             <button type="button" class="btn btn-primary" ng-click="save.doClick()"> Сохранить</button>
         </div>

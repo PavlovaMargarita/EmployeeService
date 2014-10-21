@@ -61,15 +61,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void updateEmployee(EmployeeDTO employeeDTO) {
         Employee employee = employeeDTOToEmployee(employeeDTO);
         employee.setId(employeeDTO.getId());
-        employeeRepository.updateEmployee(employee.getId(), employee.getF_name());
+//        employeeRepository.updateEmployee(employee.getId(), employee.getF_name(), employee.getS_name(), employee.getDateOfBirth());
+        employeeRepository.updateEmployee(employee.getId(), employee.getF_name(), employee.getS_name(), employee.getDateOfBirth(), employee.getSex(), employee.getCountry(),
+                employee.getCity(), employee.getStreet(), employee.getHouse(), employee.getFlat(), employee.getPhotoURL(), employee.getAddress(),
+                employee.getDepartment(), employee.getPositionInCompany());
     }
 
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(employee.getId());
-        employeeDTO.setF_name(employee.getS_name());
+        employeeDTO.setF_name(employee.getF_name());
         employeeDTO.setS_name(employee.getS_name());
         if(employee.getDepartment() != null ) {
+            employeeDTO.setDepartmentId(employee.getDepartment().getId());
             employeeDTO.setDepartmentName(employee.getDepartment().getDepartmentName());
         }
         employeeDTO.setDateOfBirth(employee.getDateOfBirth());

@@ -4,10 +4,7 @@ import com.itechart.dto.EmployeeDTO;
 import com.itechart.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +27,17 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreate")
     public @ResponseBody void saveEmployeeCorrect(@RequestBody EmployeeDTO employeeDTO){
         employeeService.createEmployee(employeeDTO);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/employeeById")
+    @ResponseBody
+    public EmployeeDTO readEmployee(@RequestParam("id") Long id ){
+        EmployeeDTO employeeDTO= employeeService.readEmployee(id);
+        return employeeDTO;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeUpdate")
+    public @ResponseBody void saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO){
+        employeeService.updateEmployee(employeeDTO);
     }
 }

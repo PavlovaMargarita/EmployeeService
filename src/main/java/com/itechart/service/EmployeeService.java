@@ -11,4 +11,5 @@ public interface EmployeeService {
     public List<EmployeeDTO> readEmployeeList();
     public EmployeeDTO readEmployee(Long id);
     public void createEmployee(EmployeeDTO employeeDTO);
+    public void updateEmployee(EmployeeDTO employeeDTO);
 }

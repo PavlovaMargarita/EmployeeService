@@ -22,7 +22,7 @@ public class EmployeeDTO {
     private Long addressId;
     private Long departmentId;
     private String departmentName;
-    private Long positionInCompany;
+    private Long positionInCompanyId;
 
     public EmployeeDTO(){}
 
@@ -122,12 +122,12 @@ public class EmployeeDTO {
         this.departmentId = departmentId;
     }
 
-    public Long getPositionInCompany() {
-        return positionInCompany;
+    public Long getPositionInCompanyId() {
+        return positionInCompanyId;
     }
 
-    public void setPositionInCompany(Long positionInCompany) {
-        this.positionInCompany = positionInCompany;
+    public void setPositionInCompanyId(Long positionInCompanyId) {
+        this.positionInCompanyId = positionInCompanyId;
     }
 
     public String getDepartmentName() {

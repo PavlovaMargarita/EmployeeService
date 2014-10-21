@@ -1,6 +1,5 @@
 package com.itechart.service.impl;
 
-import com.itechart.dto.DepartmentDTO;
 import com.itechart.dto.EmployeeDTO;
 import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
@@ -57,6 +56,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employee);
     }
 
+    @Override
+    @Transactional
+    public void updateEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = employeeDTOToEmployee(employeeDTO);
+        employee.setId(employeeDTO.getId());
+        employeeRepository.updateEmployee(employee.getId(), employee.getF_name());
+    }
+
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(employee.getId());
@@ -65,6 +72,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(employee.getDepartment() != null ) {
             employeeDTO.setDepartmentName(employee.getDepartment().getDepartmentName());
         }
+        employeeDTO.setDateOfBirth(employee.getDateOfBirth());
+        employeeDTO.setCountryId(employee.getCountry().getId());
+        employeeDTO.setCity(employee.getCity());
+        employeeDTO.setStreet(employee.getStreet());
+        employeeDTO.setHouse(employee.getHouse());
+        employeeDTO.setFlat(employee.getFlat());
+        employeeDTO.setPositionInCompanyId(employee.getPositionInCompany().getId());
+        employeeDTO.setAddressId(employee.getAddress().getId());
         return employeeDTO;
     }
 
@@ -85,7 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setAddress(address);
         Department department = departmentRepository.findOne(employeeDTO.getDepartmentId());
         employee.setDepartment(department);
-        PositionInCompany positionInCompany = positionInCompanyRepository.findOne(employeeDTO.getPositionInCompany());
+        PositionInCompany positionInCompany = positionInCompanyRepository.findOne(employeeDTO.getPositionInCompanyId());
         employee.setPositionInCompany(positionInCompany);
         return employee;
     }

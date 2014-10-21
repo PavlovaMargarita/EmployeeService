@@ -75,6 +75,16 @@ public class Employee {
                     nullable = false, updatable = false) })
     private List<Project> projectList;
 
+
+    @Column(nullable = false, name="date_contract_end")
+    private Date dateContractEnd;
+
+    @Column(nullable = false)
+    private Boolean fired;
+
+    @Column(nullable = true, name = "fired_comment")
+    private String firedComment;
+
     public Employee(){
         companyList = new ArrayList<Company>();
         projectList = new ArrayList<Project>();
@@ -206,5 +216,29 @@ public class Employee {
 
     public void setProjectList(List<Project> projectList) {
         this.projectList = projectList;
+    }
+
+    public Date getDateContractEnd() {
+        return dateContractEnd;
+    }
+
+    public void setDateContractEnd(Date dateContractEnd) {
+        this.dateContractEnd = dateContractEnd;
+    }
+
+    public Boolean getFired() {
+        return fired;
+    }
+
+    public void setFired(Boolean fired) {
+        this.fired = fired;
+    }
+
+    public String getFiredComment() {
+        return firedComment;
+    }
+
+    public void setFiredComment(String firedComment) {
+        this.firedComment = firedComment;
     }
 }

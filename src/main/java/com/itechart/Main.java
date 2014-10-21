@@ -75,6 +75,9 @@ public class Main {
         employee.setDateOfBirth(java.sql.Date.valueOf("2010-10-10"));
         employee.setPhotoURL("qwe");
         employee.setAddress(address);
+        employee.setDateContractEnd(java.sql.Date.valueOf("2010-10-10"));
+        employee.setFired(false);
+        employee.setFiredComment("");
 //        employee.setDepartmentList(department);
         employee.setPositionInCompany(positionInCompany);
         List companies = new ArrayList();
@@ -97,7 +100,7 @@ public class Main {
         user.setEmployee(employee);
         user.setRole(RoleEnum.ROLE_ADMIN);
         companyService.createUser(user);
-        User test = companyService.readUser("qwe2");
-        System.out.println(test.getPassword());
+//        User test = companyService.readUser("qwe2");
+//        System.out.println(test.getPassword());
     }
 }

@@ -23,6 +23,9 @@ public class EmployeeDTO {
     private Long departmentId;
     private String departmentName;
     private Long positionInCompanyId;
+    private Date dateContractEnd;
+    private Boolean fired;
+    private String firedComment;
 
     public EmployeeDTO(){}
 
@@ -136,5 +139,29 @@ public class EmployeeDTO {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public Date getDateContractEnd() {
+        return dateContractEnd;
+    }
+
+    public void setDateContractEnd(Date dateContractEnd) {
+        this.dateContractEnd = dateContractEnd;
+    }
+
+    public Boolean getFired() {
+        return fired;
+    }
+
+    public void setFired(Boolean fired) {
+        this.fired = fired;
+    }
+
+    public String getFiredComment() {
+        return firedComment;
+    }
+
+    public void setFiredComment(String firedComment) {
+        this.firedComment = firedComment;
     }
 }

@@ -54,8 +54,7 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
 //        }
 //        $location.replace();
         if(data.role == 'ROLE_HRM'){
-            alert("ok");
-            $location.path('/contactList');
+            $location.path('/employeeList');
         }
         $location.replace();
     }

@@ -35,7 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public List <EmployeeDTO> readEmployeeList() {
-        List<Employee> employeeList = employeeRepository.findAll();
+        List<Employee> employeeList = employeeRepository.readEmployeeList();
         List <EmployeeDTO> employeeDTOList = new ArrayList();
         for(Employee employee: employeeList){
             employeeDTOList.add(employeeToEmployeeDTO(employee));
@@ -64,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        employeeRepository.updateEmployee(employee.getId(), employee.getF_name(), employee.getS_name(), employee.getDateOfBirth());
         employeeRepository.updateEmployee(employee.getId(), employee.getF_name(), employee.getS_name(), employee.getDateOfBirth(), employee.getSex(), employee.getCountry(),
                 employee.getCity(), employee.getStreet(), employee.getHouse(), employee.getFlat(), employee.getPhotoURL(), employee.getAddress(),
-                employee.getDepartment(), employee.getPositionInCompany());
+                employee.getDepartment(), employee.getPositionInCompany(), employee.getDateContractEnd(), employee.getFired(), employee.getFiredComment());
     }
 
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){
@@ -77,6 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeDTO.setDepartmentName(employee.getDepartment().getDepartmentName());
         }
         employeeDTO.setDateOfBirth(employee.getDateOfBirth());
+        employeeDTO.setSex(employee.getSex());
         employeeDTO.setCountryId(employee.getCountry().getId());
         employeeDTO.setCity(employee.getCity());
         employeeDTO.setStreet(employee.getStreet());
@@ -84,6 +85,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDTO.setFlat(employee.getFlat());
         employeeDTO.setPositionInCompanyId(employee.getPositionInCompany().getId());
         employeeDTO.setAddressId(employee.getAddress().getId());
+        employeeDTO.setDateContractEnd(employee.getDateContractEnd());
+        employeeDTO.setFired(employee.getFired());
+        employeeDTO.setFiredComment(employee.getFiredComment());
         return employeeDTO;
     }
 
@@ -92,7 +96,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setF_name(employeeDTO.getF_name());
         employee.setS_name(employeeDTO.getS_name());
         employee.setDateOfBirth(employeeDTO.getDateOfBirth());
-        employee.setSex(SexEnum.FEMALE);
+        employee.setSex(employeeDTO.getSex());
         Country country = countryRepository.findOne(employeeDTO.getCountryId());
         employee.setCountry(country);
         employee.setCity(employeeDTO.getCity());
@@ -106,6 +110,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDepartment(department);
         PositionInCompany positionInCompany = positionInCompanyRepository.findOne(employeeDTO.getPositionInCompanyId());
         employee.setPositionInCompany(positionInCompany);
+        employee.setDateContractEnd(employeeDTO.getDateContractEnd());
+        employee.setFired(employeeDTO.getFired());
+        employee.setFiredComment(employeeDTO.getFiredComment());
         return employee;
     }
 

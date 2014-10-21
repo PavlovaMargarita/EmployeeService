@@ -94,6 +94,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @Transactional
     public User readUser(String login) {
         return userRepository.readUser(login);
     }

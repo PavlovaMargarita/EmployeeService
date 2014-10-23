@@ -94,7 +94,7 @@
         <div class="input-group" id="div-department">
             <span class="input-group-addon">Отдел</span>
             <select class="form-control" name="department" id="department" data-ng-model="department.id"
-                    ng-options="d.id as d.department for d in departments">
+                    ng-options="d.id as d.department for d in departments" ng-change="changeDepartment.change()">
             </select>
         </div>
 

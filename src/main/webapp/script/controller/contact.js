@@ -36,16 +36,16 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
         $scope.countries = data;
     });
 
-    var departmentAddresses = $http({
-        method: "get",
-        url: "/EmployeeService/address/addressList",
-        dataType: 'json',
-        contentType: 'application/json',
-        mimeType: 'application/json'
-    });
-    departmentAddresses.success(function (data) {
-        $scope.addresses = data;
-    });
+//    var departmentAddresses = $http({
+//        method: "get",
+//        url: "/EmployeeService/address/addressList",
+//        dataType: 'json',
+//        contentType: 'application/json',
+//        mimeType: 'application/json'
+//    });
+//    departmentAddresses.success(function (data) {
+//        $scope.addresses = data;
+//    });
 
     var position = $http({
         method: "get",
@@ -100,6 +100,11 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
             $location.path('/employeeList');
             $location.replace();
         });
+    }
+
+    $scope.changeDepartment = {};
+    $scope.changeDepartment.change = function(){
+        $scope.addresses = loadAddress($scope.department.id);
     }
 });
 
@@ -285,4 +290,21 @@ function showModalFiredComment() {
 function hideModalFiredComment() {
     document.getElementById('fired-comment').value = "";
     $('#modal-fired-comment').modal('hide');
+}
+
+function loadAddress(idDepartment){
+    alert("load");
+    var departmentAddresses = $http({
+        method: "get",
+        url: "/EmployeeService/address/addressList",
+        dataType: 'json',
+        contentType: 'application/json',
+        mimeType: 'application/json',
+        params: {
+            departmentId: idDepartment
+        }
+    });
+    departmentAddresses.success(function (data) {
+        return data;
+    });
 }

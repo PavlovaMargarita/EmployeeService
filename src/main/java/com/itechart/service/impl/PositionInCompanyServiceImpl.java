@@ -5,6 +5,11 @@ import com.itechart.model.PositionInCompany;
 import com.itechart.repository.PositionInCompanyRepository;
 import com.itechart.service.PositionInCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,7 +26,11 @@ public class PositionInCompanyServiceImpl implements PositionInCompanyService {
 
     @Override
     public List<PositionInCompanyDTO> readPositionInCompanyList() {
-        List<PositionInCompany> positionInCompanyList = positionInCompanyRepository.findAll();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String company = authority.get(1).getAuthority();
+        Pageable topTen = new PageRequest(0, 10);
+        List<PositionInCompany> positionInCompanyList = positionInCompanyRepository.readPositionInCompanyList(company, topTen);
         List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList();
         for(PositionInCompany positionInCompany: positionInCompanyList){
             positionInCompanyDTOList.add(positionInCompanyToPositionInCompanyDTO(positionInCompany));

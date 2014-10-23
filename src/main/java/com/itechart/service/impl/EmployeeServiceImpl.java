@@ -1,11 +1,17 @@
 package com.itechart.service.impl;
 
 import com.itechart.dto.EmployeeDTO;
-import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
 import com.itechart.repository.*;
 import com.itechart.service.EmployeeService;
+import org.apache.log4j.Logger;
+import org.apache.logging.log4j.message.StructuredDataMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,11 +41,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public List <EmployeeDTO> readEmployeeList() {
-        List<Employee> employeeList = employeeRepository.readEmployeeList();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String company = authority.get(1).getAuthority();
+        Pageable topTen = new PageRequest(0, 10);
+        List<Employee> employeeList = employeeRepository.readEmployeeList(company, topTen);
         List <EmployeeDTO> employeeDTOList = new ArrayList();
         for(Employee employee: employeeList){
             employeeDTOList.add(employeeToEmployeeDTO(employee));
         }
+        Logger.getLogger(EmployeeService.class).info("hello");
         return employeeDTOList;
     }
 
@@ -62,9 +73,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeDTOToEmployee(employeeDTO);
         employee.setId(employeeDTO.getId());
 //        employeeRepository.updateEmployee(employee.getId(), employee.getF_name(), employee.getS_name(), employee.getDateOfBirth());
-        employeeRepository.updateEmployee(employee.getId(), employee.getF_name(), employee.getS_name(), employee.getDateOfBirth(), employee.getSex(), employee.getCountry(),
-                employee.getCity(), employee.getStreet(), employee.getHouse(), employee.getFlat(), employee.getPhotoURL(), employee.getAddress(),
-                employee.getDepartment(), employee.getPositionInCompany(), employee.getDateContractEnd(), employee.getFired(), employee.getFiredComment());
+//        employeeRepository.updateEmployee(employee.getId(), employee.getF_name(), employee.getS_name(), employee.getDateOfBirth(), employee.getSex(), employee.getCountry(),
+//                employee.getCity(), employee.getStreet(), employee.getHouse(), employee.getFlat(), employee.getPhotoURL(), employee.getAddress(),
+//                employee.getDepartment(), employee.getPositionInCompany(), employee.getDateContractEnd(), employee.getFired(), employee.getFiredComment());
+        employeeRepository.save(employee);
     }
 
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){

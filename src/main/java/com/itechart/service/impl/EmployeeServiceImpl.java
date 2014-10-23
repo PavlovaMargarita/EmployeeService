@@ -45,18 +45,20 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
         String company = authority.get(1).getAuthority();
         Pageable topTen = new PageRequest(0, 10);
+        Logger.getLogger(EmployeeServiceImpl.class).info("Read Employee List, first="+0+", count=" + 10 );
         List<Employee> employeeList = employeeRepository.readEmployeeList(company, topTen);
         List <EmployeeDTO> employeeDTOList = new ArrayList();
         for(Employee employee: employeeList){
             employeeDTOList.add(employeeToEmployeeDTO(employee));
         }
-        Logger.getLogger(EmployeeService.class).info("hello");
         return employeeDTOList;
     }
 
     @Override
     public EmployeeDTO readEmployee(Long id) {
+        Logger.getLogger(EmployeeService.class).info("Read Employee by id " + id);
         Employee employee = employeeRepository.findOne(id);
+        Logger.getLogger(EmployeeService.class).info("Return Employee" + employee.toString());
         EmployeeDTO employeeDTO = employeeToEmployeeDTO(employee);
         return employeeDTO;
     }
@@ -64,7 +66,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void createEmployee(EmployeeDTO employeeDTO) {
         Employee employee = employeeDTOToEmployee(employeeDTO);
+        Logger.getLogger(EmployeeService.class).info("Create Employee " + employee.toString());
         employeeRepository.save(employee);
+
     }
 
     @Override
@@ -72,10 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void updateEmployee(EmployeeDTO employeeDTO) {
         Employee employee = employeeDTOToEmployee(employeeDTO);
         employee.setId(employeeDTO.getId());
-//        employeeRepository.updateEmployee(employee.getId(), employee.getF_name(), employee.getS_name(), employee.getDateOfBirth());
-//        employeeRepository.updateEmployee(employee.getId(), employee.getF_name(), employee.getS_name(), employee.getDateOfBirth(), employee.getSex(), employee.getCountry(),
-//                employee.getCity(), employee.getStreet(), employee.getHouse(), employee.getFlat(), employee.getPhotoURL(), employee.getAddress(),
-//                employee.getDepartment(), employee.getPositionInCompany(), employee.getDateContractEnd(), employee.getFired(), employee.getFiredComment());
+        Logger.getLogger(EmployeeService.class).info("Update Employee " + employee.toString());
         employeeRepository.save(employee);
     }
 

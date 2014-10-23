@@ -2,6 +2,7 @@ package com.itechart.controller;
 
 import com.itechart.dto.PositionInCompanyDTO;
 import com.itechart.service.PositionInCompanyService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class PositionInCompanyController {
     @RequestMapping(method = RequestMethod.GET, value = "/positionList")
     @ResponseBody
     public List<PositionInCompanyDTO> positionList(){
+        Logger.getLogger(AddressController.class).info("Request /EmployeeService/positionInCompany/positionList ");
         return positionInCompanyService.readPositionInCompanyList();
     }
 }

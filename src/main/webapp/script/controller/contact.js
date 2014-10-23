@@ -104,7 +104,7 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
 
     $scope.changeDepartment = {};
     $scope.changeDepartment.change = function(){
-        $scope.addresses = loadAddress($scope.department.id);
+        loadAddress($scope.department.id, $http, $scope);
     }
 });
 
@@ -136,6 +136,27 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                     }
                 }
             }
+            var departmentAddresses = $http({
+                method: "get",
+                url: "/EmployeeService/address/addressList",
+                dataType: 'json',
+                contentType: 'application/json',
+                mimeType: 'application/json',
+                params: {
+                    departmentId: $scope.department.id
+                }
+            });
+            departmentAddresses.success(function (data) {
+                $scope.addresses = data;
+                data.forEach(selectAddress);
+                if ($scope.employee != undefined) {
+                    function selectAddress(element, index) {
+                        if (element.id == $scope.employee.addressId) {
+                            $scope.address = $scope.addresses[index];
+                        }
+                    }
+                }
+            });
         });
 
         var countries = $http({
@@ -157,24 +178,6 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
             }
         });
 
-        var departmentAddresses = $http({
-            method: "get",
-            url: "/EmployeeService/address/addressList",
-            dataType: 'json',
-            contentType: 'application/json',
-            mimeType: 'application/json'
-        });
-        departmentAddresses.success(function (data) {
-            $scope.addresses = data;
-            data.forEach(selectAddress);
-            if ($scope.employee != undefined) {
-                function selectAddress(element, index) {
-                    if (element.id == $scope.employee.addressId) {
-                        $scope.address = $scope.addresses[index];
-                    }
-                }
-            }
-        });
 
         var position = $http({
             method: "get",
@@ -292,8 +295,9 @@ function hideModalFiredComment() {
     $('#modal-fired-comment').modal('hide');
 }
 
-function loadAddress(idDepartment){
+function loadAddress(idDepartment, $http, $scope){
     alert("load");
+    var test;
     var departmentAddresses = $http({
         method: "get",
         url: "/EmployeeService/address/addressList",
@@ -305,6 +309,6 @@ function loadAddress(idDepartment){
         }
     });
     departmentAddresses.success(function (data) {
-        return data;
+        $scope.addresses = data;
     });
 }

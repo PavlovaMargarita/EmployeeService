@@ -2,6 +2,7 @@ package com.itechart.controller;
 
 import com.itechart.dto.DepartmentDTO;
 import com.itechart.service.DepartmentService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,9 @@ public class DepartmentController {
     @RequestMapping(method = RequestMethod.GET, value = "/departmentList")
     @ResponseBody
     public List<DepartmentDTO> departmentList(){
+        Logger.getLogger(AddressController.class).info("Request /EmployeeService/department/departmentList ");
         return departmentService.readDepartmentList();
     }
+
+
 }

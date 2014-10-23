@@ -241,4 +241,28 @@ public class Employee {
     public void setFiredComment(String firedComment) {
         this.firedComment = firedComment;
     }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", f_name='" + f_name + '\'' +
+                ", s_name='" + s_name + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", sex=" + sex +
+                ", country=" + country.getCountry() +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", house=" + house +
+                ", flat='" + flat + '\'' +
+                ", photoURL='" + photoURL + '\'' +
+                ", departmentAddress: country='" + address.getCountry().getCountry() + ", city='"+ address.getCity() +
+                ", street='" + address.getStreet() + ", house='" + address.getHouse() + ", flat='" + address.getFlat() +'\'' +
+                ", department=" + department.getDepartmentName() +
+                ", positionInCompany=" + positionInCompany.getPosition() +
+                ", dateContractEnd=" + dateContractEnd +
+                ", fired=" + fired +
+                ", firedComment='" + firedComment + '\'' +
+                '}';
+    }
 }

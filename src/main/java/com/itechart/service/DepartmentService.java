@@ -1,5 +1,6 @@
 package com.itechart.service;
 
+import com.itechart.dto.AddressDTO;
 import com.itechart.dto.DepartmentDTO;
 
 import java.util.List;
@@ -8,4 +9,5 @@ import java.util.List;
  */
 public interface DepartmentService {
     public List<DepartmentDTO> readDepartmentList();
+    public List<AddressDTO> readAddressList(Long departmentId);
 }

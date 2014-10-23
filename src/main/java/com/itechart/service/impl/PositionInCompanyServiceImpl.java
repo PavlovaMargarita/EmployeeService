@@ -4,6 +4,7 @@ import com.itechart.dto.PositionInCompanyDTO;
 import com.itechart.model.PositionInCompany;
 import com.itechart.repository.PositionInCompanyRepository;
 import com.itechart.service.PositionInCompanyService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,7 @@ public class PositionInCompanyServiceImpl implements PositionInCompanyService {
         List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
         String company = authority.get(1).getAuthority();
         Pageable topTen = new PageRequest(0, 10);
+        Logger.getLogger(PositionInCompanyServiceImpl.class).info("Read PositionInCompanyList List, first=" + 0 + ", count=" + 10);
         List<PositionInCompany> positionInCompanyList = positionInCompanyRepository.readPositionInCompanyList(company, topTen);
         List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList();
         for(PositionInCompany positionInCompany: positionInCompanyList){

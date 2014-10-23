@@ -2,6 +2,7 @@ package com.itechart.controller;
 
 import com.itechart.dto.CountryDTO;
 import com.itechart.service.CountryService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class CountryController {
     @RequestMapping(method = RequestMethod.GET, value = "/countryList")
     @ResponseBody
     public List<CountryDTO> countryList(){
+        Logger.getLogger(AddressController.class).info("Request /EmployeeService/country/countryList ");
         return countryService.readCountryList();
     }
 }

@@ -1,5 +1,6 @@
 package com.itechart.repository;
 
+import com.itechart.model.Address;
 import com.itechart.model.Department;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,7 @@ import java.util.List;
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
     @Query("select d from Department d where d.company.companyName=:company")
     public List<Department> readDepartmentList(@Param("company") String company,Pageable pageable);
+
+    @Query("select d.addressList from Department d where d.id=:id")
+    public List<Address> readAddressList(@Param("id") Long id);
 }

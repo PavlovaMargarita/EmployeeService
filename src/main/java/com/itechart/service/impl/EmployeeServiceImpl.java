@@ -126,6 +126,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDateContractEnd(employeeDTO.getDateContractEnd());
         employee.setFired(employeeDTO.getFired());
         employee.setFiredComment(employeeDTO.getFiredComment());
+        employee.setDateFired(employeeDTO.getDateFired());
         return employee;
     }
 

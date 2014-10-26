@@ -26,6 +26,7 @@ public class EmployeeDTO {
     private Date dateContractEnd;
     private Boolean fired;
     private String firedComment;
+    private Date dateFired;
 
     public EmployeeDTO(){}
 
@@ -163,5 +164,13 @@ public class EmployeeDTO {
 
     public void setFiredComment(String firedComment) {
         this.firedComment = firedComment;
+    }
+
+    public Date getDateFired() {
+        return dateFired;
+    }
+
+    public void setDateFired(Date dateFired) {
+        this.dateFired = dateFired;
     }
 }

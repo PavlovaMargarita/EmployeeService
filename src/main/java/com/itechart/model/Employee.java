@@ -85,6 +85,9 @@ public class Employee {
     @Column(nullable = true, name = "fired_comment")
     private String firedComment;
 
+    @Column(nullable = true)
+    private Date dateFired;
+
     public Employee(){
         companyList = new ArrayList<Company>();
         projectList = new ArrayList<Project>();
@@ -242,6 +245,14 @@ public class Employee {
         this.firedComment = firedComment;
     }
 
+    public Date getDateFired() {
+        return dateFired;
+    }
+
+    public void setDateFired(Date dateFired) {
+        this.dateFired = dateFired;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -265,4 +276,6 @@ public class Employee {
                 ", firedComment='" + firedComment + '\'' +
                 '}';
     }
+
+
 }

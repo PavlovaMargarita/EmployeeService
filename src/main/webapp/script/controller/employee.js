@@ -121,6 +121,12 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
     $scope.changeDepartment.change = function(){
         loadAddress($scope.department.id, $http, $scope);
     }
+
+    $scope.cancel = {};
+    $scope.cancel.doClick = function(){
+        $location.path('/employeeList');
+        $location.replace();
+    }
 });
 
 app.controller("employeeCorrectController", function ($scope, $http, $routeParams, $location) {
@@ -288,7 +294,8 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 positionInCompanyId: $scope.position.id,
                 dateContractEnd: $scope.employee.dateContractEnd,
                 fired: true,
-                firedComment: $scope.employee.firedComment
+                firedComment: $scope.employee.firedComment,
+                dateFired: $scope.employee.dateFired
             },
             dataType: 'json',
             contentType: 'application/json',
@@ -298,6 +305,12 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
             $location.path('/employeeList');
             $location.replace();
         });
+    }
+
+    $scope.cancel = {};
+    $scope.cancel.doClick = function(){
+        $location.path('/employeeList');
+        $location.replace();
     }
 });
 

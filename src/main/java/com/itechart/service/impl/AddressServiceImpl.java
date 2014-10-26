@@ -26,7 +26,7 @@ public class AddressServiceImpl implements AddressService {
     public List<AddressDTO> readAddressList() {
         Logger.getLogger(AddressServiceImpl.class).info("Read Address List ");
         List <Address> addressList = addressRepository.findAll();
-        List <AddressDTO> addressDTOList = new ArrayList();
+        List <AddressDTO> addressDTOList = new ArrayList(addressList.size());
         for(Address address: addressList){
             addressDTOList.add(addressToAddressDTO(address));
         }

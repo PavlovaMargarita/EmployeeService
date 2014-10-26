@@ -43,10 +43,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
         String company = authority.get(1).getAuthority();
+        Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(EmployeeServiceImpl.class).info("Read Employee List, first="+0+", count=" + 10 );
-        List<Employee> employeeList = employeeRepository.readEmployeeList(company, topTen);
-        List <EmployeeDTO> employeeDTOList = new ArrayList<>();
+        List<Employee> employeeList = employeeRepository.readEmployeeList(companyId, topTen);
+        List <EmployeeDTO> employeeDTOList = new ArrayList(employeeList.size());
         for(Employee employee: employeeList){
             employeeDTOList.add(employeeToEmployeeDTO(employee));
         }

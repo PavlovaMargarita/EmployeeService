@@ -39,7 +39,8 @@ public class CustomUserDetailService implements UserDetailsService {
 
         // Build user's authorities
         setAuths.add(new SimpleGrantedAuthority(user.getRole().name()));
-        setAuths.add(new SimpleGrantedAuthority(user.getEmployee().getDepartment().getCompany().getCompanyName()));
+        String companyId = "companyId=";
+        setAuths.add(new SimpleGrantedAuthority(companyId + user.getEmployee().getDepartment().getCompany().getId()));
 
         List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
 

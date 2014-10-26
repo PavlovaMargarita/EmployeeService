@@ -30,10 +30,11 @@ public class PositionInCompanyServiceImpl implements PositionInCompanyService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
         String company = authority.get(1).getAuthority();
+        Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(PositionInCompanyServiceImpl.class).info("Read PositionInCompanyList List, first=" + 0 + ", count=" + 10);
-        List<PositionInCompany> positionInCompanyList = positionInCompanyRepository.readPositionInCompanyList(company, topTen);
-        List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList();
+        List<PositionInCompany> positionInCompanyList = positionInCompanyRepository.readPositionInCompanyList(companyId, topTen);
+        List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList(positionInCompanyList.size());
         for(PositionInCompany positionInCompany: positionInCompanyList){
             positionInCompanyDTOList.add(positionInCompanyToPositionInCompanyDTO(positionInCompany));
         }

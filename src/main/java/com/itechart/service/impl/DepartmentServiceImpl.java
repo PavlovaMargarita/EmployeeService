@@ -34,10 +34,11 @@ public class DepartmentServiceImpl implements DepartmentService{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
         String company = authority.get(1).getAuthority();
+        Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(DepartmentServiceImpl.class).info("Read Department List, first=" + 0 + ", count=" + 10);
-        List <Department> departmentList = departmentRepository.readDepartmentList(company, topTen);
-        List <DepartmentDTO> departmentDTOList = new ArrayList();
+        List <Department> departmentList = departmentRepository.readDepartmentList(companyId, topTen);
+        List <DepartmentDTO> departmentDTOList = new ArrayList(departmentList.size());
         for(Department department: departmentList){
             departmentDTOList.add(departmentToDepartmentDTO(department));
         }
@@ -48,7 +49,7 @@ public class DepartmentServiceImpl implements DepartmentService{
     public List<AddressDTO> readAddressList(Long departmentId) {
         Logger.getLogger(DepartmentServiceImpl.class).info("Read Address List for Department");
         List <Address> addressList = departmentRepository.readAddressList(departmentId);
-        List <AddressDTO> addressDTOList = new ArrayList();
+        List <AddressDTO> addressDTOList = new ArrayList(addressList.size());
         for(Address address: addressList){
             addressDTOList.add(addressToAddressDTO(address));
         }

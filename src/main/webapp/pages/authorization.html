@@ -1,10 +1,12 @@
 <div class="authorization">
     <div class="container" ng-controller = "authorizationController">
-        <div class="div-error">{{processError()}}</div>
-        <form action="/j_spring_security_check" method="POST">
+        <div class="div-error" id="processError">{{processError()}}</div>
+        <form action="/j_spring_security_check" method="POST" id="form">
+            <div class="div-error" id="loginError">Логин должен содержать не менее 5 знаков</div>
             <input type="text" class="form-control" placeholder="Ваш логин" name="j_username"/>
+            <div class="div-error" id="passwordError">Пароль должен содержать не менее 6 знаков</div>
             <input type="password" class="form-control" placeholder="Ваш пароль" name="j_password"/>
-            <button type="submit" class="btn btn-primary"> Войти</button>
+            <button type="button" class="btn btn-primary" ng-click="authorization.doClick()"> Войти</button>
         </form>
     </div>
 </div>

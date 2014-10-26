@@ -5,7 +5,6 @@ import com.itechart.model.*;
 import com.itechart.repository.*;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
-import org.apache.logging.log4j.message.StructuredDataMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(EmployeeServiceImpl.class).info("Read Employee List, first="+0+", count=" + 10 );
         List<Employee> employeeList = employeeRepository.readEmployeeList(company, topTen);
-        List <EmployeeDTO> employeeDTOList = new ArrayList();
+        List <EmployeeDTO> employeeDTOList = new ArrayList<>();
         for(Employee employee: employeeList){
             employeeDTOList.add(employeeToEmployeeDTO(employee));
         }
@@ -56,7 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO readEmployee(Long id) {
-        Logger.getLogger(EmployeeService.class).info("Read Employee by id " + id);
+        Logger.getLogger(EmployeeService.class).info(String.format("Read Employee by id %s",id));
         Employee employee = employeeRepository.findOne(id);
         Logger.getLogger(EmployeeService.class).info("Return Employee" + employee.toString());
         EmployeeDTO employeeDTO = employeeToEmployeeDTO(employee);

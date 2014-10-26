@@ -149,7 +149,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
             departmentAddresses.success(function (data) {
                 $scope.addresses = data;
                 data.forEach(selectAddress);
-                if ($scope.employee != undefined) {
+                if ($scope.employee) {
                     function selectAddress(element, index) {
                         if (element.id == $scope.employee.addressId) {
                             $scope.address = $scope.addresses[index];

@@ -1,4 +1,6 @@
 app.controller("authorizationController", function ($scope, $http, $location, $rootScope, $cookieStore) {
+    document.getElementById("loginError").style.display = "none";
+    document.getElementById("passwordError").style.display = "none";
     $scope.authorization = {};
 
     var isSuccess = ($location.search()).success;
@@ -57,5 +59,11 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
             $location.path('/employeeList');
         }
         $location.replace();
+    }
+
+    $scope.authorization = {};
+    $scope.authorization.doClick = function(){
+        var formValidator = new FormValidator(document.getElementById("form"));
+        formValidator.validateLoginAndPassword();
     }
 });

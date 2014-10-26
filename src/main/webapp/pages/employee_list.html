@@ -16,7 +16,7 @@
             </tr>
         </thead>
 
-        <tr data-ng-repeat="employee in employees">
+        <tr data-ng-repeat="employee in employees" ng-style="setColor({{employee.redRow}})">
             <td>{{employee.s_name}} </td>
             <td>{{employee.f_name}} </td>
             <td>{{employee.departmentName}} </td>

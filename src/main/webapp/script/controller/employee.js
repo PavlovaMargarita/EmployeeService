@@ -9,7 +9,22 @@ app.controller("employeeListController", function ($scope, $rootScope, $http) {
     });
     response.success(function (data) {
         $scope.employees = data;
+        $scope.employees.forEach(checkDateContractEnd);
+        function checkDateContractEnd(element, index) {
+            var employeeDateContractEnd = new Date(element.dateContractEnd);
+            var currentDate = new Date();
+            if((employeeDateContractEnd - currentDate) / (1000*60*60*24) <= 10){
+                element.redRow = true;
+            } else{
+                element.redRow = false;
+            }
+        }
     });
+    $scope.setColor = function (value) {
+        if (value) {
+            return {background: "red"}
+        }
+    }
 });
 
 app.controller("employeeCreateController", function ($scope, $rootScope, $http, $location, $route) {

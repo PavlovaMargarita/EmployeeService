@@ -2,7 +2,7 @@ var app = angular.module("EmployeeService", ['ngRoute', 'checklist-model', 'ngCo
 
 app.run(function($rootScope, $cookieStore){
 
-    $rootScope.recordsOnPage = 10;
+    $rootScope.recordsOnPage = 20;
 
     $rootScope.isAuth = function(){
         var user = $cookieStore.get("userInfo");
@@ -41,3 +41,36 @@ app.config(function($routeProvider){
 
 });
 
+app.service('PagerService', function() {
+    this.totalPageNumber = function(pageRecords, totalRecords) {
+        var totalPageNumber = 1;
+        if(typeof totalRecords != 'undefined'){
+            totalPageNumber = Math.floor((totalRecords + pageRecords - 1) / pageRecords);
+        }
+        return (totalPageNumber == 0) ? 1 : totalPageNumber;
+    }
+
+    this.buildRange = function(totalPageNumber) {
+        var pages = [];
+        for(var i = 1;i <= totalPageNumber; i++) {
+            pages.push(i);
+        }
+        return pages;
+    }
+
+    this.isPrevDisabled = function(currentPage){
+        return currentPage === 1 ? "disabled" : "";
+    }
+
+    this.isNextDisabled = function(currentPage, totalPageCountt){
+        return currentPage === totalPageCountt ? "disabled" : "";
+    }
+
+    this.isFirstDisabled = function(currentPage){
+        return currentPage === 1 ? "disabled" : "";
+    }
+
+    this.isLastDisabled = function(currentPage, totalPageCount){
+        return currentPage === totalPageCount ? "disabled" : "";
+    }
+});

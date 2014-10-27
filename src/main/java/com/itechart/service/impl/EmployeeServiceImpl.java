@@ -39,13 +39,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public List <EmployeeDTO> readEmployeeList() {
+    public List <EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
         String company = authority.get(1).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
-        Pageable topTen = new PageRequest(0, 10);
-        Logger.getLogger(EmployeeServiceImpl.class).info("Read Employee List, first="+0+", count=" + 10 );
+        Pageable topTen = new PageRequest(pageNumber, pageRecords);
+        Logger.getLogger(EmployeeServiceImpl.class).info("Read Employee List, page = "+ pageNumber+", count=" + pageRecords);
         List<Employee> employeeList = employeeRepository.readEmployeeList(companyId, topTen);
         List <EmployeeDTO> employeeDTOList = new ArrayList(employeeList.size());
         for(Employee employee: employeeList){
@@ -78,6 +78,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setId(employeeDTO.getId());
         Logger.getLogger(EmployeeService.class).info("Update Employee " + employee.toString());
         employeeRepository.save(employee);
+    }
+
+    @Override
+    public long employeeCount() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String company = authority.get(1).getAuthority();
+        Long companyId = Long.parseLong(company.substring(10));
+        return employeeRepository.employeeCount(companyId);
     }
 
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){

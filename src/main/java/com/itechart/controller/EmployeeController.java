@@ -21,9 +21,16 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/employeeList")
     @ResponseBody
-    public List<EmployeeDTO> employeeList(){
+    public List<EmployeeDTO> employeeList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords){
         Logger.getLogger(AddressController.class).info("Request /EmployeeService/employee/employeeList ");
-        return employeeService.readEmployeeList();
+        int firstRecordNumber = firstRecordNumber(currentPage, pageRecords);
+        return employeeService.readEmployeeList(currentPage - 1, pageRecords);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/employeeCount")
+    @ResponseBody
+    public long employeeCount(){
+        return employeeService.employeeCount();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreate")
@@ -44,5 +51,10 @@ public class EmployeeController {
     public @ResponseBody void saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO){
         Logger.getLogger(AddressController.class).info("Request /EmployeeService/employee/saveEmployeeUpdate ");
         employeeService.updateEmployee(employeeDTO);
+    }
+
+    private int firstRecordNumber(int currentPage, int count){
+        int firstRecordNumber = (currentPage - 1) * count;
+        return firstRecordNumber >= 0 ? firstRecordNumber : 0;
     }
 }

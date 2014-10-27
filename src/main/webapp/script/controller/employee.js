@@ -39,8 +39,11 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
         });
     });
     $scope.setColor = function (value) {
+//        if (value) {
+//            return {background: "red"}
+//        }
         if (value) {
-            return {background: "red"}
+            return "alert alert-danger";
         }
     }
 

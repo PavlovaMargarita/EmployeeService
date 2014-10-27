@@ -15,8 +15,8 @@
                 <th>Редактировать</th>
             </tr>
         </thead>
-
-        <tr data-ng-repeat="employee in employees" ng-style="setColor({{employee.redRow}})">
+        <!--ng-style="setColor({{employee.redRow}})"-->
+        <tr data-ng-repeat="employee in employees" ng-class="setColor({{employee.redRow}})">
             <td>{{employee.s_name}} </td>
             <td>{{employee.f_name}} </td>
             <td>{{employee.departmentName}} </td>

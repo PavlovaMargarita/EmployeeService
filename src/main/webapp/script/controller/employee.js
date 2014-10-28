@@ -81,9 +81,43 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
             });
         });
     }
+
 });
 
-app.controller("employeeCreateController", function ($scope, $rootScope, $http, $location, $route) {
+app.controller("employeeCreateController", function ($scope, $rootScope, $http, $location, $route, $upload) {
+    $scope.show = false;
+    $scope.onFileSelect = function($files) {
+//        for (var i = 0; i < $files.length; i++) {
+//            var file = $files[i];
+//            var data = {f_name: 'test',
+//                s_name: 'qw'};
+////            $scope.upload = $upload.upload({
+////                method: 'POST',
+////                url: 'EmployeeService/employee/upload',
+////                file: file,
+////                data: data
+////            }).progress(function (evt) {
+////                console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+////            }).success(function (data, status, headers, config) {
+////                // file is uploaded successfully
+////                console.log(data);
+////            });
+//            var fd = new FormData();
+//            fd.append('data', angular.toJson(data));
+//            fd.append("file", file);
+//            $http({
+//                method: 'POST',
+//                url: 'EmployeeService/employee/uploadPhoto',
+//                headers: {'Content-Type': undefined},
+//                data: fd,
+//                transformRequest: angular.identity
+//            })
+//                .success(function(data, status) {
+//                    alert("success");
+//                });
+//        }
+        $scope.photo = $files[0];
+    }
 
     var departments = $http({
         method: "get",
@@ -167,9 +201,23 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
             contentType: 'application/json',
             mimeType: 'application/json'
         });
-        response.success(function () {
-            $location.path('/employeeList');
-            $location.replace();
+        response.success(function (data) {
+            var fd = new FormData();
+            fd.append('idEmployee', data);
+            fd.append("photo", $scope.photo);
+            $http({
+                method: 'POST',
+                url: 'EmployeeService/employee/uploadPhoto',
+                headers: {'Content-Type': undefined},
+                data: fd,
+                transformRequest: angular.identity
+            })
+                .success(function(data, status) {
+                    alert("success");
+                    $location.path('/employeeList');
+                    $location.replace();
+                });
+
         });
     }
 

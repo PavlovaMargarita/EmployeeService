@@ -13,9 +13,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Created by Margarita on 20.10.2014.
@@ -64,10 +68,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void createEmployee(EmployeeDTO employeeDTO) {
+    public Long createEmployee(EmployeeDTO employeeDTO) {
         Employee employee = employeeDTOToEmployee(employeeDTO);
         Logger.getLogger(EmployeeService.class).info("Create Employee " + employee.toString());
-        employeeRepository.save(employee);
+        return employeeRepository.save(employee).getId();
 
     }
 
@@ -87,6 +91,48 @@ public class EmployeeServiceImpl implements EmployeeService {
         String company = authority.get(1).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
         return employeeRepository.employeeCount(companyId);
+    }
+
+    @Override
+    public void loadPhoto(MultipartFile photo, Long id) {
+        System.out.println("ok");
+        String classPath = this.getClass().getClassLoader().getResource("").getPath();
+        String separator = "/";
+        StringBuilder photoPath = new StringBuilder();
+        StringTokenizer stringTokenizer = new StringTokenizer(classPath, separator);
+        while (stringTokenizer.hasMoreTokens()){
+            String token = (String)stringTokenizer.nextElement();
+            if(!token.equals("target")){
+                photoPath.append(token);
+                photoPath.append(separator);
+            }else break;
+        }
+        photoPath.append("src");
+        photoPath.append("/");
+        photoPath.append("main");
+        photoPath.append(separator);
+        photoPath.append("webapp");
+        photoPath.append(separator);
+        photoPath.append("photoEmployee");
+        photoPath.append(separator);
+        photoPath.append(id);
+        photoPath.append(separator);
+        String fileName  = photo.getOriginalFilename();
+        File pathFile = new File(photoPath.toString());
+        if(!pathFile.exists()){
+            pathFile.mkdir();
+        }
+        pathFile = new File(photoPath.toString() + fileName);
+        try {
+            photo.transferTo(pathFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //save url on database
+        Employee employee = employeeRepository.getOne(id);
+        employee.setPhotoURL(fileName);
+        employeeRepository.save(employee);
     }
 
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){
@@ -110,6 +156,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDTO.setDateContractEnd(employee.getDateContractEnd());
         employeeDTO.setFired(employee.getFired());
         employeeDTO.setFiredComment(employee.getFiredComment());
+        employeeDTO.setPhotoURL(employee.getPhotoURL());
         return employeeDTO;
     }
 

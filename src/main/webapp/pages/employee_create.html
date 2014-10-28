@@ -5,7 +5,7 @@
     </div>
 
 
-    <div class="button-save-div" ng-show="employee != undefined">
+    <div class="button-save-div" ng-show="show">
         <button type="button" class="btn btn-danger" onclick="showModalFiredComment()"> Уволить</button>
     </div>
 
@@ -13,7 +13,7 @@
         <div class="box" id="snp-box">
             <h3>ФИО</h3>
             <hr>
-
+            <input type="file" ng-file-select="onFileSelect($files)" multiple accept="image/*">
             <label id="label-surname">Введите корректную фамилию</label>
             <input type="hidden" class="form-control" name="id" id="id" ng-model="employee.id"/>
 

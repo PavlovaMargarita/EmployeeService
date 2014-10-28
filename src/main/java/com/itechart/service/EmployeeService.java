@@ -1,6 +1,7 @@
 package com.itechart.service;
 
 import com.itechart.dto.EmployeeDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -10,7 +11,8 @@ import java.util.List;
 public interface EmployeeService {
     public List<EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords);
     public EmployeeDTO readEmployee(Long id);
-    public void createEmployee(EmployeeDTO employeeDTO);
+    public Long createEmployee(EmployeeDTO employeeDTO);
     public void updateEmployee(EmployeeDTO employeeDTO);
     public long employeeCount();
+    public void loadPhoto(MultipartFile photo, Long id);
 }

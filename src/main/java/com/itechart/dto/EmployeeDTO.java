@@ -27,6 +27,7 @@ public class EmployeeDTO {
     private Boolean fired;
     private String firedComment;
     private Date dateFired;
+    private String photoURL;
 
     public EmployeeDTO(){}
 
@@ -172,5 +173,13 @@ public class EmployeeDTO {
 
     public void setDateFired(Date dateFired) {
         this.dateFired = dateFired;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 }

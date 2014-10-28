@@ -1,4 +1,4 @@
-var app = angular.module("EmployeeService", ['ngRoute', 'checklist-model', 'ngCookies']);
+var app = angular.module("EmployeeService", ['ngRoute', 'checklist-model', 'ngCookies', 'angularFileUpload']);
 
 app.run(function($rootScope, $cookieStore){
 

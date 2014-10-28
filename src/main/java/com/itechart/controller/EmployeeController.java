@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,9 +35,10 @@ public class EmployeeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreate")
-    public @ResponseBody void saveEmployeeCorrect(@RequestBody EmployeeDTO employeeDTO){
+    public @ResponseBody Long saveEmployeeCorrect(@RequestBody EmployeeDTO employeeDTO){
         Logger.getLogger(AddressController.class).info("Request /EmployeeService/employee/saveEmployeeCreate ");
-        employeeService.createEmployee(employeeDTO);
+        Long id = employeeService.createEmployee(employeeDTO);
+        return id;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/employeeById")
@@ -51,6 +53,22 @@ public class EmployeeController {
     public @ResponseBody void saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO){
         Logger.getLogger(AddressController.class).info("Request /EmployeeService/employee/saveEmployeeUpdate ");
         employeeService.updateEmployee(employeeDTO);
+    }
+
+//    @RequestMapping(method = RequestMethod.POST, value = "/upload")
+//    public @ResponseBody void upload(HttpServletRequest request, HttpServletResponse response){
+//        System.out.println("ok");
+//    }
+
+    @ResponseBody
+    @RequestMapping(value = "/uploadPhoto", method = RequestMethod.POST)
+    public void postFile(@RequestParam(value="photo", required=false) MultipartFile file,
+                           @RequestParam(value="idEmployee") String data) throws Exception {
+
+        System.out.println("data = " + data);
+        Long id = Long.parseLong(data);
+        employeeService.loadPhoto(file, id);
+
     }
 
     private int firstRecordNumber(int currentPage, int count){

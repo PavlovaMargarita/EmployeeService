@@ -130,9 +130,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         //save url on database
-        Employee employee = employeeRepository.getOne(id);
-        employee.setPhotoURL(fileName);
-        employeeRepository.save(employee);
+        EmployeeDTO employeeDTO = readEmployee(id);
+        employeeDTO.setPhotoURL(fileName);
+        updateEmployee(employeeDTO);
     }
 
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){
@@ -172,7 +172,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setStreet(employeeDTO.getStreet());
         employee.setHouse(employeeDTO.getHouse());
         employee.setFlat(employeeDTO.getFlat());
-        employee.setPhotoURL("qwe");
+        employee.setPhotoURL(employeeDTO.getPhotoURL());
         Address address = addressRepository.findOne(employeeDTO.getAddressId());
         employee.setAddress(address);
         Department department = departmentRepository.findOne(employeeDTO.getDepartmentId());

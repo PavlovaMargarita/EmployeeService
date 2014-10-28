@@ -14,6 +14,7 @@
             <h3>ФИО</h3>
             <hr>
             <input type="file" ng-file-select="onFileSelect($files)" multiple accept="image/*">
+            <img src="../photoEmployee/{{employee.id}}/{{employee.photoURL}}"/>
             <label id="label-surname">Введите корректную фамилию</label>
             <input type="hidden" class="form-control" name="id" id="id" ng-model="employee.id"/>
 

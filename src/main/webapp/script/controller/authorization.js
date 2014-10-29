@@ -58,6 +58,9 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
         if(data.role == 'ROLE_HRM'){
             $location.path('/employeeList');
         }
+        if(data.role == 'ROLE_SUPERADMIN'){
+            $location.path('/companyList');
+        }
         $location.replace();
     }
 

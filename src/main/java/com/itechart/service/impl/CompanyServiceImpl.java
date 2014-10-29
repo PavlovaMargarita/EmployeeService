@@ -1,13 +1,7 @@
 package com.itechart.service.impl;
 
-import com.itechart.dto.AddressDTO;
-import com.itechart.dto.CountryDTO;
-import com.itechart.dto.DepartmentDTO;
-import com.itechart.dto.PositionInCompanyDTO;
-import com.itechart.model.Address;
-import com.itechart.model.Country;
-import com.itechart.model.Department;
-import com.itechart.model.PositionInCompany;
+import com.itechart.dto.*;
+import com.itechart.model.*;
 import com.itechart.repository.CompanyRepository;
 import com.itechart.service.CompanyService;
 import org.apache.log4j.Logger;
@@ -28,10 +22,10 @@ import java.util.List;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
-
     @Autowired
     private CompanyRepository companyRepository;
 
+    private final int COUNT_COMPANY_FOR_SELECT = 50;
     @Override
     public List<PositionInCompanyDTO> readPositionInCompanyList() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -75,6 +69,27 @@ public class CompanyServiceImpl implements CompanyService {
         return addressDTOList;
     }
 
+    @Override
+    public List<CompanyDTO> readCompanyList() {
+        int count = companyRepository.companyCount();
+        int totalSelect = count / COUNT_COMPANY_FOR_SELECT + 1;
+        List<Company> companyList = new ArrayList<>(count);
+        for(int i = 0; i < totalSelect; i++){
+            companyList.addAll(companyRepository.readCompanyList(new PageRequest(i, COUNT_COMPANY_FOR_SELECT)));
+        }
+        List<CompanyDTO> companyDTOList = new ArrayList<>(count);
+        for (Company company: companyList){
+            companyDTOList.add(companyToCompanyDTO(company));
+        }
+        return companyDTOList;
+    }
+
+    @Override
+    public void updateCompany(CompanyDTO companyDTO) {
+        Company company = companyDTOToCompany(companyDTO);
+        companyRepository.save(company);
+    }
+
     private DepartmentDTO departmentToDepartmentDTO(Department department){
         DepartmentDTO departmentDTO = new DepartmentDTO();
         if(department != null) {
@@ -111,5 +126,25 @@ public class CompanyServiceImpl implements CompanyService {
         positionInCompanyDTO.setId(positionInCompany.getId());
         positionInCompanyDTO.setPosition(positionInCompany.getPosition());
         return positionInCompanyDTO;
+    }
+
+    private CompanyDTO companyToCompanyDTO(Company company){
+        CompanyDTO companyDTO = new CompanyDTO();
+        companyDTO.setId(company.getId());
+        companyDTO.setCompanyName(company.getCompanyName());
+        companyDTO.setAccountSum(company.getAccountSum());
+        companyDTO.setDateLastRefill(company.getDateLastRefill());
+        companyDTO.setCanLogin(company.getCanLogin());
+        return companyDTO;
+    }
+
+    private Company companyDTOToCompany(CompanyDTO companyDTO){
+        Company company = new Company();
+        company.setId(companyDTO.getId());
+        company.setCompanyName(companyDTO.getCompanyName());
+        company.setAccountSum(companyDTO.getAccountSum());
+        company.setDateLastRefill(companyDTO.getDateLastRefill());
+        company.setCanLogin(companyDTO.getCanLogin());
+        return company;
     }
 }

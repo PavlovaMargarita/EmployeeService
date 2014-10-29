@@ -1,6 +1,7 @@
 package com.itechart.service;
 
 import com.itechart.dto.AddressDTO;
+import com.itechart.dto.CompanyDTO;
 import com.itechart.dto.DepartmentDTO;
 import com.itechart.dto.PositionInCompanyDTO;
 
@@ -13,4 +14,6 @@ public interface CompanyService {
     public List<PositionInCompanyDTO> readPositionInCompanyList();
     public List<DepartmentDTO> readDepartmentList();
     public List<AddressDTO> readAddressList(Long departmentId);
+    public List<CompanyDTO> readCompanyList();
+    public void updateCompany(CompanyDTO companyDTO);
 }

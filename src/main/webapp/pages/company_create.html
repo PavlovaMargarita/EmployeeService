@@ -1,0 +1,50 @@
+<div class="contact">
+    <div class="page-title">
+        <h2>Информация о контакте</h2>
+        <hr>
+    </div>
+
+    <div class="contact-information">
+        <div class="box" id="snp-box">
+
+            <h3>Компания</h3>
+            <hr>
+
+            <div class="input-group" id="div-companyName">
+                <span class="input-group-addon">Название компании </span>
+                <input type="text" class="form-control" name="companyName" id="companyName" ng-model="company.companyName"/>
+            </div>
+
+            <div class="input-group" id="div-task">
+                <span class="input-group-addon">Задачи</span>
+                <select class="form-control" name="sex" id="sex" data-ng-model="employee.sex"
+                        ng-options="s.sexEnum as s.roleRussian for s in sexList">
+                </select>
+            </div>
+
+        </div>
+
+
+        <div class="box" id="address">
+            <h3>Состояние</h3>
+            <hr>
+            <button type="button" class="btn btn-warning" ng-click="save.doClick()"> Пополнить счет</button>
+            <div class="input-group" id="div-sum">
+                <span class="input-group-addon">Сумма</span>
+                <input type="text" class="form-control" name="sum" id="sum" ng-model="company.sum"/>
+            </div>
+
+            <div class="input-group" id="div-street">
+                <span class="input-group-addon">Дата последнего пополнения</span>
+                <input type="date" class="form-control" name="dateAddMoney" id="dateAddMoney" ng-model="company.dateAddMoney">
+            </div>
+        </div>
+
+        <div class="button-save-div">
+            <button type="button" class="btn btn-primary" ng-click="save.doClick()"> Сохранить</button>
+            <button type="button" class="btn btn-danger" ng-click="cancel.doClick()"> Отмена</button>
+        </div>
+    </div>
+
+</div>
+

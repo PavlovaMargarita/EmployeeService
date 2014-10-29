@@ -33,10 +33,17 @@ app.config(function($routeProvider){
             templateUrl: 'pages/employee_create.html',
             controller: 'employeeCreateController'
         } )
-
         .when('/employeeCorrect/:id', {
             templateUrl: 'pages/employee_create.html',
             controller: 'employeeCorrectController'
+        } )
+        .when('/companyList', {
+            templateUrl: 'pages/company_list.html',
+            controller: 'companyListController'
+        } )
+        .when('/companyCreate', {
+            templateUrl: 'pages/company_create.html',
+            controller: 'companyCreateController'
         } )
 
 });

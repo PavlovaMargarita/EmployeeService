@@ -15,8 +15,12 @@ import java.util.List;
  * Created by Margarita on 19.10.2014.
  */
 public interface CompanyRepository extends JpaRepository<Company, Long> {
-    @Query("select c from Company c")
-    public List<Company> readCompanyList();
+
+    @Query("select count(c) from Company c where c.canLogin = true")
+    public int companyCount();
+
+    @Query("select c from Company c where c.canLogin = true")
+    public List<Company> readCompanyList(Pageable pageable);
 
     @Query("select p from PositionInCompany p where p.company.id=:company")
     public List<PositionInCompany> readPositionInCompanyList(@Param("company")Long company, Pageable pageable);

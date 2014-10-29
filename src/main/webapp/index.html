@@ -33,7 +33,14 @@
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">Сотрудник <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="#employeeList">Список сотрудников</a></li>
-                                    <li><a href="#employeeCreate">Создать сотрудника</a></li>
+                                    <li><a href="#employeeCreate">Добавить сотрудника</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown" ng-show="hasAuthority(['ROLE_SUPERADMIN'])">
+                                <a href="" class="dropdown-toggle" data-toggle="dropdown">Компании <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#companyList">Список компаний</a></li>
+                                    <li><a href="#companyCreate">Добавить компанию</a></li>
                                 </ul>
                             </li>
 

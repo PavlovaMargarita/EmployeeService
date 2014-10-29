@@ -2,6 +2,7 @@ package com.itechart.model;
 
 import javax.persistence.*;
 import java.util.*;
+import java.sql.Date;
 
 @Entity
 @Table(name = "company")
@@ -17,6 +18,12 @@ public class Company {
 
     @Column(nullable = false, name = "can_login")
     private Boolean canLogin;
+
+    @Column(nullable = false, name = "account_sum")
+    private Integer accountSum;
+
+    @Column(nullable = false, name = "date_last_refill")
+    private Date dateLastRefill;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Department> departmentList;
@@ -79,5 +86,21 @@ public class Company {
 
     public void setFormerEmployeeList(List<Employee> formerEmployeeList) {
         this.formerEmployeeList = formerEmployeeList;
+    }
+
+    public Integer getAccountSum() {
+        return accountSum;
+    }
+
+    public void setAccountSum(Integer accountSum) {
+        this.accountSum = accountSum;
+    }
+
+    public java.sql.Date getDateLastRefill() {
+        return dateLastRefill;
+    }
+
+    public void setDateLastRefill(java.sql.Date dateLastRefill) {
+        this.dateLastRefill = dateLastRefill;
     }
 }

@@ -25,7 +25,7 @@ public class PositionInCompanyController {
     @RequestMapping(method = RequestMethod.GET, value = "/positionList")
     @ResponseBody
     public List<PositionInCompanyDTO> positionList(){
-        Logger.getLogger(AddressController.class).info("Request /EmployeeService/positionInCompany/positionList ");
+        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/positionInCompany/positionList ");
         return positionInCompanyService.readPositionInCompanyList();
     }
 }

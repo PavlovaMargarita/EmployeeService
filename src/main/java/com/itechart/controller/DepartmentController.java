@@ -25,7 +25,7 @@ public class DepartmentController {
     @RequestMapping(method = RequestMethod.GET, value = "/departmentList")
     @ResponseBody
     public List<DepartmentDTO> departmentList(){
-        Logger.getLogger(AddressController.class).info("Request /EmployeeService/department/departmentList ");
+        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/department/departmentList ");
         return departmentService.readDepartmentList();
     }
 

@@ -20,7 +20,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET, value = "/userInfo")
     @ResponseBody
     public LoginDTO currentUserInfo(Authentication authentication){
-        Logger.getLogger(AddressController.class).info("Request /EmployeeService/user/userInfo");
+        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/user/userInfo");
         List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
         String stringRole = authority.get(0).getAuthority();
         String username = authentication.getName();

@@ -19,12 +19,13 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
         function checkDateContractEnd(element, index) {
             var employeeDateContractEnd = new Date(element.dateContractEnd);
             var currentDate = new Date();
-            if((employeeDateContractEnd - currentDate) / (1000*60*60*24) <= 10){
+            if ((employeeDateContractEnd - currentDate) / (1000 * 60 * 60 * 24) <= 10) {
                 element.redRow = true;
-            } else{
+            } else {
                 element.redRow = false;
             }
         }
+
         var employeeCount = $http({
             method: "get",
             url: "/EmployeeService/employee/employeeCount",
@@ -32,16 +33,13 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
             contentType: 'application/json',
             mimeType: 'application/json'
         });
-        employeeCount.success(function(data){
-            $scope.totalRecords = data-0;
+        employeeCount.success(function (data) {
+            $scope.totalRecords = data - 0;
             $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
             $scope.range = PagerService.buildRange($scope.totalPages);
         });
     });
     $scope.setColor = function (value) {
-//        if (value) {
-//            return {background: "red"}
-//        }
         if (value) {
             return "alert alert-danger";
         }
@@ -60,12 +58,13 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
             function checkDateContractEnd(element, index) {
                 var employeeDateContractEnd = new Date(element.dateContractEnd);
                 var currentDate = new Date();
-                if((employeeDateContractEnd - currentDate) / (1000*60*60*24) <= 10){
+                if ((employeeDateContractEnd - currentDate) / (1000 * 60 * 60 * 24) <= 10) {
                     element.redRow = true;
-                } else{
+                } else {
                     element.redRow = false;
                 }
             }
+
             $scope.currentPage = pageNumber;
             var employeeCount = $http({
                 method: "get",
@@ -74,7 +73,7 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
                 contentType: 'application/json',
                 mimeType: 'application/json'
             });
-            employeeCount.success(function(data){
+            employeeCount.success(function (data) {
                 $scope.totalRecords = data - 0;
                 $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
                 $scope.range = PagerService.buildRange($scope.totalPages);
@@ -86,39 +85,18 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
 
 app.controller("employeeCreateController", function ($scope, $rootScope, $http, $location, $route, $upload) {
     $scope.show = false;
-    $scope.onFileSelect = function($files) {
-//        for (var i = 0; i < $files.length; i++) {
-//            var file = $files[i];
-//            var data = {f_name: 'test',
-//                s_name: 'qw'};
-////            $scope.upload = $upload.upload({
-////                method: 'POST',
-////                url: 'EmployeeService/employee/upload',
-////                file: file,
-////                data: data
-////            }).progress(function (evt) {
-////                console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-////            }).success(function (data, status, headers, config) {
-////                // file is uploaded successfully
-////                console.log(data);
-////            });
-//            var fd = new FormData();
-//            fd.append('data', angular.toJson(data));
-//            fd.append("file", file);
-//            $http({
-//                method: 'POST',
-//                url: 'EmployeeService/employee/uploadPhoto',
-//                headers: {'Content-Type': undefined},
-//                data: fd,
-//                transformRequest: angular.identity
-//            })
-//                .success(function(data, status) {
-//                    alert("success");
-//                });
-//        }
+    $scope.onFileSelect = function ($files) {
         $scope.photo = $files[0];
-    }
+        var reader = new FileReader();
+        var imgtag = document.getElementById("employeePhotoCreate");
+        var photo;
+        reader.onload = function (e) {
+            photo = e.target.result;
+            imgtag.src = photo;
+        };
+        reader.readAsDataURL($scope.photo);
 
+    }
     var departments = $http({
         method: "get",
         url: "/EmployeeService/department/departmentList",
@@ -140,17 +118,6 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
     countries.success(function (data) {
         $scope.countries = data;
     });
-
-//    var departmentAddresses = $http({
-//        method: "get",
-//        url: "/EmployeeService/address/addressList",
-//        dataType: 'json',
-//        contentType: 'application/json',
-//        mimeType: 'application/json'
-//    });
-//    departmentAddresses.success(function (data) {
-//        $scope.addresses = data;
-//    });
 
     var position = $http({
         method: "get",
@@ -195,7 +162,8 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
                 positionInCompanyId: $scope.position.id,
                 dateContractEnd: $scope.employee.dateContractEnd,
                 fired: false,
-                firedComment: ''
+                firedComment: '',
+                photoURL: 't'
             },
             dataType: 'json',
             contentType: 'application/json',
@@ -212,7 +180,7 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
                 data: fd,
                 transformRequest: angular.identity
             })
-                .success(function(data, status) {
+                .success(function (data, status) {
                     alert("success");
                     $location.path('/employeeList');
                     $location.replace();
@@ -222,18 +190,24 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
     }
 
     $scope.changeDepartment = {};
-    $scope.changeDepartment.change = function(){
+    $scope.changeDepartment.change = function () {
         loadAddress($scope.department.id, $http, $scope);
     }
 
+    $scope.loadPhotoButton = {};
+    $scope.loadPhotoButton.doClick = function () {
+        document.getElementById('photoFileID').click();
+    }
+
     $scope.cancel = {};
-    $scope.cancel.doClick = function(){
+    $scope.cancel.doClick = function () {
         $location.path('/employeeList');
         $location.replace();
     }
 });
 
 app.controller("employeeCorrectController", function ($scope, $http, $routeParams, $location) {
+    $scope.show = true;
     var id = $routeParams.id;
     var response = $http({
         method: "get",
@@ -334,8 +308,8 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
         sex.success(function (data) {
             $scope.sexList = data;
             data.forEach(selectSex);
-            function selectSex(element, index){
-                if(element.sexEnum == $scope.employee.sex){
+            function selectSex(element, index) {
+                if (element.sexEnum == $scope.employee.sex) {
                     $scope.employee.sex = $scope.sexList[index].sexEnum;
                 }
             }
@@ -364,15 +338,31 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 positionInCompanyId: $scope.position.id,
                 dateContractEnd: $scope.employee.dateContractEnd,
                 fired: false,
-                firedComment: ''
+                firedComment: '',
+                photoURL: $scope.employee.photoURL
             },
             dataType: 'json',
             contentType: 'application/json',
             mimeType: 'application/json'
         });
-        response.success(function () {
-            $location.path('/employeeList');
-            $location.replace();
+        response.success(function (data) {
+            var fd = new FormData();
+            fd.append('idEmployee', data);
+            fd.append("photo", $scope.photo);
+            $http({
+                method: 'POST',
+                url: 'EmployeeService/employee/uploadPhoto',
+                headers: {'Content-Type': undefined},
+                data: fd,
+                transformRequest: angular.identity
+            })
+                .success(function (data, status) {
+                    alert("success");
+                    $location.path('/employeeList');
+                    $location.replace();
+                });
+//            $location.path('/employeeList');
+//            $location.replace();
         });
     }
 
@@ -399,7 +389,8 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 dateContractEnd: $scope.employee.dateContractEnd,
                 fired: true,
                 firedComment: $scope.employee.firedComment,
-                dateFired: $scope.employee.dateFired
+                dateFired: $scope.employee.dateFired,
+                photoURL: "test"
             },
             dataType: 'json',
             contentType: 'application/json',
@@ -411,8 +402,31 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
         });
     }
 
+    $scope.loadPhotoButton = {};
+    $scope.loadPhotoButton.doClick = function () {
+        document.getElementById('photoFileID').click();
+        alert("ok");
+    }
+
+    $scope.loadPhotoButton = {};
+    $scope.loadPhotoButton.doClick = function () {
+        document.getElementById('photoFileID').click();
+    }
+    $scope.onFileSelect = function ($files) {
+        $scope.photo = $files[0];
+        var reader = new FileReader();
+        var imgtag = document.getElementById("employeePhotoEdit");
+        var photo;
+        reader.onload = function (e) {
+            photo = e.target.result;
+            imgtag.src = photo;
+        };
+        reader.readAsDataURL($scope.photo);
+
+    }
+
     $scope.cancel = {};
-    $scope.cancel.doClick = function(){
+    $scope.cancel.doClick = function () {
         $location.path('/employeeList');
         $location.replace();
     }
@@ -427,7 +441,7 @@ function hideModalFiredComment() {
     $('#modal-fired-comment').modal('hide');
 }
 
-function loadAddress(idDepartment, $http, $scope){
+function loadAddress(idDepartment, $http, $scope) {
     alert("load");
     var test;
     var departmentAddresses = $http({

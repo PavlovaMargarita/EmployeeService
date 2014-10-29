@@ -23,7 +23,7 @@ public class CountryController {
     @RequestMapping(method = RequestMethod.GET, value = "/countryList")
     @ResponseBody
     public List<CountryDTO> countryList(){
-        Logger.getLogger(AddressController.class).info("Request /EmployeeService/country/countryList ");
+        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/country/countryList ");
         return countryService.readCountryList();
     }
 }

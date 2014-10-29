@@ -23,7 +23,7 @@ public class SexController {
     @RequestMapping(method = RequestMethod.GET, value = "/sexList")
     @ResponseBody
     public List<SexDTO> addressList(){
-        Logger.getLogger(AddressController.class).info("Request /EmployeeService/sex/sexList");
+        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/sex/sexList");
         return sexService.readSexEnum();
     }
 }

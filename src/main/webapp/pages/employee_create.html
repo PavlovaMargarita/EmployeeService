@@ -8,13 +8,23 @@
     <div class="button-save-div" ng-show="show">
         <button type="button" class="btn btn-danger" onclick="showModalFiredComment()"> Уволить</button>
     </div>
+    <br/>
+
 
     <div class="contact-information">
         <div class="box" id="snp-box">
+
+            <!--<img ng-show="!show" id="employeePhotoCreate" src="../images/silhouette.jpg"/>-->
+            <!--<img ng-show="show" id="employeePhotoEdit" src="../photoEmployee/{{employee.id}}/{{employee.photoURL}}"/>-->
+            <img ng-show="!show" id="employeePhotoCreate" src="../images/silhouette.jpg"/>
+            <img ng-show="show" id="employeePhotoEdit" src="/{{employee.id}}/{{employee.photoURL}}"/>
+
+            <button class="btn bg-info" type="button" ng-click="loadPhotoButton.doClick()">Загрузить фото</button>
+
+            <input type="file" id="photoFileID" style="display: none" ng-file-select="onFileSelect($files)" multiple accept="image/*"/>
+
             <h3>ФИО</h3>
             <hr>
-            <input type="file" ng-file-select="onFileSelect($files)" multiple accept="image/*">
-            <img src="../photoEmployee/{{employee.id}}/{{employee.photoURL}}"/>
             <label id="label-surname">Введите корректную фамилию</label>
             <input type="hidden" class="form-control" name="id" id="id" ng-model="employee.id"/>
 
@@ -55,7 +65,6 @@
             <hr>
 
 
-
             <div class="input-group" id="div-country">
                 <span class="input-group-addon">Страна</span>
                 <select class="form-control" name="country" id="country" data-ng-model="country.id"
@@ -64,6 +73,7 @@
             </div>
 
             <label id="label-city">Введите корректный город</label>
+
             <div class="input-group" id="div-city">
                 <span class="input-group-addon">Город</span>
                 <input type="text" class="form-control" name="city" id="city" ng-model="employee.city"/>
@@ -125,30 +135,39 @@
         </div>
     </div>
 
-    <div class="modal fade bs-example-modal-sm" id="modal-fired-comment" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true">
+
+    <div class="modal fade bs-example-modal-sm" id="modal-fired-comment" tabindex="-1" role="dialog"
+         aria-labelledby="modal-label" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span></button>
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span></button>
                 </div>
 
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Комментарий</label>
-                        <textarea class="form-control" rows="6" id="fired-comment" ng-model="employee.firedComment"></textarea>
+                        <textarea class="form-control" rows="6" id="fired-comment"
+                                  ng-model="employee.firedComment"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Дата увольнения</label>
-                        <input type="date" class="form-control" name="date-fired" id="date-fired" ng-model="employee.dateFired"></textarea>
+                        <input type="date" class="form-control" name="date-fired" id="date-fired"
+                               ng-model="employee.dateFired"></textarea>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="hideModalFiredComment()">Закрыть</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                            onclick="hideModalFiredComment()">Закрыть
+                    </button>
                     <button type="button" class="btn btn-info" ng-click="delete.doClick()">Уволить</button>
                 </div>
             </div>
         </div>
     </div>
+
+
 </div>
 

@@ -19,14 +19,13 @@ import java.util.List;
 @Controller
 @RequestMapping("/EmployeeService/address")
 public class AddressController {
-
     @Autowired
     private DepartmentService departmentService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/addressList")
     @ResponseBody
     public List<AddressDTO> addressList(@RequestParam("departmentId") Long id ){
-        Logger.getLogger(AddressController.class).info("Request /EmployeeService/address/addressList, parameter id = " + id);
+        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/address/addressList, parameter id = " + id);
         return departmentService.readAddressList(id);
     }
 }

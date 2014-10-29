@@ -12,7 +12,8 @@ public interface EmployeeService {
     public List<EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords);
     public EmployeeDTO readEmployee(Long id);
     public Long createEmployee(EmployeeDTO employeeDTO);
-    public void updateEmployee(EmployeeDTO employeeDTO);
+    public Long updateEmployee(EmployeeDTO employeeDTO);
     public long employeeCount();
+    //load photo
     public void loadPhoto(MultipartFile photo, Long id);
 }

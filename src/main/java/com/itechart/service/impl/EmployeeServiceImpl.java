@@ -17,9 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Created by Margarita on 20.10.2014.
@@ -41,6 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private PositionInCompanyRepository positionInCompanyRepository;
 
+    private final String IMAGE_LOCATION = "D:/BSU/iTechArt/images/EmployeeService/photoEmployee/";
     @Override
     @Transactional
     public List <EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords) {
@@ -77,11 +79,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public void updateEmployee(EmployeeDTO employeeDTO) {
+    public Long updateEmployee(EmployeeDTO employeeDTO) {
         Employee employee = employeeDTOToEmployee(employeeDTO);
         employee.setId(employeeDTO.getId());
         Logger.getLogger(EmployeeService.class).info("Update Employee " + employee.toString());
         employeeRepository.save(employee);
+        return employeeDTO.getId();
     }
 
     @Override
@@ -95,42 +98,34 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void loadPhoto(MultipartFile photo, Long id) {
-        System.out.println("ok");
-        String classPath = this.getClass().getClassLoader().getResource("").getPath();
-        String separator = "/";
-        StringBuilder photoPath = new StringBuilder();
-        StringTokenizer stringTokenizer = new StringTokenizer(classPath, separator);
-        while (stringTokenizer.hasMoreTokens()){
-            String token = (String)stringTokenizer.nextElement();
-            if(!token.equals("target")){
-                photoPath.append(token);
-                photoPath.append(separator);
-            }else break;
-        }
-        photoPath.append("src");
-        photoPath.append("/");
-        photoPath.append("main");
-        photoPath.append(separator);
-        photoPath.append("webapp");
-        photoPath.append(separator);
-        photoPath.append("photoEmployee");
-        photoPath.append(separator);
+        //create new photo path
+        StringBuilder photoPath = new StringBuilder(IMAGE_LOCATION);
         photoPath.append(id);
-        photoPath.append(separator);
+        photoPath.append("/");
+
         String fileName  = photo.getOriginalFilename();
         File pathFile = new File(photoPath.toString());
         if(!pathFile.exists()){
             pathFile.mkdir();
         }
+
         pathFile = new File(photoPath.toString() + fileName);
+        //delete old image
+        EmployeeDTO employeeDTO = readEmployee(id);
+        try {
+            if(!employeeDTO.getPhotoURL().equals("t"))
+                Files.delete(Paths.get(photoPath.toString() + employeeDTO.getPhotoURL()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         try {
             photo.transferTo(pathFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         //save url on database
-        EmployeeDTO employeeDTO = readEmployee(id);
+
         employeeDTO.setPhotoURL(fileName);
         updateEmployee(employeeDTO);
     }

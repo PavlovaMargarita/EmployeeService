@@ -1,12 +1,25 @@
 package com.itechart.service.impl;
 
-import com.itechart.model.*;
-import com.itechart.repository.*;
+import com.itechart.dto.AddressDTO;
+import com.itechart.dto.CountryDTO;
+import com.itechart.dto.DepartmentDTO;
+import com.itechart.dto.PositionInCompanyDTO;
+import com.itechart.model.Address;
+import com.itechart.model.Country;
+import com.itechart.model.Department;
+import com.itechart.model.PositionInCompany;
+import com.itechart.repository.CompanyRepository;
 import com.itechart.service.CompanyService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,87 +28,88 @@ import java.util.List;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
+
     @Autowired
     private CompanyRepository companyRepository;
 
-    @Autowired
-    private DepartmentRepository departmentRepository;
-
-    @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private PositionInCompanyRepository positionInCompanyRepository;
-
-    @Autowired
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CountryRepository countryRepository;
-
     @Override
-    @Transactional
-    public List readCompany() {
-        return  companyRepository.findAll();
+    public List<PositionInCompanyDTO> readPositionInCompanyList() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String company = authority.get(1).getAuthority();
+        Long companyId = Long.parseLong(company.substring(10));
+        Pageable topTen = new PageRequest(0, 10);
+        Logger.getLogger(CompanyServiceImpl.class).info("Read PositionInCompanyList List, first=" + 0 + ", count=" + 10);
+        List<PositionInCompany> positionInCompanyList =companyRepository.readPositionInCompanyList(companyId, topTen);
+        List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList(positionInCompanyList.size());
+        for(PositionInCompany positionInCompany: positionInCompanyList){
+            positionInCompanyDTOList.add(positionInCompanyToPositionInCompanyDTO(positionInCompany));
+        }
+        return positionInCompanyDTOList;
     }
 
     @Override
-    @Transactional
-    public void createCompany(Company company) {
-        companyRepository.save(company);
+    public List<DepartmentDTO> readDepartmentList() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String company = authority.get(1).getAuthority();
+        Long companyId = Long.parseLong(company.substring(10));
+        Pageable topTen = new PageRequest(0, 10);
+        Logger.getLogger(CompanyServiceImpl.class).info("Read Department List, first=" + 0 + ", count=" + 10);
+        List <Department> departmentList = companyRepository.readDepartmentList(companyId, topTen);
+        List <DepartmentDTO> departmentDTOList = new ArrayList(departmentList.size());
+        for(Department department: departmentList){
+            departmentDTOList.add(departmentToDepartmentDTO(department));
+        }
+        return departmentDTOList;
     }
 
     @Override
-    @Transactional
-    public void createDepartment(Department department) {
-        departmentRepository.save(department);
+    public List<AddressDTO> readAddressList(Long departmentId) {
+        Logger.getLogger(CompanyServiceImpl.class).info("Read Address List for Department");
+        List <Address> addressList = companyRepository.readAddressList(departmentId);
+        List <AddressDTO> addressDTOList = new ArrayList(addressList.size());
+        for(Address address: addressList){
+            addressDTOList.add(addressToAddressDTO(address));
+        }
+        return addressDTOList;
     }
 
-    @Override
-    @Transactional
-    public void createAddress(Address address) {
-        addressRepository.save(address);
+    private DepartmentDTO departmentToDepartmentDTO(Department department){
+        DepartmentDTO departmentDTO = new DepartmentDTO();
+        if(department != null) {
+            departmentDTO.setId(department.getId());
+            departmentDTO.setDepartment(department.getDepartmentName());
+        }
+        return departmentDTO;
     }
 
-    @Override
-    @Transactional
-    public void createEmployee(Employee employee) {
-        employeeRepository.save(employee);
+    private AddressDTO addressToAddressDTO(Address address){
+        AddressDTO addressDTO = new AddressDTO();
+        addressDTO.setId(address.getId());
+        CountryDTO countryDTO = countryToCountryDTO(address.getCountry());
+        addressDTO.setCountry(countryDTO);
+        addressDTO.setCity(address.getCity());
+        addressDTO.setStreet(address.getStreet());
+        addressDTO.setHouse(address.getHouse());
+        addressDTO.setFlat(address.getFlat());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(countryDTO.getCountry() + " г." + addressDTO.getCity() +
+                " ул." + addressDTO.getStreet() + " д." + addressDTO.getHouse() + " оф." + addressDTO.getFlat());
+        addressDTO.setFullAddress(stringBuilder.toString());
+        return addressDTO;
     }
 
-    @Override
-    @Transactional
-    public void createPositionInCompany(PositionInCompany positionInCompany) {
-        positionInCompanyRepository.save(positionInCompany);
+    private CountryDTO countryToCountryDTO(Country country){
+        CountryDTO countryDTO = new CountryDTO();
+        countryDTO.setId(country.getId());
+        countryDTO.setCountry(country.getCountry());
+        return countryDTO;
     }
-
-    @Override
-    @Transactional
-    public void createProject(Project project) {
-        projectRepository.save(project);
-    }
-
-    @Override
-    @Transactional
-    public void createUser(User user) {
-        userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public void createCountry(Country country) {
-        countryRepository.save(country);
-    }
-
-    @Override
-    @Transactional
-    public User readUser(String login) {
-        return userRepository.readUser(login);
+    private PositionInCompanyDTO positionInCompanyToPositionInCompanyDTO(PositionInCompany positionInCompany){
+        PositionInCompanyDTO positionInCompanyDTO = new PositionInCompanyDTO();
+        positionInCompanyDTO.setId(positionInCompany.getId());
+        positionInCompanyDTO.setPosition(positionInCompany.getPosition());
+        return positionInCompanyDTO;
     }
 }

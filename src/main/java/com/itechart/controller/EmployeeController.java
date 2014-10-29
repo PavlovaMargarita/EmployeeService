@@ -1,6 +1,7 @@
 package com.itechart.controller;
 
 import com.itechart.dto.EmployeeDTO;
+import com.itechart.dto.SexDTO;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.GET, value = "/employeeList")
     @ResponseBody
     public List<EmployeeDTO> employeeList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords){
-        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/employee/employeeList ");
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/employeeList ");
         return employeeService.readEmployeeList(currentPage - 1, pageRecords);
     }
 
@@ -35,7 +36,7 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreate")
     public @ResponseBody Long saveEmployeeCorrect(@RequestBody EmployeeDTO employeeDTO){
-        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
         Long id = employeeService.createEmployee(employeeDTO);
         return id;
     }
@@ -43,14 +44,14 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.GET, value = "/employeeById")
     @ResponseBody
     public EmployeeDTO readEmployee(@RequestParam("id") Long id ){
-        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/employee/employeeById");
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/employeeById");
         EmployeeDTO employeeDTO= employeeService.readEmployee(id);
         return employeeDTO;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeUpdate")
     public @ResponseBody Long saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO){
-        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/employee/saveEmployeeUpdate ");
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeUpdate ");
         Long id = employeeService.updateEmployee(employeeDTO);
         return id;
     }
@@ -59,9 +60,16 @@ public class EmployeeController {
     @RequestMapping(value = "/uploadPhoto", method = RequestMethod.POST)
     public void postFile(@RequestParam(value="photo", required=false) MultipartFile file,
                            @RequestParam(value="idEmployee") String data) throws Exception {
-        Logger.getLogger(AddressController.class).info("Request: /EmployeeService/employee/uploadPhoto ");
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/uploadPhoto ");
         Long id = Long.parseLong(data);
         employeeService.loadPhoto(file, id);
 
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/sexList")
+    @ResponseBody
+    public List<SexDTO> addressList(){
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/sexList");
+        return employeeService.readSexEnum();
     }
 }

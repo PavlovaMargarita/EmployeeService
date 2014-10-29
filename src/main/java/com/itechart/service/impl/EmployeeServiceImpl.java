@@ -1,6 +1,8 @@
 package com.itechart.service.impl;
 
 import com.itechart.dto.EmployeeDTO;
+import com.itechart.dto.SexDTO;
+import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
 import com.itechart.repository.*;
 import com.itechart.service.EmployeeService;
@@ -31,16 +33,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private DepartmentRepository departmentRepository;
-
-    @Autowired
     private CountryRepository countryRepository;
 
     @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
-    private PositionInCompanyRepository positionInCompanyRepository;
+    private CompanyRepository companyRepository;
 
     private final String IMAGE_LOCATION = "D:/BSU/iTechArt/images/EmployeeService/photoEmployee/";
     @Override
@@ -130,6 +126,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         updateEmployee(employeeDTO);
     }
 
+
+    @Override
+    public List<SexDTO> readSexEnum() {
+        List<SexDTO> sexEnum = new ArrayList();
+        for(int i = 0; i < SexEnum.values().length; i++) {
+            SexDTO sexDTO = new SexDTO();
+            sexDTO.setSexEnum(SexEnum.values()[i]);
+            if(sexDTO.getSexEnum().equals(SexEnum.FEMALE)){
+                sexDTO.setRoleRussian("Женский");
+            }
+            if(sexDTO.getSexEnum().equals(SexEnum.MALE)){
+                sexDTO.setRoleRussian("Мужской");
+            }
+            sexEnum.add(sexDTO);
+        }
+        return sexEnum;
+    }
+
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(employee.getId());
@@ -168,11 +182,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setHouse(employeeDTO.getHouse());
         employee.setFlat(employeeDTO.getFlat());
         employee.setPhotoURL(employeeDTO.getPhotoURL());
-        Address address = addressRepository.findOne(employeeDTO.getAddressId());
+        Address address = companyRepository.readAddress(employeeDTO.getAddressId());
         employee.setAddress(address);
-        Department department = departmentRepository.findOne(employeeDTO.getDepartmentId());
+        Department department = companyRepository.readDepartment(employeeDTO.getDepartmentId());
         employee.setDepartment(department);
-        PositionInCompany positionInCompany = positionInCompanyRepository.findOne(employeeDTO.getPositionInCompanyId());
+        PositionInCompany positionInCompany = companyRepository.readPositionInCompany(employeeDTO.getPositionInCompanyId());
         employee.setPositionInCompany(positionInCompany);
         employee.setDateContractEnd(employeeDTO.getDateContractEnd());
         employee.setFired(employeeDTO.getFired());

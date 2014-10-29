@@ -99,7 +99,7 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
     }
     var departments = $http({
         method: "get",
-        url: "/EmployeeService/department/departmentList",
+        url: "/EmployeeService/company/departmentList",
         dataType: 'json',
         contentType: 'application/json',
         mimeType: 'application/json'
@@ -121,7 +121,7 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
 
     var position = $http({
         method: "get",
-        url: "/EmployeeService/positionInCompany/positionList",
+        url: "/EmployeeService/company/positionInCompanyList",
         dataType: 'json',
         contentType: 'application/json',
         mimeType: 'application/json'
@@ -132,7 +132,7 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
 
     var sex = $http({
         method: "get",
-        url: "/EmployeeService/sex/sexList",
+        url: "/EmployeeService/employee/sexList",
         dataType: 'json',
         contentType: 'application/json',
         mimeType: 'application/json'
@@ -220,7 +220,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
         $scope.employee = data;
         var departments = $http({
             method: "get",
-            url: "/EmployeeService/department/departmentList",
+            url: "/EmployeeService/company/departmentList",
             dataType: 'json',
             contentType: 'application/json',
             mimeType: 'application/json'
@@ -237,7 +237,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
             }
             var departmentAddresses = $http({
                 method: "get",
-                url: "/EmployeeService/address/addressList",
+                url: "/EmployeeService/company/addressList",
                 dataType: 'json',
                 contentType: 'application/json',
                 mimeType: 'application/json',
@@ -280,7 +280,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
 
         var position = $http({
             method: "get",
-            url: "/EmployeeService/positionInCompany/positionList",
+            url: "/EmployeeService/company/positionInCompanyList",
             dataType: 'json',
             contentType: 'application/json',
             mimeType: 'application/json'
@@ -300,7 +300,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
 
         var sex = $http({
             method: "get",
-            url: "/EmployeeService/sex/sexList",
+            url: "/EmployeeService/employee/sexList",
             dataType: 'json',
             contentType: 'application/json',
             mimeType: 'application/json'
@@ -446,7 +446,7 @@ function loadAddress(idDepartment, $http, $scope) {
     var test;
     var departmentAddresses = $http({
         method: "get",
-        url: "/EmployeeService/address/addressList",
+        url: "/EmployeeService/company/addressList",
         dataType: 'json',
         contentType: 'application/json',
         mimeType: 'application/json',

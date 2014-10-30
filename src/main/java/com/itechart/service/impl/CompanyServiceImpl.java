@@ -4,6 +4,7 @@ import com.itechart.dto.*;
 import com.itechart.enumProperty.CompanyStatusEnum;
 import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
+import com.itechart.projectValue.Params;
 import com.itechart.repository.CompanyRepository;
 import com.itechart.service.CompanyService;
 import org.apache.log4j.Logger;
@@ -15,7 +16,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -28,6 +31,7 @@ public class CompanyServiceImpl implements CompanyService {
     private CompanyRepository companyRepository;
 
     private final int COUNT_COMPANY_FOR_SELECT = 50;
+
     @Override
     public List<PositionInCompanyDTO> readPositionInCompanyList() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -36,9 +40,9 @@ public class CompanyServiceImpl implements CompanyService {
         Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(CompanyServiceImpl.class).info("Read PositionInCompanyList List, first=" + 0 + ", count=" + 10);
-        List<PositionInCompany> positionInCompanyList =companyRepository.readPositionInCompanyList(companyId, topTen);
+        List<PositionInCompany> positionInCompanyList = companyRepository.readPositionInCompanyList(companyId, topTen);
         List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList(positionInCompanyList.size());
-        for(PositionInCompany positionInCompany: positionInCompanyList){
+        for (PositionInCompany positionInCompany : positionInCompanyList) {
             positionInCompanyDTOList.add(positionInCompanyToPositionInCompanyDTO(positionInCompany));
         }
         return positionInCompanyDTOList;
@@ -52,9 +56,9 @@ public class CompanyServiceImpl implements CompanyService {
         Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(CompanyServiceImpl.class).info("Read Department List, first=" + 0 + ", count=" + 10);
-        List <Department> departmentList = companyRepository.readDepartmentList(companyId, topTen);
-        List <DepartmentDTO> departmentDTOList = new ArrayList(departmentList.size());
-        for(Department department: departmentList){
+        List<Department> departmentList = companyRepository.readDepartmentList(companyId, topTen);
+        List<DepartmentDTO> departmentDTOList = new ArrayList(departmentList.size());
+        for (Department department : departmentList) {
             departmentDTOList.add(departmentToDepartmentDTO(department));
         }
         return departmentDTOList;
@@ -63,9 +67,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<AddressDTO> readAddressList(Long departmentId) {
         Logger.getLogger(CompanyServiceImpl.class).info("Read Address List for Department");
-        List <Address> addressList = companyRepository.readAddressList(departmentId);
-        List <AddressDTO> addressDTOList = new ArrayList(addressList.size());
-        for(Address address: addressList){
+        List<Address> addressList = companyRepository.readAddressList(departmentId);
+        List<AddressDTO> addressDTOList = new ArrayList(addressList.size());
+        for (Address address : addressList) {
             addressDTOList.add(addressToAddressDTO(address));
         }
         return addressDTOList;
@@ -76,11 +80,11 @@ public class CompanyServiceImpl implements CompanyService {
         int count = companyRepository.companyCount();
         int totalSelect = count / COUNT_COMPANY_FOR_SELECT + 1;
         List<Company> companyList = new ArrayList<>(count);
-        for(int i = 0; i < totalSelect; i++){
+        for (int i = 0; i < totalSelect; i++) {
             companyList.addAll(companyRepository.readCompanyList(new PageRequest(i, COUNT_COMPANY_FOR_SELECT)));
         }
         List<CompanyDTO> companyDTOList = new ArrayList<>(count);
-        for (Company company: companyList){
+        for (Company company : companyList) {
             companyDTOList.add(companyToCompanyDTO(company));
         }
         return companyDTOList;
@@ -98,11 +102,27 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyDTOToCompany(companyDTO);
         company.setId(companyDTO.getId());
         company.setAccountSum(companyDTO.getAccountSum() + companyDTO.getAddSum());
-        switch (companyDTO.getCompanyStatus()){
-            case CONTINUE_FUNCTIONING: companyRepository.save(company); break;
-            case SUSPEND_FUNCTIONING: companyRepository.save(company); break;
-            case FINISH_FUNCTIONING: company.setCanLogin(false);
-                                     companyRepository.save(company);
+        java.util.Date currentDate = new java.util.Date();
+        java.util.Date companyDate = new java.util.Date(company.getDateBoundaryRefill().getTime());
+        Calendar cal = Calendar.getInstance();
+        while (currentDate.after(companyDate) && company.getAccountSum() - Params.COST_OF_USING_MONTH >= 0) {
+            company.setAccountSum(company.getAccountSum() - Params.COST_OF_USING_MONTH);
+            cal.setTime(companyDate);
+            cal.add(Calendar.MONTH, 1);
+            company.setDateBoundaryRefill(new java.sql.Date((cal.getTime()).getTime()));
+            companyDate = new java.util.Date(company.getDateBoundaryRefill().getTime());
+        }
+        switch (companyDTO.getCompanyStatus()) {
+            case CONTINUE_FUNCTIONING:
+                companyRepository.save(company);
+                break;
+            case SUSPEND_FUNCTIONING:
+                companyRepository.save(company);
+                break;
+            case FINISH_FUNCTIONING:
+                company.setCanLogin(false);
+                companyRepository.save(company);
+                break;
         }
     }
 
@@ -111,8 +131,8 @@ public class CompanyServiceImpl implements CompanyService {
         Pageable recordsCount = new PageRequest(pageNumber, pageRecords);
         List<Company> companyList = companyRepository.readCompanyList(recordsCount);
         List<CompanyDTO> companyDTOList = new ArrayList(companyList.size());
-        for(Company company: companyList){
-               companyDTOList.add(companyToCompanyDTO(company));
+        for (Company company : companyList) {
+            companyDTOList.add(companyToCompanyDTO(company));
         }
         return companyDTOList;
     }
@@ -125,16 +145,16 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<CompanyStatusDTO> readCompanyStatusEnum() {
         List<CompanyStatusDTO> companyTaskEnum = new ArrayList(SexEnum.values().length);
-        for(int i = 0; i < CompanyStatusEnum.values().length; i++) {
+        for (int i = 0; i < CompanyStatusEnum.values().length; i++) {
             CompanyStatusDTO companyStatusDTO = new CompanyStatusDTO();
             companyStatusDTO.setCompanyStatusEnum(CompanyStatusEnum.values()[i]);
-            if(companyStatusDTO.getCompanyStatusEnum().equals(CompanyStatusEnum.CONTINUE_FUNCTIONING)){
+            if (companyStatusDTO.getCompanyStatusEnum().equals(CompanyStatusEnum.CONTINUE_FUNCTIONING)) {
                 companyStatusDTO.setCompanyStatusEnumRussian("Продолжить функционирование");
             }
-            if(companyStatusDTO.getCompanyStatusEnum().equals(CompanyStatusEnum.SUSPEND_FUNCTIONING)){
+            if (companyStatusDTO.getCompanyStatusEnum().equals(CompanyStatusEnum.SUSPEND_FUNCTIONING)) {
                 companyStatusDTO.setCompanyStatusEnumRussian("Приостановить функционирование");
             }
-            if(companyStatusDTO.getCompanyStatusEnum().equals(CompanyStatusEnum.FINISH_FUNCTIONING)){
+            if (companyStatusDTO.getCompanyStatusEnum().equals(CompanyStatusEnum.FINISH_FUNCTIONING)) {
                 companyStatusDTO.setCompanyStatusEnumRussian("Завершить функционирование");
             }
             companyTaskEnum.add(companyStatusDTO);
@@ -158,16 +178,26 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepository.save(company);
     }
 
-    private DepartmentDTO departmentToDepartmentDTO(Department department){
+    @Override
+    public Date getDateBoundaryRefill() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String companyStringID = authority.get(1).getAuthority();
+        Long companyId = Long.parseLong(companyStringID.substring(10));
+        CompanyDTO companyDTO = readCompany(companyId);
+        return companyDTO.getDateBoundaryRefill();
+    }
+
+    private DepartmentDTO departmentToDepartmentDTO(Department department) {
         DepartmentDTO departmentDTO = new DepartmentDTO();
-        if(department != null) {
+        if (department != null) {
             departmentDTO.setId(department.getId());
             departmentDTO.setDepartment(department.getDepartmentName());
         }
         return departmentDTO;
     }
 
-    private AddressDTO addressToAddressDTO(Address address){
+    private AddressDTO addressToAddressDTO(Address address) {
         AddressDTO addressDTO = new AddressDTO();
         addressDTO.setId(address.getId());
         CountryDTO countryDTO = countryToCountryDTO(address.getCountry());
@@ -183,20 +213,21 @@ public class CompanyServiceImpl implements CompanyService {
         return addressDTO;
     }
 
-    private CountryDTO countryToCountryDTO(Country country){
+    private CountryDTO countryToCountryDTO(Country country) {
         CountryDTO countryDTO = new CountryDTO();
         countryDTO.setId(country.getId());
         countryDTO.setCountry(country.getCountry());
         return countryDTO;
     }
-    private PositionInCompanyDTO positionInCompanyToPositionInCompanyDTO(PositionInCompany positionInCompany){
+
+    private PositionInCompanyDTO positionInCompanyToPositionInCompanyDTO(PositionInCompany positionInCompany) {
         PositionInCompanyDTO positionInCompanyDTO = new PositionInCompanyDTO();
         positionInCompanyDTO.setId(positionInCompany.getId());
         positionInCompanyDTO.setPosition(positionInCompany.getPosition());
         return positionInCompanyDTO;
     }
 
-    private CompanyDTO companyToCompanyDTO(Company company){
+    private CompanyDTO companyToCompanyDTO(Company company) {
         CompanyDTO companyDTO = new CompanyDTO();
         companyDTO.setId(company.getId());
         companyDTO.setCompanyName(company.getCompanyName());
@@ -207,7 +238,7 @@ public class CompanyServiceImpl implements CompanyService {
         return companyDTO;
     }
 
-    private Company companyDTOToCompany(CompanyDTO companyDTO){
+    private Company companyDTOToCompany(CompanyDTO companyDTO) {
         Company company = new Company();
         company.setCompanyName(companyDTO.getCompanyName());
         company.setAccountSum(companyDTO.getAccountSum());

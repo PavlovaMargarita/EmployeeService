@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.sql.Date;
 
 /**
  * Created by Margarita on 29.10.2014.
@@ -79,4 +80,10 @@ public class CompanyController {
         companyService.createCompany(companyDTO);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/dateBoundaryRefill")
+    @ResponseBody
+    public Date getDateBoundaryRefill(){
+        Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/dateBoundaryRefill");
+        return companyService.getDateBoundaryRefill();
+    }
 }

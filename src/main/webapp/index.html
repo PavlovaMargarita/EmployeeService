@@ -1,69 +1,74 @@
 <!DOCTYPE>
 <html>
-    <head>
-        <meta charset="UTF-8"/>
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <script src="script-lib/jquery.min.js"></script>
-        <script src="script-lib/bootstrap.min.js"></script>
-        <script src="script-lib/angular.min.js"></script>
-        <script src="script-lib/angular-cookies.js"></script>
-        <script src="script-lib/angular-route.js"></script>
-        <script type="text/javascript" src="script/app.js"></script>
-        <script type="text/javascript" src="script/controller/authorization.js"></script>
-        <script type="text/javascript" src="script/controller/employee.js"></script>
-        <script type="text/javascript" src="script/directive/checklist-model.js"></script>
-        <script type="text/javascript" src="script-lib/jQuery.js"></script>
-        <script src="script-lib/jquery-ui.js"></script>
-        <script type="text/javascript" src="script-lib/jQuery.js"></script>
-        <script type="text/javascript" src="script/formValidator.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/1.6.1/angular-file-upload-shim.min.js" type="text/javascript"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/1.6.1/angular-file-upload.min.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="css/jquery-ui.css">
-        <script type="text/javascript" src="script/controller/company.js"></script>
-    </head>
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="script-lib/jquery.min.js"></script>
+    <script src="script-lib/bootstrap.min.js"></script>
+    <script src="script-lib/angular.min.js"></script>
+    <script src="script-lib/angular-cookies.js"></script>
+    <script src="script-lib/angular-route.js"></script>
+    <script type="text/javascript" src="script/app.js"></script>
+    <script type="text/javascript" src="script/controller/authorization.js"></script>
+    <script type="text/javascript" src="script/controller/employee.js"></script>
+    <script type="text/javascript" src="script/directive/checklist-model.js"></script>
+    <script type="text/javascript" src="script-lib/jQuery.js"></script>
+    <script src="script-lib/jquery-ui.js"></script>
+    <script type="text/javascript" src="script-lib/jQuery.js"></script>
+    <script type="text/javascript" src="script/formValidator.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/1.6.1/angular-file-upload-shim.min.js"
+            type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/1.6.1/angular-file-upload.min.js"
+            type="text/javascript"></script>
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <script type="text/javascript" src="script/controller/company.js"></script>
+</head>
 
-    <body ng-app="EmployeeService">
-        <header>
-            <nav class="navbar navbar-default" role="navigation">
-                <div class="container-fluid">
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
-                        <ul class="nav navbar-nav">
-                            <li class="dropdown" ng-show="hasAuthority(['ROLE_HRM'])">
-                                <a href="" class="dropdown-toggle" data-toggle="dropdown">Сотрудник <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#employeeList">Список сотрудников</a></li>
-                                    <li><a href="#employeeCreate">Добавить сотрудника</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown" ng-show="hasAuthority(['ROLE_SUPERADMIN'])">
-                                <a href="" class="dropdown-toggle" data-toggle="dropdown">Компании <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#companyList">Список компаний</a></li>
-                                    <li><a href="#companyCreate">Добавить компанию</a></li>
-                                </ul>
-                            </li>
-
+<body ng-app="EmployeeService">
+<header>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown" ng-show="hasAuthority(['ROLE_HRM'])">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">Сотрудник <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#employeeList">Список сотрудников</a></li>
+                            <li><a href="#employeeCreate">Добавить сотрудника</a></li>
                         </ul>
-
-                        <ul class="nav navbar-nav navbar-right">
-                            <li ng-show="isAuth()"><a href="j_spring_security_logout">Выход</a></li>
+                    </li>
+                    <li class="dropdown" ng-show="hasAuthority(['ROLE_SUPERADMIN'])">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">Компании <span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#companyList">Список компаний</a></li>
+                            <li><a href="#companyCreate">Добавить компанию</a></li>
                         </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li ng-show="!isAuth()"><a href="/#login">Войти</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
+                    </li>
 
-        <!--<div id="errorOverlay" class="overlay">-->
-            <!--<div class="errorPopup" id="errorPopup">-->
-                <!--<p id="errorMessage">ErrorMessage</p>-->
-            <!--</div>-->
-        <!--</div>-->
+                </ul>
 
-        <div class="content" id="content" ng-view></div>
-    </body>
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-show="isAuth()"><a href="j_spring_security_logout">Выход</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-show="!isAuth()"><a href="/#login">Войти</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!--<div id="errorOverlay" class="overlay">-->
+<!--<div class="errorPopup" id="errorPopup">-->
+<!--<p id="errorMessage">ErrorMessage</p>-->
+<!--</div>-->
+<!--</div>-->
+<div ng-show="showLabelPaySystem">
+    <h3><span class="label label-danger">Произведите оплату за пользование системой</span></h3>
+</div>
+<div class="content" id="content" ng-view></div>
+</body>
 </html>

@@ -2,6 +2,7 @@ package com.itechart.service;
 
 import com.itechart.dto.*;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -19,4 +20,5 @@ public interface CompanyService {
     public List<CompanyStatusDTO> readCompanyStatusEnum();
     public CompanyDTO readCompany(Long id);
     public void createCompany(CompanyDTO companyDTO);
+    public Date getDateBoundaryRefill();
 }

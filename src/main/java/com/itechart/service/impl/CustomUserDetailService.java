@@ -35,7 +35,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     private List<GrantedAuthority> buildUserAuthority(com.itechart.model.User user) {
 
-        Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
+        List<GrantedAuthority> setAuths = new ArrayList();
 
         // Build user's authorities
         setAuths.add(new SimpleGrantedAuthority(user.getRole().name()));

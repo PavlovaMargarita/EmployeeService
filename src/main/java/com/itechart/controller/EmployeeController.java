@@ -58,7 +58,7 @@ public class EmployeeController {
 
     @ResponseBody
     @RequestMapping(value = "/uploadPhoto", method = RequestMethod.POST)
-    public void postFile(@RequestParam(value="photo", required=false) MultipartFile file,
+    public void uploadFile(@RequestParam(value="photo", required=false) MultipartFile file,
                            @RequestParam(value="idEmployee") String data) throws Exception {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/uploadPhoto ");
         Long id = Long.parseLong(data);
@@ -68,7 +68,7 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/sexList")
     @ResponseBody
-    public List<SexDTO> addressList(){
+    public List<SexDTO> readSexList(){
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/sexList");
         return employeeService.readSexEnum();
     }

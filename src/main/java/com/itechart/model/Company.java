@@ -1,5 +1,7 @@
 package com.itechart.model;
 
+import com.itechart.enumProperty.CompanyStatusEnum;
+
 import javax.persistence.*;
 import java.util.*;
 import java.sql.Date;
@@ -22,8 +24,12 @@ public class Company {
     @Column(nullable = false, name = "account_sum")
     private Integer accountSum;
 
-    @Column(nullable = false, name = "date_last_refill")
-    private Date dateLastRefill;
+    @Column(nullable = false, name = "date_boundary_refill")
+    private Date dateBoundaryRefill;
+
+    @Column(nullable = false, name = "status_functioning")
+    @Enumerated(EnumType.STRING)
+    private CompanyStatusEnum companyStatus;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Department> departmentList;
@@ -96,11 +102,19 @@ public class Company {
         this.accountSum = accountSum;
     }
 
-    public java.sql.Date getDateLastRefill() {
-        return dateLastRefill;
+    public Date getDateBoundaryRefill() {
+        return dateBoundaryRefill;
     }
 
-    public void setDateLastRefill(java.sql.Date dateLastRefill) {
-        this.dateLastRefill = dateLastRefill;
+    public void setDateBoundaryRefill(Date dateBoundaryRefill) {
+        this.dateBoundaryRefill = dateBoundaryRefill;
+    }
+
+    public CompanyStatusEnum getCompanyStatus() {
+        return companyStatus;
+    }
+
+    public void setCompanyStatus(CompanyStatusEnum companyStatus) {
+        this.companyStatus = companyStatus;
     }
 }

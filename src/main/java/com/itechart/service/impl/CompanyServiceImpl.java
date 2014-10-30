@@ -1,6 +1,8 @@
 package com.itechart.service.impl;
 
 import com.itechart.dto.*;
+import com.itechart.enumProperty.CompanyStatusEnum;
+import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
 import com.itechart.repository.CompanyRepository;
 import com.itechart.service.CompanyService;
@@ -85,8 +87,74 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public void updateCompanyEveryDay(CompanyDTO companyDTO) {
+        Company company = companyDTOToCompany(companyDTO);
+        company.setId(companyDTO.getId());
+        companyRepository.save(company);
+    }
+
+    @Override
     public void updateCompany(CompanyDTO companyDTO) {
         Company company = companyDTOToCompany(companyDTO);
+        company.setId(companyDTO.getId());
+        company.setAccountSum(companyDTO.getAccountSum() + companyDTO.getAddSum());
+        switch (companyDTO.getCompanyStatus()){
+            case CONTINUE_FUNCTIONING: companyRepository.save(company); break;
+            case SUSPEND_FUNCTIONING: companyRepository.save(company); break;
+            case FINISH_FUNCTIONING: company.setCanLogin(false);
+                                     companyRepository.save(company);
+        }
+    }
+
+    @Override
+    public List<CompanyDTO> readCompanyList(int pageNumber, int pageRecords) {
+        Pageable recordsCount = new PageRequest(pageNumber, pageRecords);
+        List<Company> companyList = companyRepository.readCompanyList(recordsCount);
+        List<CompanyDTO> companyDTOList = new ArrayList(companyList.size());
+        for(Company company: companyList){
+               companyDTOList.add(companyToCompanyDTO(company));
+        }
+        return companyDTOList;
+    }
+
+    @Override
+    public long companyCount() {
+        return companyRepository.companyCount();
+    }
+
+    @Override
+    public List<CompanyStatusDTO> readCompanyStatusEnum() {
+        List<CompanyStatusDTO> companyTaskEnum = new ArrayList(SexEnum.values().length);
+        for(int i = 0; i < CompanyStatusEnum.values().length; i++) {
+            CompanyStatusDTO companyStatusDTO = new CompanyStatusDTO();
+            companyStatusDTO.setCompanyStatusEnum(CompanyStatusEnum.values()[i]);
+            if(companyStatusDTO.getCompanyStatusEnum().equals(CompanyStatusEnum.CONTINUE_FUNCTIONING)){
+                companyStatusDTO.setCompanyStatusEnumRussian("Продолжить функционирование");
+            }
+            if(companyStatusDTO.getCompanyStatusEnum().equals(CompanyStatusEnum.SUSPEND_FUNCTIONING)){
+                companyStatusDTO.setCompanyStatusEnumRussian("Приостановить функционирование");
+            }
+            if(companyStatusDTO.getCompanyStatusEnum().equals(CompanyStatusEnum.FINISH_FUNCTIONING)){
+                companyStatusDTO.setCompanyStatusEnumRussian("Завершить функционирование");
+            }
+            companyTaskEnum.add(companyStatusDTO);
+        }
+        return companyTaskEnum;
+    }
+
+    @Override
+    public CompanyDTO readCompany(Long id) {
+        Company company = companyRepository.findOne(id);
+        CompanyDTO companyDTO = companyToCompanyDTO(company);
+        return companyDTO;
+    }
+
+    @Override
+    public void createCompany(CompanyDTO companyDTO) {
+        Company company = companyDTOToCompany(companyDTO);
+        company.setAccountSum(companyDTO.getAddSum());
+        company.setCanLogin(true);
+        company.setCompanyStatus(CompanyStatusEnum.CONTINUE_FUNCTIONING);
         companyRepository.save(company);
     }
 
@@ -133,18 +201,19 @@ public class CompanyServiceImpl implements CompanyService {
         companyDTO.setId(company.getId());
         companyDTO.setCompanyName(company.getCompanyName());
         companyDTO.setAccountSum(company.getAccountSum());
-        companyDTO.setDateLastRefill(company.getDateLastRefill());
+        companyDTO.setDateBoundaryRefill(company.getDateBoundaryRefill());
         companyDTO.setCanLogin(company.getCanLogin());
+        companyDTO.setCompanyStatus(company.getCompanyStatus());
         return companyDTO;
     }
 
     private Company companyDTOToCompany(CompanyDTO companyDTO){
         Company company = new Company();
-        company.setId(companyDTO.getId());
         company.setCompanyName(companyDTO.getCompanyName());
         company.setAccountSum(companyDTO.getAccountSum());
-        company.setDateLastRefill(companyDTO.getDateLastRefill());
+        company.setDateBoundaryRefill(companyDTO.getDateBoundaryRefill());
         company.setCanLogin(companyDTO.getCanLogin());
+        company.setCompanyStatus(companyDTO.getCompanyStatus());
         return company;
     }
 }

@@ -1,9 +1,6 @@
 package com.itechart.service;
 
-import com.itechart.dto.AddressDTO;
-import com.itechart.dto.CompanyDTO;
-import com.itechart.dto.DepartmentDTO;
-import com.itechart.dto.PositionInCompanyDTO;
+import com.itechart.dto.*;
 
 import java.util.List;
 
@@ -15,5 +12,11 @@ public interface CompanyService {
     public List<DepartmentDTO> readDepartmentList();
     public List<AddressDTO> readAddressList(Long departmentId);
     public List<CompanyDTO> readCompanyList();
+    public void updateCompanyEveryDay(CompanyDTO companyDTO);
     public void updateCompany(CompanyDTO companyDTO);
+    public List<CompanyDTO> readCompanyList(int pageNumber, int pageRecords);
+    public long companyCount();
+    public List<CompanyStatusDTO> readCompanyStatusEnum();
+    public CompanyDTO readCompany(Long id);
+    public void createCompany(CompanyDTO companyDTO);
 }

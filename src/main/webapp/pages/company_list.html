@@ -8,12 +8,16 @@
     <table class="table table-hover">
         <thead>
         <tr class="warning">
-            <th>Название компнии</th>
+            <th>Название компании</th>
+            <th>Сумма на счету</th>
+            <th>Крайняя дата следующего пополнения</th>
             <th>Редактировать</th>
         </tr>
         </thead>
-        <tr data-ng-repeat="company in companies">
+        <tr data-ng-repeat="company in companies"  ng-class="setColor({{company.redRow}})">
             <td>{{company.companyName}} </td>
+            <td>{{company.accountSum}} </td>
+            <td>{{company.dateBoundaryRefill}} </td>
             <td><a class="btn btn-success btn-sm" href="#companyCorrect/{{company.id}}">Редактировать</a></td>
         </tr>
     </table>

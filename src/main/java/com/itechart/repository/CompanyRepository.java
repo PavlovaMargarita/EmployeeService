@@ -19,7 +19,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("select count(c) from Company c where c.canLogin = true")
     public int companyCount();
 
-    @Query("select c from Company c where c.canLogin = true")
+    @Query("select c from Company c where c.canLogin = true order by c.accountSum")
     public List<Company> readCompanyList(Pageable pageable);
 
     @Query("select p from PositionInCompany p where p.company.id=:company")

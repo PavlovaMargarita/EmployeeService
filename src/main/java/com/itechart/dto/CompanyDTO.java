@@ -1,5 +1,7 @@
 package com.itechart.dto;
 
+import com.itechart.enumProperty.CompanyStatusEnum;
+
 import java.sql.Date;
 
 /**
@@ -11,10 +13,12 @@ public class CompanyDTO {
     private Long id;
     private String companyName;
     private Integer accountSum;
-    private Date dateLastRefill;
+    private Date dateBoundaryRefill;
     private Boolean canLogin;
+    private CompanyStatusEnum companyStatus;
+    private Integer addSum;
     public CompanyDTO(){
-
+        addSum = 0;
     }
     public Long getId() {
         return id;
@@ -32,12 +36,12 @@ public class CompanyDTO {
         this.companyName = companyName;
     }
 
-    public Date getDateLastRefill() {
-        return dateLastRefill;
+    public Date getDateBoundaryRefill() {
+        return dateBoundaryRefill;
     }
 
-    public void setDateLastRefill(Date dateLastRefill) {
-        this.dateLastRefill = dateLastRefill;
+    public void setDateBoundaryRefill(Date dateBoundaryRefill) {
+        this.dateBoundaryRefill = dateBoundaryRefill;
     }
 
     public Integer getAccountSum() {
@@ -55,5 +59,21 @@ public class CompanyDTO {
 
     public void setCanLogin(Boolean canLogin) {
         this.canLogin = canLogin;
+    }
+
+    public CompanyStatusEnum getCompanyStatus() {
+        return companyStatus;
+    }
+
+    public void setCompanyStatus(CompanyStatusEnum companyStatus) {
+        this.companyStatus = companyStatus;
+    }
+
+    public Integer getAddSum() {
+        return addSum;
+    }
+
+    public void setAddSum(Integer addSum) {
+        this.addSum = addSum;
     }
 }

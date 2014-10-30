@@ -28,6 +28,7 @@ public class Employee {
     private Date dateOfBirth;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private SexEnum sex;
 
     @OneToOne

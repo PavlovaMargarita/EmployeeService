@@ -45,6 +45,10 @@ app.config(function($routeProvider){
             templateUrl: 'pages/company_create.html',
             controller: 'companyCreateController'
         } )
+        .when('/companyCorrect/:id', {
+            templateUrl: 'pages/company_create.html',
+            controller: 'companyCorrectController'
+        } )
 
 });
 

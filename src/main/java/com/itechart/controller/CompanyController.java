@@ -1,16 +1,11 @@
 package com.itechart.controller;
 
-import com.itechart.dto.AddressDTO;
-import com.itechart.dto.DepartmentDTO;
-import com.itechart.dto.PositionInCompanyDTO;
+import com.itechart.dto.*;
 import com.itechart.service.CompanyService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,4 +38,45 @@ public class CompanyController {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/addressList, parameter id = " + id);
         return companyService.readAddressList(id);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/companyList")
+    @ResponseBody
+    public List<CompanyDTO> companyList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords){
+        Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyList");
+        return companyService.readCompanyList(currentPage - 1, pageRecords);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/companyCount")
+    @ResponseBody
+    public long companyCount(){
+        return companyService.companyCount();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/companyById")
+    @ResponseBody
+    public CompanyDTO readCompany(@RequestParam("id") Long id ){
+        Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyById");
+        CompanyDTO companyDTO = companyService.readCompany(id);
+        return companyDTO;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/companyStatusList")
+    @ResponseBody
+    public List<CompanyStatusDTO> readCompanyStatusList(){
+        Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyStatusList");
+        return companyService.readCompanyStatusEnum();
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/saveCompanyUpdate")
+    public @ResponseBody void saveCompanyUpdate(@RequestBody CompanyDTO companyDTO){
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveCompanyUpdate ");
+        companyService.updateCompany(companyDTO);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/saveCompanyCreate")
+    public @ResponseBody void saveCompanyCreate(@RequestBody CompanyDTO companyDTO){
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveCompanyCreate ");
+        companyService.createCompany(companyDTO);
+    }
+
 }

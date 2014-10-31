@@ -346,23 +346,25 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
             mimeType: 'application/json'
         });
         response.success(function (data) {
-            var fd = new FormData();
-            fd.append('idEmployee', data);
-            fd.append("photo", $scope.photo);
-            $http({
-                method: 'POST',
-                url: 'EmployeeService/employee/uploadPhoto',
-                headers: {'Content-Type': undefined},
-                data: fd,
-                transformRequest: angular.identity
-            })
-                .success(function (data, status) {
-                    alert("success");
-                    $location.path('/employeeList');
-                    $location.replace();
-                });
-//            $location.path('/employeeList');
-//            $location.replace();
+            if($scope.photo) {
+                var fd = new FormData();
+                fd.append('idEmployee', data);
+                fd.append("photo", $scope.photo);
+                $http({
+                    method: 'POST',
+                    url: 'EmployeeService/employee/uploadPhoto',
+                    headers: {'Content-Type': undefined},
+                    data: fd,
+                    transformRequest: angular.identity
+                })
+                    .success(function (data, status) {
+                        alert("success");
+                        $location.path('/employeeList');
+                        $location.replace();
+                    });
+            }
+            $location.path('/employeeList');
+            $location.replace();
         });
     }
 

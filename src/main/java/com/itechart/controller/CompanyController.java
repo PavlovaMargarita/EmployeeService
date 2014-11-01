@@ -50,6 +50,7 @@ public class CompanyController {
     @RequestMapping(method = RequestMethod.GET, value = "/companyCount")
     @ResponseBody
     public long companyCount(){
+        Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyCount");
         return companyService.companyCount();
     }
 

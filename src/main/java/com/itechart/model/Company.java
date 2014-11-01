@@ -117,4 +117,16 @@ public class Company {
     public void setCompanyStatus(CompanyStatusEnum companyStatus) {
         this.companyStatus = companyStatus;
     }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "id=" + id +
+                ", companyName='" + companyName + '\'' +
+                ", canLogin=" + canLogin +
+                ", accountSum=" + accountSum +
+                ", dateBoundaryRefill=" + dateBoundaryRefill +
+                ", companyStatus=" + companyStatus +
+                '}';
+    }
 }

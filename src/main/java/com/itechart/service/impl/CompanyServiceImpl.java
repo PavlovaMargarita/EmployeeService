@@ -39,7 +39,7 @@ public class CompanyServiceImpl implements CompanyService {
         String company = authority.get(1).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(0, 10);
-        Logger.getLogger(CompanyServiceImpl.class).info("Read PositionInCompanyList List, first=" + 0 + ", count=" + 10);
+        Logger.getLogger(CompanyServiceImpl.class).info("Read PositionInCompanyList");
         List<PositionInCompany> positionInCompanyList = companyRepository.readPositionInCompanyList(companyId, topTen);
         List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList(positionInCompanyList.size());
         for (PositionInCompany positionInCompany : positionInCompanyList) {
@@ -55,7 +55,7 @@ public class CompanyServiceImpl implements CompanyService {
         String company = authority.get(1).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(0, 10);
-        Logger.getLogger(CompanyServiceImpl.class).info("Read Department List, first=" + 0 + ", count=" + 10);
+        Logger.getLogger(CompanyServiceImpl.class).info("Read Department ");
         List<Department> departmentList = companyRepository.readDepartmentList(companyId, topTen);
         List<DepartmentDTO> departmentDTOList = new ArrayList(departmentList.size());
         for (Department department : departmentList) {
@@ -77,10 +77,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<CompanyDTO> readCompanyList() {
+        Logger.getLogger(CompanyServiceImpl.class).info("Read company list ");
         int count = companyRepository.companyCount();
         int totalSelect = count / COUNT_COMPANY_FOR_SELECT + 1;
         List<Company> companyList = new ArrayList<>(count);
         for (int i = 0; i < totalSelect; i++) {
+            Logger.getLogger(CompanyServiceImpl.class).info("Read company list, page = " + i);
             companyList.addAll(companyRepository.readCompanyList(new PageRequest(i, COUNT_COMPANY_FOR_SELECT)));
         }
         List<CompanyDTO> companyDTOList = new ArrayList<>(count);
@@ -94,6 +96,7 @@ public class CompanyServiceImpl implements CompanyService {
     public void updateCompanyEveryDay(CompanyDTO companyDTO) {
         Company company = companyDTOToCompany(companyDTO);
         company.setId(companyDTO.getId());
+        Logger.getLogger(CompanyServiceImpl.class).info("Update company every day:" + company.toString());
         companyRepository.save(company);
     }
 
@@ -114,13 +117,16 @@ public class CompanyServiceImpl implements CompanyService {
         }
         switch (companyDTO.getCompanyStatus()) {
             case CONTINUE_FUNCTIONING:
+                Logger.getLogger(CompanyServiceImpl.class).info("Update company:" + company.toString());
                 companyRepository.save(company);
                 break;
             case SUSPEND_FUNCTIONING:
                 companyRepository.save(company);
+                Logger.getLogger(CompanyServiceImpl.class).info("Update company :" + company.toString());
                 break;
             case FINISH_FUNCTIONING:
                 company.setCanLogin(false);
+                Logger.getLogger(CompanyServiceImpl.class).info("Update company:" + company.toString());
                 companyRepository.save(company);
                 break;
         }
@@ -129,6 +135,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<CompanyDTO> readCompanyList(int pageNumber, int pageRecords) {
         Pageable recordsCount = new PageRequest(pageNumber, pageRecords);
+        Logger.getLogger(CompanyServiceImpl.class).info("Read company list, page = " + pageNumber);
         List<Company> companyList = companyRepository.readCompanyList(recordsCount);
         List<CompanyDTO> companyDTOList = new ArrayList(companyList.size());
         for (Company company : companyList) {
@@ -139,6 +146,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public long companyCount() {
+        Logger.getLogger(CompanyServiceImpl.class).info("Read company count ");
         return companyRepository.companyCount();
     }
 
@@ -164,6 +172,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDTO readCompany(Long id) {
+        Logger.getLogger(CompanyServiceImpl.class).info("Read company by id = " + id);
         Company company = companyRepository.findOne(id);
         CompanyDTO companyDTO = companyToCompanyDTO(company);
         return companyDTO;
@@ -175,6 +184,7 @@ public class CompanyServiceImpl implements CompanyService {
         company.setAccountSum(companyDTO.getAddSum());
         company.setCanLogin(true);
         company.setCompanyStatus(CompanyStatusEnum.CONTINUE_FUNCTIONING);
+        Logger.getLogger(CompanyServiceImpl.class).info("Create company: " + company.toString());
         companyRepository.save(company);
     }
 
@@ -185,6 +195,7 @@ public class CompanyServiceImpl implements CompanyService {
         String companyStringID = authority.get(1).getAuthority();
         Long companyId = Long.parseLong(companyStringID.substring(10));
         CompanyDTO companyDTO = readCompany(companyId);
+        Logger.getLogger(CompanyServiceImpl.class).info("Get date boundary refill");
         return companyDTO.getDateBoundaryRefill();
     }
 

@@ -31,6 +31,7 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.GET, value = "/employeeCount")
     @ResponseBody
     public long employeeCount(){
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/employeeCount ");
         return employeeService.employeeCount();
     }
 

@@ -89,6 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
         String company = authority.get(1).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
+        Logger.getLogger(EmployeeServiceImpl.class).info("Read employee count");
         return employeeRepository.employeeCount(companyId);
     }
 
@@ -114,14 +115,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         try {
             photo.transferTo(pathFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
         //save url on database
-
+        Logger.getLogger(EmployeeServiceImpl.class).info("Load file employee, id = " + employeeDTO.getId());
         employeeDTO.setPhotoURL(fileName);
         updateEmployee(employeeDTO);
     }

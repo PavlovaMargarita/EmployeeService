@@ -85,3 +85,8 @@ app.service('PagerService', function() {
         return currentPage === totalPageCount ? "disabled" : "";
     }
 });
+
+
+//$(function() {
+//
+//});

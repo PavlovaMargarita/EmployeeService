@@ -83,5 +83,33 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
     $scope.authorization.doClick = function(){
         var formValidator = new FormValidator(document.getElementById("form"));
         formValidator.validateLoginAndPassword();
-    }
+    };
+
+    $(function(){
+        $("#form").validate({
+            rules: {
+                j_username: {
+                    required: true,
+                    minlength: 5
+                },
+                j_password: {
+                    required: true,
+                    minlength: 6
+                }
+            },
+            messages: {
+                j_username: {
+                    required: "Введите свой логин",
+                    minlength: "Логин должно содержать не менее 5 символов"
+                },
+                j_password: {
+                    required: "Введите свой пароль",
+                    minlength: "Пароль должно содержать не менее 6 символов"
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    })
 });

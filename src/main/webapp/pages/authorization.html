@@ -2,12 +2,13 @@
     <div class="container" ng-controller = "authorizationController">
         <div class="div-error" id="processError">{{processError()}}</div>
         <div class="div-error" ng-show="pay">Вы не можете войти в систему, так как не произведена оплата</div>
-        <form action="/j_spring_security_check" method="POST" id="form">
+        <form action="/j_spring_security_check" method="POST" id="form" novalidate="novalidate">
             <div class="div-error" id="loginError">Логин должен содержать не менее 5 знаков</div>
-            <input type="text" class="form-control" placeholder="Ваш логин" name="j_username"/>
+            <input type="text" class="form-control" placeholder="Ваш логин" id="j_username" name="j_username"/>
             <div class="div-error" id="passwordError">Пароль должен содержать не менее 6 знаков</div>
-            <input type="password" class="form-control" placeholder="Ваш пароль" name="j_password"/>
-            <button type="button" class="btn btn-primary" ng-click="authorization.doClick()"> Войти</button>
+            <input type="password" class="form-control" placeholder="Ваш пароль" id="j_password" name="j_password"/>
+            <!--<button type="button" class="btn btn-primary" ng-click="authorization.doClick()"> Войти</button>-->
+            <button type="submit" class="btn btn-primary"> Войти</button>
         </form>
     </div>
 </div>

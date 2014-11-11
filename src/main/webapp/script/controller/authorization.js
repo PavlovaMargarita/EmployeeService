@@ -81,7 +81,7 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
 
     $scope.authorization = {};
     $scope.authorization.doClick = function(){
-        validateObject.validateAndSubmit('#formID', '#formID input:not([type="button"])');
+        validateObject.validateAndSubmit('#formID');
     };
 //
 //    $(function(){

@@ -52,8 +52,8 @@ body {
 }
 
 .contact, .contact-list, .contact-search, .order-list, .order-search, .order, .user, .user-list, .settings {
-    min-width: 800px;
-    max-width: 1366px;
+    min-width: 100%;
+    max-width: 100%;
     padding-left:  5%;
     padding-right: 5%;
 }

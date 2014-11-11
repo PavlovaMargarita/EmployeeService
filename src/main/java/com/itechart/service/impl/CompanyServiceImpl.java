@@ -80,12 +80,12 @@ public class CompanyServiceImpl implements CompanyService {
         Logger.getLogger(CompanyServiceImpl.class).info("Read company list ");
         int count = companyRepository.companyCount();
         int totalSelect = count / COUNT_COMPANY_FOR_SELECT + 1;
-        List<Company> companyList = new ArrayList<>(count);
+        List<Company> companyList = new ArrayList(count);
         for (int i = 0; i < totalSelect; i++) {
             Logger.getLogger(CompanyServiceImpl.class).info("Read company list, page = " + i);
             companyList.addAll(companyRepository.readCompanyList(new PageRequest(i, COUNT_COMPANY_FOR_SELECT)));
         }
-        List<CompanyDTO> companyDTOList = new ArrayList<>(count);
+        List<CompanyDTO> companyDTOList = new ArrayList(count);
         for (Company company : companyList) {
             companyDTOList.add(companyToCompanyDTO(company));
         }

@@ -94,4 +94,11 @@ public class CompanyController {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/currentCompanyId");
         return companyService.getCurrentCompanyId();
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/pay")
+    public @ResponseBody void pay(@RequestParam("accountNumber") String accountNumber){
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/company/pay ");
+        companyService.pay(accountNumber);
+
+    }
 }

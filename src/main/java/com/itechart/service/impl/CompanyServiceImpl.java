@@ -5,6 +5,7 @@ import com.itechart.enumProperty.CompanyStatusEnum;
 import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
 import com.itechart.projectValue.Params;
+import com.itechart.repository.AccountNumberRepository;
 import com.itechart.repository.CompanyRepository;
 import com.itechart.service.CompanyService;
 import org.apache.log4j.Logger;
@@ -29,6 +30,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private AccountNumberRepository accountNumberRepository;
 
     private final int COUNT_COMPANY_FOR_SELECT = 50;
 
@@ -104,17 +108,17 @@ public class CompanyServiceImpl implements CompanyService {
     public void updateCompany(CompanyDTO companyDTO) {
         Company company = companyDTOToCompany(companyDTO);
         company.setId(companyDTO.getId());
-        company.setAccountSum(companyDTO.getAccountSum() + companyDTO.getAddSum());
-        java.util.Date currentDate = new java.util.Date();
-        java.util.Date companyDate = new java.util.Date(company.getDateBoundaryRefill().getTime());
-        Calendar cal = Calendar.getInstance();
-        while (currentDate.after(companyDate) && company.getAccountSum() - Params.COST_OF_USING_MONTH >= 0) {
-            company.setAccountSum(company.getAccountSum() - Params.COST_OF_USING_MONTH);
-            cal.setTime(companyDate);
-            cal.add(Calendar.MONTH, 1);
-            company.setDateBoundaryRefill(new java.sql.Date((cal.getTime()).getTime()));
-            companyDate = new java.util.Date(company.getDateBoundaryRefill().getTime());
-        }
+//        company.setAccountSum(companyDTO.getAccountSum() + companyDTO.getAddSum());
+//        java.util.Date currentDate = new java.util.Date();
+//        java.util.Date companyDate = new java.util.Date(company.getDateBoundaryRefill().getTime());
+//        Calendar cal = Calendar.getInstance();
+//        while (currentDate.after(companyDate) && company.getAccountSum() - Params.COST_OF_USING_MONTH >= 0) {
+//            company.setAccountSum(company.getAccountSum() - Params.COST_OF_USING_MONTH);
+//            cal.setTime(companyDate);
+//            cal.add(Calendar.MONTH, 1);
+//            company.setDateBoundaryRefill(new java.sql.Date((cal.getTime()).getTime()));
+//            companyDate = new java.util.Date(company.getDateBoundaryRefill().getTime());
+//        }
         switch (companyDTO.getCompanyStatus()) {
             case CONTINUE_FUNCTIONING:
                 Logger.getLogger(CompanyServiceImpl.class).info("Update company:" + company.toString());
@@ -181,7 +185,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void createCompany(CompanyDTO companyDTO) {
         Company company = companyDTOToCompany(companyDTO);
-        company.setAccountSum(companyDTO.getAddSum());
+//        company.setAccountSum(companyDTO.getAddSum());
         company.setCanLogin(true);
         company.setCompanyStatus(CompanyStatusEnum.CONTINUE_FUNCTIONING);
         Logger.getLogger(CompanyServiceImpl.class).info("Create company: " + company.toString());
@@ -206,6 +210,26 @@ public class CompanyServiceImpl implements CompanyService {
         String company = authority.get(1).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
         return companyId;
+    }
+
+    @Override
+    public void pay(String number) {
+        if(accountNumberRepository.readAccountNumber(number) == null){
+            AccountNumber accountNumber = new AccountNumber();
+            accountNumber.setNumber(number);
+            accountNumberRepository.save(accountNumber);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+            String companyStringID = authority.get(1).getAuthority();
+            Long companyId = Long.parseLong(companyStringID.substring(10));
+            CompanyDTO companyDTO = readCompany(companyId);
+            java.util.Date companyDate = new java.util.Date(companyDTO.getDateBoundaryRefill().getTime());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(companyDate);
+            cal.add(Calendar.MONTH, 1);
+            companyDTO.setDateBoundaryRefill(new java.sql.Date((cal.getTime()).getTime()));
+            this.updateCompany(companyDTO);
+        }
     }
 
     private DepartmentDTO departmentToDepartmentDTO(Department department) {
@@ -251,7 +275,7 @@ public class CompanyServiceImpl implements CompanyService {
         CompanyDTO companyDTO = new CompanyDTO();
         companyDTO.setId(company.getId());
         companyDTO.setCompanyName(company.getCompanyName());
-        companyDTO.setAccountSum(company.getAccountSum());
+//        companyDTO.setAccountSum(company.getAccountSum());
         companyDTO.setDateBoundaryRefill(company.getDateBoundaryRefill());
         companyDTO.setCanLogin(company.getCanLogin());
         companyDTO.setCompanyStatus(company.getCompanyStatus());
@@ -261,7 +285,7 @@ public class CompanyServiceImpl implements CompanyService {
     private Company companyDTOToCompany(CompanyDTO companyDTO) {
         Company company = new Company();
         company.setCompanyName(companyDTO.getCompanyName());
-        company.setAccountSum(companyDTO.getAccountSum());
+//        company.setAccountSum(companyDTO.getAccountSum());
         company.setDateBoundaryRefill(companyDTO.getDateBoundaryRefill());
         company.setCanLogin(companyDTO.getCanLogin());
         company.setCompanyStatus(companyDTO.getCompanyStatus());

@@ -220,3 +220,8 @@ body {
     vertical-align:middle;
     text-align:center;
 }
+
+.error-font{
+    color: red;
+    font-weight: bold;
+}

@@ -1,6 +1,7 @@
 package com.itechart.service.impl;
 
-import com.itechart.repository.UserRepository;
+import com.itechart.model.Employee;
+import com.itechart.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,9 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Margarita on 20.10.2014.
@@ -20,34 +19,34 @@ import java.util.Set;
 public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private EmployeeRepository employeeRepository;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        com.itechart.model.User user = userRepository.readUser(s);
+        Employee user = employeeRepository.readEmployee(s);
         if(user != null) {
             List<GrantedAuthority> authorities = buildUserAuthority(user);
             return buildUserForAuthentication(user, authorities);
         }else {
-            throw new UsernameNotFoundException("Can't locate user '" + s + "'");
+            throw new UsernameNotFoundException("Can't locate employee '" + s + "'");
         }
     }
 
-    private List<GrantedAuthority> buildUserAuthority(com.itechart.model.User user) {
+    private List<GrantedAuthority> buildUserAuthority(Employee employee) {
 
         List<GrantedAuthority> setAuths = new ArrayList();
 
-        // Build user's authorities
-        setAuths.add(new SimpleGrantedAuthority(user.getRole().name()));
+        // Build employee's authorities
+        setAuths.add(new SimpleGrantedAuthority(employee.getRole().name()));
         String companyId = "companyId=";
-        setAuths.add(new SimpleGrantedAuthority(companyId + user.getEmployee().getDepartment().getCompany().getId()));
+        setAuths.add(new SimpleGrantedAuthority(companyId + employee.getCompany().getId()));
 
         List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
 
         return Result;
     }
 
-    private User buildUserForAuthentication(com.itechart.model.User user,
+    private User buildUserForAuthentication(Employee user,
                                             List<GrantedAuthority> authorities) {
         System.out.println(user.getLogin());
         return new User(user.getLogin(), user.getPassword(),

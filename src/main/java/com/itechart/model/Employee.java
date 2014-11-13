@@ -1,5 +1,6 @@
 package com.itechart.model;
 
+import com.itechart.enumProperty.RoleEnum;
 import com.itechart.enumProperty.SexEnum;
 
 import javax.persistence.*;
@@ -31,7 +32,7 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private SexEnum sex;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
@@ -53,6 +54,10 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "office_address_id", nullable = true)
     private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = true)
@@ -88,6 +93,16 @@ public class Employee {
 
     @Column(nullable = true)
     private Date dateFired;
+
+    @Column(nullable = false)
+    private String login;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
 
     public Employee(){
         companyList = new ArrayList<Company>();
@@ -253,7 +268,13 @@ public class Employee {
     public void setDateFired(Date dateFired) {
         this.dateFired = dateFired;
     }
+    public Company getCompany() {
+        return company;
+    }
 
+    public void setCompany(Company company) {
+        this.company = company;
+    }
     @Override
     public String toString() {
         return "Employee{" +
@@ -278,5 +299,27 @@ public class Employee {
                 '}';
     }
 
+    public String getLogin() {
+        return login;
+    }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public RoleEnum getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEnum role) {
+        this.role = role;
+    }
 }

@@ -12,14 +12,9 @@ public class CompanyDTO {
 
     private Long id;
     private String companyName;
-    private Integer accountSum;
     private Date dateBoundaryRefill;
     private Boolean canLogin;
     private CompanyStatusEnum companyStatus;
-    private Integer addSum;
-    public CompanyDTO(){
-        addSum = 0;
-    }
     public Long getId() {
         return id;
     }
@@ -44,15 +39,6 @@ public class CompanyDTO {
         this.dateBoundaryRefill = dateBoundaryRefill;
     }
 
-    public Integer getAccountSum() {
-
-        return accountSum;
-    }
-
-    public void setAccountSum(Integer accountSum) {
-        this.accountSum = accountSum;
-    }
-
     public Boolean getCanLogin() {
         return canLogin;
     }
@@ -67,13 +53,5 @@ public class CompanyDTO {
 
     public void setCompanyStatus(CompanyStatusEnum companyStatus) {
         this.companyStatus = companyStatus;
-    }
-
-    public Integer getAddSum() {
-        return addSum;
-    }
-
-    public void setAddSum(Integer addSum) {
-        this.addSum = addSum;
     }
 }

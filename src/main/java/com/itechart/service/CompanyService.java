@@ -22,4 +22,5 @@ public interface CompanyService {
     public void createCompany(CompanyDTO companyDTO);
     public Date getDateBoundaryRefill();
     public Long getCurrentCompanyId();
+    public void pay(String number);
 }

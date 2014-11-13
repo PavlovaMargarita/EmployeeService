@@ -21,9 +21,6 @@ public class Company {
     @Column(nullable = false, name = "can_login")
     private Boolean canLogin;
 
-    @Column(nullable = false, name = "account_sum")
-    private Integer accountSum;
-
     @Column(nullable = false, name = "date_boundary_refill")
     private Date dateBoundaryRefill;
 
@@ -39,6 +36,9 @@ public class Company {
 
     @ManyToMany(mappedBy = "companyList")
     private List<Employee> formerEmployeeList;
+
+    @OneToMany(mappedBy = "company")
+    private List<Employee> employeeList;
 
     public Company(){
         departmentList = new ArrayList<Department>();
@@ -94,14 +94,6 @@ public class Company {
         this.formerEmployeeList = formerEmployeeList;
     }
 
-    public Integer getAccountSum() {
-        return accountSum;
-    }
-
-    public void setAccountSum(Integer accountSum) {
-        this.accountSum = accountSum;
-    }
-
     public Date getDateBoundaryRefill() {
         return dateBoundaryRefill;
     }
@@ -117,6 +109,13 @@ public class Company {
     public void setCompanyStatus(CompanyStatusEnum companyStatus) {
         this.companyStatus = companyStatus;
     }
+    public List<Employee> getEmployeeList() {
+        return employeeList;
+    }
+
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
+    }
 
     @Override
     public String toString() {
@@ -124,7 +123,6 @@ public class Company {
                 "id=" + id +
                 ", companyName='" + companyName + '\'' +
                 ", canLogin=" + canLogin +
-                ", accountSum=" + accountSum +
                 ", dateBoundaryRefill=" + dateBoundaryRefill +
                 ", companyStatus=" + companyStatus +
                 '}';

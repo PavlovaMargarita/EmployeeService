@@ -1,6 +1,7 @@
 package com.itechart.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Margarita on 17.10.2014.
@@ -16,6 +17,9 @@ public class Country {
 
     @Column(nullable = false)
     private String country;
+
+    @OneToMany(mappedBy = "country")
+    private List<Employee> employeeList;
 
     public Country(){}
 
@@ -33,5 +37,13 @@ public class Country {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public List<Employee> getEmployeeList() {
+        return employeeList;
+    }
+
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
     }
 }

@@ -76,7 +76,7 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
         if(data.role == 'ROLE_SUPERADMIN'){
             $location.path('/companyList');
         }
-        if(data.role == 'ROLE_SEO'){
+        if(data.role == 'ROLE_CEO'){
             $location.path('/pay');
         }
         $location.replace();

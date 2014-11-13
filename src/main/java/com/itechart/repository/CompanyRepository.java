@@ -1,9 +1,6 @@
 package com.itechart.repository;
 
-import com.itechart.model.Address;
-import com.itechart.model.Company;
-import com.itechart.model.Department;
-import com.itechart.model.PositionInCompany;
+import com.itechart.model.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,7 +16,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("select count(c) from Company c where c.canLogin = true")
     public int companyCount();
 
-    @Query("select c from Company c where c.canLogin = true order by c.accountSum")
+    @Query("select c from Company c where c.canLogin = true")
     public List<Company> readCompanyList(Pageable pageable);
 
     @Query("select p from PositionInCompany p where p.company.id=:company")
@@ -39,5 +36,4 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     @Query("select a from Address a where a.id=:id")
     public Address readAddress(@Param("id")Long id);
-
 }

@@ -199,6 +199,15 @@ public class CompanyServiceImpl implements CompanyService {
         return companyDTO.getDateBoundaryRefill();
     }
 
+    @Override
+    public Long getCurrentCompanyId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String company = authority.get(1).getAuthority();
+        Long companyId = Long.parseLong(company.substring(10));
+        return companyId;
+    }
+
     private DepartmentDTO departmentToDepartmentDTO(Department department) {
         DepartmentDTO departmentDTO = new DepartmentDTO();
         if (department != null) {

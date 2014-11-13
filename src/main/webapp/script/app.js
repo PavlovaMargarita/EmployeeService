@@ -49,7 +49,10 @@ app.config(function($routeProvider){
             templateUrl: 'pages/company_create.html',
             controller: 'companyCorrectController'
         } )
-
+        .when('/pay', {
+            templateUrl: 'pages/pay.html',
+            controller: 'payController'
+        } )
 });
 
 app.service('PagerService', function() {
@@ -85,8 +88,3 @@ app.service('PagerService', function() {
         return currentPage === totalPageCount ? "disabled" : "";
     }
 });
-
-
-//$(function() {
-//
-//});

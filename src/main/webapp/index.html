@@ -28,6 +28,7 @@
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>-->
     <!--<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>-->
     <script type="text/javascript" src="script-lib/bootstrap-modal.js"></script>
+    <!--<script type="text/javascript" src="script-lib/angular.js"></script>-->
 
 </head>
 
@@ -54,12 +55,15 @@
                     </li>
 
                 </ul>
+                <ul class="nav navbar-nav">
+                    <li ng-show="hasAuthority(['ROLE_CEO'])"><a href="#pay">Заплатить</a></li>
+                </ul>
 
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-show="isAuth()"><a href="j_spring_security_logout">Выход</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li ng-show="!isAuth()"><a href="/#login">Войти</a></li>
+                    <li ng-show="!isAuth()"><a href="#login">Войти</a></li>
                 </ul>
             </div>
         </div>

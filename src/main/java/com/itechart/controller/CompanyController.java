@@ -14,7 +14,7 @@ import java.sql.Date;
  * Created by Margarita on 29.10.2014.
  */
 @Controller
-@RequestMapping("/EmployeeService/company")
+@RequestMapping("/company")
 public class CompanyController {
     @Autowired
     private CompanyService companyService;
@@ -86,5 +86,12 @@ public class CompanyController {
     public Date getDateBoundaryRefill(){
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/dateBoundaryRefill");
         return companyService.getDateBoundaryRefill();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/currentCompanyId")
+    @ResponseBody
+    public Long readCurrentCompanyId(){
+        Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/currentCompanyId");
+        return companyService.getCurrentCompanyId();
     }
 }

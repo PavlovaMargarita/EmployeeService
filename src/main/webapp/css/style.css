@@ -170,7 +170,53 @@ body {
     transition: visibility 0s 2s, opacity 2s linear;
 }
 
-img{
-    width: 25%;
-    height: 30%;
+.employee-photo{
+    width: 30%;
+    margin-left: 19%;
+}
+.button-add-photo {
+    width: 30%;
+    margin-right: 19%;
+}
+.div-employee-service-form {
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
+
+.button-save-delete {
+    width: 20%;
+    margin-left: 40%;
+    margin-right: 40%;
+}
+
+.label-font-size{
+    font-size: 0.8vw;
+}
+.input-size{
+    font-size: 0.8vw;
+    height: 1.6vw;
+    padding-bottom: 0.1vw;
+    padding-top: 0.1vw;
+}
+
+.button-style{
+    height: 1.8vw;
+    font-size: 0.8vw;
+    padding-bottom: 0.1vw;
+    padding-top: 0.1vw;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+}
+.parent {
+    display: table;
+    table-layout: fixed;
+}
+
+.child {
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
 }

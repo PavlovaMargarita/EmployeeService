@@ -8,6 +8,8 @@ import com.itechart.repository.*;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,7 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private CompanyRepository companyRepository;
 
-    private final String IMAGE_LOCATION = "D:/BSU/iTechArt/images/EmployeeService/photoEmployee/";
+    private final String LOCATION = "D:/EmployeeService/src/main/webapp/files/company/";
     @Override
     @Transactional
     public List <EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords) {
@@ -95,35 +99,53 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void loadPhoto(MultipartFile photo, Long id) {
-        //create new photo path
-        StringBuilder photoPath = new StringBuilder(IMAGE_LOCATION);
-        photoPath.append(id);
-        photoPath.append("/");
-
-        String fileName  = photo.getOriginalFilename();
-        File pathFile = new File(photoPath.toString());
-        if(!pathFile.exists()){
-            pathFile.mkdir();
-        }
-
-        pathFile = new File(photoPath.toString() + fileName);
-        //delete old image
-        EmployeeDTO employeeDTO = readEmployee(id);
         try {
-            if(!employeeDTO.getPhotoURL().equals("t"))
-                Files.delete(Paths.get(photoPath.toString() + employeeDTO.getPhotoURL()));
+            if(ImageIO.read(photo.getInputStream()) == null){
+                System.out.println("bad image");
+
+            } else {
+                //create new photo path
+                StringBuilder photoPath = new StringBuilder(LOCATION);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+                String company = authority.get(1).getAuthority();
+                Long companyId = Long.parseLong(company.substring(10));
+                photoPath.append(companyId);
+                photoPath.append("/photoEmployee/");
+                photoPath.append(id);
+                photoPath.append("/");
+
+                String fileName  = photo.getOriginalFilename();
+                File pathFile = new File(photoPath.toString());
+                if(!pathFile.exists()){
+                    pathFile.mkdir();
+                }
+
+                pathFile = new File(photoPath.toString() + fileName);
+                System.out.println(pathFile);
+                //delete old image
+                EmployeeDTO employeeDTO = readEmployee(id);
+                try {
+                    if(!employeeDTO.getPhotoURL().equals("t"))
+                        Files.delete(Paths.get(photoPath.toString() + employeeDTO.getPhotoURL()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    photo.transferTo(pathFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //save url on database
+                Logger.getLogger(EmployeeServiceImpl.class).info("Load file employee, id = " + employeeDTO.getId());
+                employeeDTO.setPhotoURL(fileName);
+                updateEmployee(employeeDTO);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("fail");
         }
-        try {
-            photo.transferTo(pathFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //save url on database
-        Logger.getLogger(EmployeeServiceImpl.class).info("Load file employee, id = " + employeeDTO.getId());
-        employeeDTO.setPhotoURL(fileName);
-        updateEmployee(employeeDTO);
+
     }
 
 

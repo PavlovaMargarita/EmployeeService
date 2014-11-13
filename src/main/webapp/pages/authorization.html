@@ -2,7 +2,7 @@
     <div class="container" ng-controller = "authorizationController">
         <div class="div-error" id="processError">{{processError()}}</div>
         <div class="div-error" ng-show="pay">Вы не можете войти в систему, так как не произведена оплата</div>
-        <form action="/j_spring_security_check" method="POST" id="formID">
+        <form action="j_spring_security_check" method="POST" id="formID">
             <div class="div-error" id="loginError">t</div>
             <input type="text" class="form-control" placeholder="Ваш логин" id="j_username" name="j_username" validate="username" errorLabel="#loginError"/>
             <div class="div-error" id="passwordError">Пароль должен содержать не менее 6 знаков</div>
@@ -12,3 +12,114 @@
         </form>
     </div>
 </div>
+
+<!--<script type="text/javascript">-->
+    <!--// You probably don't want to use globals, but this is just example code-->
+    <!--var fbAppId = 537117513099576;-->
+    <!--var objectToLike = 'http://techcrunch.com/2013/02/06/facebook-launches-developers-live-video-channel-to-keep-its-developer-ecosystem-up-to-date/';-->
+
+    <!--// This check is just here to make sure you set your app ID. You don't-->
+    <!--// need to use it in production.-->
+    <!--if (fbAppId === 'replace me') {-->
+        <!--alert('Please set the fbAppId in the sample.');-->
+    <!--}-->
+
+    <!--/*-->
+     <!--* This is boilerplate code that is used to initialize-->
+     <!--* the Facebook JS SDK.  You would normally set your-->
+     <!--* App ID in this code.-->
+     <!--*/-->
+
+    <!--// Additional JS functions here-->
+    <!--window.fbAsyncInit = function() {-->
+        <!--FB.init({-->
+            <!--appId      : fbAppId, // App ID-->
+            <!--status     : true,    // check login status-->
+            <!--cookie     : true,    // enable cookies to allow the-->
+            <!--// server to access the session-->
+            <!--xfbml      : true,     // parse page for xfbml or html5-->
+            <!--// social plugins like login button below-->
+            <!--version        : 'v2.0'  // Specify an API version-->
+        <!--});-->
+
+        <!--// Put additional init code here-->
+        <!--FB.login(function(response) {-->
+            <!--if (response.authResponse) {-->
+                <!--console.log('Welcome!  Fetching your information.... ');-->
+                <!--FB.api('/me', function(response) {-->
+                    <!--console.log('Good to see you, ' + response.name + ' ' + response.email + '.');-->
+                <!--});-->
+            <!--} else {-->
+                <!--console.log('User cancelled login or did not fully authorize.');-->
+            <!--}-->
+        <!--});-->
+    <!--};-->
+
+
+
+    <!--// Load the SDK Asynchronously-->
+    <!--(function(d, s, id){-->
+        <!--var js, fjs = d.getElementsByTagName(s)[0];-->
+        <!--if (d.getElementById(id)) {return;}-->
+        <!--js = d.createElement(s); js.id = id;-->
+        <!--js.src = "//connect.facebook.net/en_US/sdk.js";-->
+        <!--fjs.parentNode.insertBefore(js, fjs);-->
+    <!--}(document, 'script', 'facebook-jssdk'));-->
+
+    <!--/*-->
+     <!--* This function makes a call to the og.likes API.  The-->
+     <!--* object argument is the object you like.  Other types-->
+     <!--* of APIs may take other arguments. (i.e. the book.reads-->
+     <!--* API takes a book= argument.)-->
+     <!--*-->
+     <!--* Because it's a sample, it also sets the privacy-->
+     <!--* parameter so that it will create a story that only you-->
+     <!--* can see.  Remove the privacy parameter and the story-->
+     <!--* will be visible to whatever the default privacy was when-->
+     <!--* you added the app.-->
+     <!--*-->
+     <!--* Also note that you can view any story with the id, as-->
+     <!--* demonstrated with the code below.-->
+     <!--*-->
+     <!--* APIs used in postLike():-->
+     <!--* Call the Graph API from JS:-->
+     <!--*   https://developers.facebook.com/docs/reference/javascript/FB.api-->
+     <!--* The Open Graph og.likes API:-->
+     <!--*   https://developers.facebook.com/docs/reference/opengraph/action-type/og.likes-->
+     <!--* Privacy argument:-->
+     <!--*   https://developers.facebook.com/docs/reference/api/privacy-parameter-->
+     <!--*/-->
+
+
+<!--</script>-->
+
+<!--&lt;!&ndash;-->
+  <!--Login Button-->
+
+  <!--https://developers.facebook.com/docs/reference/plugins/login-->
+
+  <!--This example needs the 'publish_actions' permission in-->
+  <!--order to publish an action.  The scope parameter below-->
+  <!--is what prompts the user for that permission.-->
+<!--&ndash;&gt;-->
+
+<!--<div-->
+        <!--class="fb-login-button"-->
+        <!--data-show-faces="true"-->
+        <!--data-width="200"-->
+        <!--data-max-rows="1"-->
+        <!--data-scope="publish_actions">-->
+<!--</div>-->
+
+<!--<div id="result"></div>-->
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&appId=537117513099576&version=v2.0";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div>

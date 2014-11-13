@@ -21,4 +21,5 @@ public interface CompanyService {
     public CompanyDTO readCompany(Long id);
     public void createCompany(CompanyDTO companyDTO);
     public Date getDateBoundaryRefill();
+    public Long getCurrentCompanyId();
 }

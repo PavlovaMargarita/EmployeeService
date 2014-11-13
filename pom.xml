@@ -6,13 +6,12 @@
 
     <groupId>EmployeeService</groupId>
     <artifactId>EmployeeService</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Define Spring version as a constant -->
         <spring.version>3.2.5.RELEASE</spring.version>
         <hibernate.version>4.3.0.Final</hibernate.version>
         <spring.security.version>3.2.3.RELEASE</spring.security.version>

@@ -1,140 +1,325 @@
-<div class="contact">
-    <div class="page-title">
-        <h2>Информация о контакте</h2>
-        <hr>
+<!--<div class="contact">-->
+<!--<div class="page-title">-->
+<!--<h2>Информация о контакте</h2>-->
+<!--<hr>-->
+<!--</div>-->
+
+
+<!--<div class="button-save-div" ng-show="show">-->
+<!--<button type="button" class="btn btn-danger" onclick="showModalFiredComment()"> Уволить</button>-->
+<!--</div>-->
+<!--<br/>-->
+
+
+<!--<div class="contact-information">-->
+<!--<div class="box" id="snp-box">-->
+
+<!--<img ng-show="!show" id="employeePhotoCreate" src="../images/silhouette.jpg"/>-->
+<!--<img ng-show="showPhoto" id="employeePhotoEdit" />-->
+
+<!--<button class="btn bg-info" type="button" ng-click="loadPhotoButton.doClick()">Загрузить фото</button>-->
+
+<!--<input type="file" id="photoFileID" style="display: none" ng-file-select="onFileSelect($files)" multiple accept="image/*"/>-->
+
+<!--<h3>ФИО</h3>-->
+<!--<hr>-->
+<!--<label id="label-surname">Введите корректную фамилию</label>-->
+<!--<div class="input-group" id="div-surname">-->
+<!--<span class="input-group-addon">Фамилия </span>-->
+<!--<input type="text" class="form-control" name="s_name" id="s_name" ng-model="employee.s_name"/>-->
+<!--</div>-->
+
+<!--<label id="label-name">Введите корректное имя</label>-->
+
+<!--<div class="input-group" id="div-name">-->
+<!--<span class="input-group-addon">Имя</span>-->
+<!--<input type="text" class="form-control" id="f_name" name="f_name" ng-model="employee.f_name"/>-->
+<!--</div>-->
+
+<!--</div>-->
+
+<!--<div class="box" id="dob&email">-->
+<!--<h3>Дата рождения</h3>-->
+<!--<hr>-->
+
+<!--<div class="input-group">-->
+<!--<span class="input-group-addon">Дата рождения</span>-->
+<!--<input type="date" class="form-control" name="date-of-birth" id="date-of-birth"-->
+<!--ng-model="employee.dateOfBirth"/>-->
+<!--</div>-->
+
+<!--<div class="input-group" id="div-sex">-->
+<!--<span class="input-group-addon">Пол</span>-->
+<!--<select class="form-control" name="sex" id="sex" data-ng-model="employee.sex"-->
+<!--ng-options="s.sexEnum as s.roleRussian for s in sexList">-->
+<!--</select>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<div class="box" id="address">-->
+<!--<h3>Адрес</h3>-->
+<!--<hr>-->
+
+
+<!--<div class="input-group" id="div-country">-->
+<!--<span class="input-group-addon">Страна</span>-->
+<!--<select class="form-control" name="country" id="country" data-ng-model="country.id"-->
+<!--ng-options="c.id as c.country for c in countries">-->
+<!--</select>-->
+<!--</div>-->
+
+<!--<label id="label-city">Введите корректный город</label>-->
+
+<!--<div class="input-group" id="div-city">-->
+<!--<span class="input-group-addon">Город</span>-->
+<!--<input type="text" class="form-control" name="city" id="city" ng-model="employee.city"/>-->
+<!--</div>-->
+
+<!--<label id="label-street">Введите корректную улицу</label>-->
+
+<!--<div class="input-group" id="div-street">-->
+<!--<span class="input-group-addon">Улица</span>-->
+<!--<input type="text" class="form-control" name="street" id="street" ng-model="employee.street">-->
+<!--</div>-->
+
+<!--<label id="label-home">Введите корректный номер дома</label>-->
+
+<!--<div class="input-group" id="div-home">-->
+<!--<span class="input-group-addon">Дом</span>-->
+<!--<input type="text" class="form-control" name="house" id="house" ng-model="employee.house">-->
+<!--</div>-->
+
+<!--<label id="label-flat">Введите корректный номер квартиры</label>-->
+
+<!--<div class="input-group" id="div-flat">-->
+<!--<span class="input-group-addon">Квартира</span>-->
+<!--<input type="text" class="form-control" name="flat" id="flat" ng-model="employee.flat">-->
+<!--</div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;<label id="label-contact">Выберите отдел</label>&ndash;&gt;-->
+<!--<div class="input-group" id="div-department">-->
+<!--<span class="input-group-addon">Отдел</span>-->
+<!--<select class="form-control" name="department" id="department" data-ng-model="department.id"-->
+<!--ng-options="d.id as d.department for d in departments" ng-change="changeDepartment.change()">-->
+<!--</select>-->
+<!--</div>-->
+
+<!--<div class="input-group" id="div-department-address">-->
+<!--<span class="input-group-addon">Адрес офиса</span>-->
+<!--<select class="form-control" name="department_address" id="department_address" data-ng-model="address.id"-->
+<!--ng-options="a.id as a.fullAddress for a in addresses">-->
+<!--</select>-->
+<!--</div>-->
+
+<!--<div class="input-group" id="div-position">-->
+<!--<span class="input-group-addon">Должность</span>-->
+<!--<select class="form-control" name="position" id="position" data-ng-model="position.id"-->
+<!--ng-options="p.id as p.position for p in positions">-->
+<!--</select>-->
+<!--</div>-->
+
+<!--<div class="input-group">-->
+<!--<span class="input-group-addon">Дата окончания контракта</span>-->
+<!--<input type="date" class="form-control" name="contract-end-date" id="contract-end-date"-->
+<!--ng-model="employee.dateContractEnd"/>-->
+<!--</div>-->
+
+<!--<div class="button-save-div">-->
+<!--<button type="button" class="btn btn-primary" ng-click="save.doClick()"> Сохранить</button>-->
+<!--<button type="button" class="btn btn-danger" ng-click="cancel.doClick()"> Отмена</button>-->
+<!--</div>-->
+<!--</div>-->
+
+
+<!--<div class="modal fade bs-example-modal-sm" id="modal-fired-comment" tabindex="-1" role="dialog"-->
+<!--aria-labelledby="modal-label" aria-hidden="true">-->
+<!--<div class="modal-dialog modal-sm">-->
+<!--<div class="modal-content">-->
+<!--<div class="modal-header">-->
+<!--<button type="button" class="close" data-dismiss="modal"><span-->
+<!--aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span></button>-->
+<!--</div>-->
+
+<!--<div class="modal-body">-->
+<!--<div class="form-group">-->
+<!--<label>Комментарий</label>-->
+<!--<textarea class="form-control" rows="6" id="fired-comment"-->
+<!--ng-model="employee.firedComment"></textarea>-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<label>Дата увольнения</label>-->
+<!--<input type="date" class="form-control" name="date-fired" id="date-fired"-->
+<!--ng-model="employee.dateFired"/>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<div class="modal-footer">-->
+<!--<button type="button" class="btn btn-default" data-dismiss="modal"-->
+<!--onclick="hideModalFiredComment()">Закрыть-->
+<!--</button>-->
+<!--<button type="button" class="btn btn-info" ng-click="delete.doClick()">Уволить</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+
+<!--</div>-->
+
+<div class="container">
+    <div class="div-employee-service-form" ng-show="show">
+        <button type="button" class="btn btn-danger button-save-delete button-style" onclick="showModalFiredComment()">
+            Уволить
+        </button>
     </div>
 
+    <div class="div-employee-service-form">
+        <img class="employee-photo" ng-show="!show" id="employeePhotoCreate" src="../images/silhouette.jpg"/>
+        <img class="employee-photo" ng-show="showPhoto" id="employeePhotoEdit"/>
 
-    <div class="button-save-div" ng-show="show">
-        <button type="button" class="btn btn-danger" onclick="showModalFiredComment()"> Уволить</button>
+        <button class="btn bg-info button-add-photo" type="button" ng-click="loadPhotoButton.doClick()">Загрузить фото
+        </button>
     </div>
-    <br/>
+    <input type="file" id="photoFileID" style="display: none" ng-file-select="onFileSelect($files)" multiple
+           accept="image/*"/>
 
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="s_name">Фамилия</label>
 
-    <div class="contact-information">
-        <div class="box" id="snp-box">
-
-            <!--<img ng-show="!show" id="employeePhotoCreate" src="../images/silhouette.jpg"/>-->
-            <!--<img ng-show="show" id="employeePhotoEdit" src="../photoEmployee/{{employee.id}}/{{employee.photoURL}}"/>-->
-            <img ng-show="!show" id="employeePhotoCreate" src="../images/silhouette.jpg"/>
-            <img ng-show="show" id="employeePhotoEdit" src="/{{employee.id}}/{{employee.photoURL}}"/>
-
-            <button class="btn bg-info" type="button" ng-click="loadPhotoButton.doClick()">Загрузить фото</button>
-
-            <input type="file" id="photoFileID" style="display: none" ng-file-select="onFileSelect($files)" multiple accept="image/*"/>
-
-            <h3>ФИО</h3>
-            <hr>
-            <label id="label-surname">Введите корректную фамилию</label>
-            <!--<input type="hidden" class="form-control" name="id" id="id" ng-model="employee.id"/>-->
-
-            <div class="input-group" id="div-surname">
-                <span class="input-group-addon">Фамилия </span>
-                <input type="text" class="form-control" name="s_name" id="s_name" ng-model="employee.s_name"/>
+            <div class="col-sm-8">
+                <input type="text" class="form-control input-size" name="s_name" id="s_name" ng-model="employee.s_name"
+                       placeholder="Введите фамилию"/>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="f_name">Имя</label>
 
-            <label id="label-name">Введите корректное имя</label>
-
-            <div class="input-group" id="div-name">
-                <span class="input-group-addon">Имя</span>
-                <input type="text" class="form-control" id="f_name" name="f_name" ng-model="employee.f_name"/>
+            <div class="col-sm-8">
+                <input type="text" class="form-control input-size" id="f_name" name="f_name" ng-model="employee.f_name"
+                       placeholder="Введите имя"/>
             </div>
-
         </div>
 
-        <div class="box" id="dob&email">
-            <h3>Дата рождения</h3>
-            <hr>
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="date-of-birth">Дата рождения</label>
 
-            <div class="input-group">
-                <span class="input-group-addon">Дата рождения</span>
-                <input type="date" class="form-control" name="date-of-birth" id="date-of-birth"
+            <div class="col-sm-8">
+                <input type="date" class="form-control input-size" name="date-of-birth" id="date-of-birth"
                        ng-model="employee.dateOfBirth"/>
             </div>
+        </div>
 
-            <div class="input-group" id="div-sex">
-                <span class="input-group-addon">Пол</span>
-                <select class="form-control" name="sex" id="sex" data-ng-model="employee.sex"
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="sex">Пол</label>
+
+            <div class="col-sm-8">
+                <select class="form-control input-size" name="sex" id="sex" data-ng-model="employee.sex"
                         ng-options="s.sexEnum as s.roleRussian for s in sexList">
                 </select>
             </div>
         </div>
 
-        <div class="box" id="address">
-            <h3>Адрес</h3>
-            <hr>
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="country">Страна</label>
 
-
-            <div class="input-group" id="div-country">
-                <span class="input-group-addon">Страна</span>
-                <select class="form-control" name="country" id="country" data-ng-model="country.id"
+            <div class="col-sm-8">
+                <select class="form-control input-size" name="country" id="country" data-ng-model="country.id"
                         ng-options="c.id as c.country for c in countries">
                 </select>
             </div>
+        </div>
 
-            <label id="label-city">Введите корректный город</label>
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="city">Город</label>
 
-            <div class="input-group" id="div-city">
-                <span class="input-group-addon">Город</span>
-                <input type="text" class="form-control" name="city" id="city" ng-model="employee.city"/>
-            </div>
-
-            <label id="label-street">Введите корректную улицу</label>
-
-            <div class="input-group" id="div-street">
-                <span class="input-group-addon">Улица</span>
-                <input type="text" class="form-control" name="street" id="street" ng-model="employee.street">
-            </div>
-
-            <label id="label-home">Введите корректный номер дома</label>
-
-            <div class="input-group" id="div-home">
-                <span class="input-group-addon">Дом</span>
-                <input type="text" class="form-control" name="house" id="house" ng-model="employee.house">
-            </div>
-
-            <label id="label-flat">Введите корректный номер квартиры</label>
-
-            <div class="input-group" id="div-flat">
-                <span class="input-group-addon">Квартира</span>
-                <input type="text" class="form-control" name="flat" id="flat" ng-model="employee.flat">
+            <div class="col-sm-8">
+                <input type="text" class="form-control  input-size" name="city" id="city" ng-model="employee.city"
+                       placeholder="Введите грод"/>
             </div>
         </div>
 
-        <!--<label id="label-contact">Выберите отдел</label>-->
-        <div class="input-group" id="div-department">
-            <span class="input-group-addon">Отдел</span>
-            <select class="form-control" name="department" id="department" data-ng-model="department.id"
-                    ng-options="d.id as d.department for d in departments" ng-change="changeDepartment.change()">
-            </select>
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="street">Улица</label>
+
+            <div class="col-sm-8">
+                <input type="text" class="form-control input-size" name="street" id="street" ng-model="employee.street"
+                       placeholder="Введите улицу"/>
+            </div>
         </div>
 
-        <div class="input-group" id="div-department-address">
-            <span class="input-group-addon">Адрес офиса</span>
-            <select class="form-control" name="department_address" id="department_address" data-ng-model="address.id"
-                    ng-options="a.id as a.fullAddress for a in addresses">
-            </select>
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="house">Дом</label>
+
+            <div class="col-sm-8">
+                <input type="text" class="form-control input-size" name="house" id="house" ng-model="employee.house"
+                       placeholder="Введите улицу"/>
+            </div>
         </div>
 
-        <div class="input-group" id="div-position">
-            <span class="input-group-addon">Должность</span>
-            <select class="form-control" name="position" id="position" data-ng-model="position.id"
-                    ng-options="p.id as p.position for p in positions">
-            </select>
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="flat">Квартира</label>
+
+            <div class="col-sm-8">
+                <input type="text" class="form-control input-size" name="flat" id="flat" ng-model="employee.flat"
+                       placeholder="Введите улицу"/>
+            </div>
         </div>
 
-        <div class="input-group">
-            <span class="input-group-addon">Дата окончания контракта</span>
-            <input type="date" class="form-control" name="contract-end-date" id="contract-end-date"
-                   ng-model="employee.dateContractEnd"/>
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="department">Отдел</label>
+
+            <div class="col-sm-8">
+                <select class="form-control input-size" name="department" id="department" data-ng-model="department.id"
+                        ng-options="d.id as d.department for d in departments" ng-change="changeDepartment.change()">
+                </select>
+            </div>
         </div>
 
-        <div class="button-save-div">
-            <button type="button" class="btn btn-primary" ng-click="save.doClick()"> Сохранить</button>
-            <button type="button" class="btn btn-danger" ng-click="cancel.doClick()"> Отмена</button>
-        </div>
-    </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="department_address">Адрес офиса</label>
 
+            <div class="col-sm-8">
+                <select class="form-control input-size" name="department_address" id="department_address"
+                        data-ng-model="address.id"
+                        ng-options="a.id as a.fullAddress for a in addresses">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="position">Должность</label>
+
+            <div class="col-sm-8">
+                <select class="form-control input-size" name="position" id="position" data-ng-model="position.id"
+                        ng-options="p.id as p.position for p in positions">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="contract-end-date">Дата окончания контракта</label>
+
+            <div class="col-sm-8">
+                <input type="date" class="form-control input-size" name="contract-end-date" id="contract-end-date"
+                       ng-model="employee.dateContractEnd"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size"></label>
+
+            <div class="col-sm-8">
+                <button type="button" class="btn btn-primary col-sm-3 button-style" ng-click="save.doClick()">
+                    Сохранить
+                </button>
+                <button type="button" class="btn btn-danger col-sm-offset-1 col-sm-3 button-style"
+                        ng-click="cancel.doClick()"> Отмена
+                </button>
+            </div>
+        </div>
+    </form>
 
     <div class="modal fade bs-example-modal-sm" id="modal-fired-comment" tabindex="-1" role="dialog"
          aria-labelledby="modal-label" aria-hidden="true">
@@ -167,7 +352,4 @@
             </div>
         </div>
     </div>
-
-
 </div>
-

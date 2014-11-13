@@ -5,6 +5,7 @@ import com.itechart.enumProperty.RoleEnum;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,13 +15,14 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/EmployeeService/user")
+@RequestMapping("/user")
 public class UserController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/userInfo")
     @ResponseBody
-    public LoginDTO currentUserInfo(Authentication authentication){
+    public LoginDTO currentUserInfo(){
         Logger.getLogger(UserController.class).info("Request: /EmployeeService/user/userInfo");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
         String stringRole = authority.get(0).getAuthority();
         String username = authentication.getName();

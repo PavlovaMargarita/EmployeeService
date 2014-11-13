@@ -208,6 +208,20 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
 
 app.controller("employeeCorrectController", function ($scope, $http, $routeParams, $location) {
     $scope.show = true;
+    var currentCompany = $http({
+        method: "get",
+        url: "/EmployeeService/company/currentCompanyId",
+        dataType: 'json',
+        contentType: 'application/json',
+        mimeType: 'application/json'
+    });
+    currentCompany.success(function (data) {
+        $scope.company = {};
+        $scope.company.id = data;
+
+    });
+
+    $scope.showPhoto = false;
     var id = $routeParams.id;
     var response = $http({
         method: "get",
@@ -218,6 +232,9 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
     });
     response.success(function (data) {
         $scope.employee = data;
+        //load photo
+        $('#employeePhotoEdit').attr('src', "/EmployeeService/files/company/" + $scope.company.id+ "/photoEmployee/" + $scope.employee.id + "/" +$scope.employee.photoURL);
+        $scope.showPhoto = true;
         var departments = $http({
             method: "get",
             url: "/EmployeeService/company/departmentList",
@@ -352,7 +369,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 fd.append("photo", $scope.photo);
                 $http({
                     method: 'POST',
-                    url: 'EmployeeService/employee/uploadPhoto',
+                    url: '/EmployeeService/employee/uploadPhoto',
                     headers: {'Content-Type': undefined},
                     data: fd,
                     transformRequest: angular.identity

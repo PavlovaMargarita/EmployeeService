@@ -1,7 +1,9 @@
 package com.itechart.service.impl;
 
 import com.itechart.dto.EmployeeDTO;
+import com.itechart.dto.RoleDTO;
 import com.itechart.dto.SexDTO;
+import com.itechart.enumProperty.RoleEnum;
 import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
 import com.itechart.repository.*;
@@ -42,7 +44,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private CompanyRepository companyRepository;
 
-    private final String LOCATION = "D:/EmployeeService/src/main/webapp/files/company/";
+    //private final String LOCATION = "D:/EmployeeService/src/main/webapp/files/company/";
+    private final String LOCATION = "C:/apache-tomcat-7.0.56/webapps/EmployeeService/files/company/";
     @Override
     @Transactional
     public List <EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords) {
@@ -71,6 +74,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Long createEmployee(EmployeeDTO employeeDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String company = authority.get(1).getAuthority();
+        Long companyId = Long.parseLong(company.substring(10));
+        employeeDTO.setCompanyId(companyId);
         Employee employee = employeeDTOToEmployee(employeeDTO);
         Logger.getLogger(EmployeeService.class).info("Create Employee " + employee.toString());
         return employeeRepository.save(employee).getId();
@@ -166,6 +174,36 @@ public class EmployeeServiceImpl implements EmployeeService {
         return sexEnum;
     }
 
+    @Override
+    public EmployeeDTO readCurrentEmployee() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String company = authority.get(2).getAuthority();
+        Long employeeId = Long.parseLong(company.substring(11));
+        EmployeeDTO employeeDTO = readEmployee(employeeId);
+        return employeeDTO;
+    }
+
+    @Override
+    public List<RoleDTO> readRoleEnum() {
+        List<RoleDTO> roleEnum = new ArrayList();
+        for(int i = 0; i < RoleEnum.values().length; i++) {
+            RoleDTO roleDTO = new RoleDTO();
+            roleDTO.setRoleEnum(RoleEnum.values()[i]);
+            if(roleDTO.getRoleEnum().equals(RoleEnum.ROLE_ADMIN)){
+                roleDTO.setRoleRussian("Администратор");
+            }
+            if(roleDTO.getRoleEnum().equals(RoleEnum.ROLE_EMPLOYEE)){
+                roleDTO.setRoleRussian("Сотрудник");
+            }
+            if(roleDTO.getRoleEnum().equals(RoleEnum.ROLE_HRM)){
+                roleDTO.setRoleRussian("HRM");
+            }
+            roleEnum.add(roleDTO);
+        }
+        return roleEnum;
+    }
+
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(employee.getId());
@@ -183,11 +221,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDTO.setHouse(employee.getHouse());
         employeeDTO.setFlat(employee.getFlat());
         employeeDTO.setPositionInCompanyId(employee.getPositionInCompany().getId());
-        employeeDTO.setAddressId(employee.getAddress().getId());
+        if(employee.getAddress() != null) {
+            employeeDTO.setAddressId(employee.getAddress().getId());
+        }
         employeeDTO.setDateContractEnd(employee.getDateContractEnd());
         employeeDTO.setFired(employee.getFired());
         employeeDTO.setFiredComment(employee.getFiredComment());
         employeeDTO.setPhotoURL(employee.getPhotoURL());
+        employeeDTO.setLogin(employee.getLogin());
+        employeeDTO.setPassword(employee.getPassword());
+        employeeDTO.setRole(employee.getRole());
+        employeeDTO.setCompanyId(employee.getCompany().getId());
         return employeeDTO;
     }
 
@@ -214,6 +258,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setFired(employeeDTO.getFired());
         employee.setFiredComment(employeeDTO.getFiredComment());
         employee.setDateFired(employeeDTO.getDateFired());
+        employee.setLogin(employeeDTO.getLogin());
+        employee.setPassword(employeeDTO.getPassword());
+        employee.setRole(employeeDTO.getRole());
+        employee.setCompany(companyRepository.findOne(employeeDTO.getCompanyId()));
         return employee;
     }
 

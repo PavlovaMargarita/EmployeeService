@@ -101,4 +101,11 @@ public class CompanyController {
         companyService.pay(accountNumber);
 
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/currentCompany")
+    @ResponseBody
+    public CompanyDTO readCurrentCompany(){
+        Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/currentCompany");
+        return companyService.getCurrentCompany();
+    }
 }

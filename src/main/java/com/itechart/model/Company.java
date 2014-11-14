@@ -28,6 +28,12 @@ public class Company {
     @Enumerated(EnumType.STRING)
     private CompanyStatusEnum companyStatus;
 
+    @Column(nullable = false, name = "program_cost")
+    private Integer programCost;
+
+    @Column(nullable = false, name = "company_plan")
+    private String companyPlan;
+
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Department> departmentList;
 
@@ -115,6 +121,22 @@ public class Company {
 
     public void setEmployeeList(List<Employee> employeeList) {
         this.employeeList = employeeList;
+    }
+
+    public Integer getProgramCost() {
+        return programCost;
+    }
+
+    public void setProgramCost(Integer programCost) {
+        this.programCost = programCost;
+    }
+
+    public String getCompanyPlan() {
+        return companyPlan;
+    }
+
+    public void setCompanyPlan(String companyPlan) {
+        this.companyPlan = companyPlan;
     }
 
     @Override

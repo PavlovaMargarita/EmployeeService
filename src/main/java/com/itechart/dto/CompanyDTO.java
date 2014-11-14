@@ -15,6 +15,8 @@ public class CompanyDTO {
     private Date dateBoundaryRefill;
     private Boolean canLogin;
     private CompanyStatusEnum companyStatus;
+    private Integer programCost;
+    private String companyPlan;
     public Long getId() {
         return id;
     }
@@ -53,5 +55,21 @@ public class CompanyDTO {
 
     public void setCompanyStatus(CompanyStatusEnum companyStatus) {
         this.companyStatus = companyStatus;
+    }
+
+    public Integer getProgramCost() {
+        return programCost;
+    }
+
+    public void setProgramCost(Integer programCost) {
+        this.programCost = programCost;
+    }
+
+    public String getCompanyPlan() {
+        return companyPlan;
+    }
+
+    public void setCompanyPlan(String companyPlan) {
+        this.companyPlan = companyPlan;
     }
 }

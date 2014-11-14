@@ -1,6 +1,7 @@
 package com.itechart.controller;
 
 import com.itechart.dto.EmployeeDTO;
+import com.itechart.dto.RoleDTO;
 import com.itechart.dto.SexDTO;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
@@ -72,5 +73,20 @@ public class EmployeeController {
     public List<SexDTO> readSexList(){
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/sexList");
         return employeeService.readSexEnum();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/currentEmployee")
+    @ResponseBody
+    public EmployeeDTO readCurrentEmployee(){
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/currentEmployee");
+        EmployeeDTO employeeDTO= employeeService.readCurrentEmployee();
+        return employeeDTO;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/roleList")
+    @ResponseBody
+    public List<RoleDTO> readRoleList(){
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/roleList");
+        return employeeService.readRoleEnum();
     }
 }

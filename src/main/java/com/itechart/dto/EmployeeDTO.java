@@ -1,5 +1,6 @@
 package com.itechart.dto;
 
+import com.itechart.enumProperty.RoleEnum;
 import com.itechart.enumProperty.SexEnum;
 
 import java.sql.Date;
@@ -28,6 +29,10 @@ public class EmployeeDTO {
     private String firedComment;
     private Date dateFired;
     private String photoURL;
+    private String login;
+    private String password;
+    private RoleEnum role;
+    private Long companyId;
 
     public EmployeeDTO(){}
 
@@ -182,5 +187,36 @@ public class EmployeeDTO {
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
     }
-    //comment
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public RoleEnum getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEnum role) {
+        this.role = role;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
 }

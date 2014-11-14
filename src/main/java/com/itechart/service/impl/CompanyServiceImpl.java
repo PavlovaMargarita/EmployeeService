@@ -232,6 +232,16 @@ public class CompanyServiceImpl implements CompanyService {
         }
     }
 
+    @Override
+    public CompanyDTO getCurrentCompany() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String company = authority.get(1).getAuthority();
+        Long companyId = Long.parseLong(company.substring(10));
+        CompanyDTO companyDTO = readCompany(companyId);
+        return companyDTO;
+    }
+
     private DepartmentDTO departmentToDepartmentDTO(Department department) {
         DepartmentDTO departmentDTO = new DepartmentDTO();
         if (department != null) {
@@ -279,6 +289,8 @@ public class CompanyServiceImpl implements CompanyService {
         companyDTO.setDateBoundaryRefill(company.getDateBoundaryRefill());
         companyDTO.setCanLogin(company.getCanLogin());
         companyDTO.setCompanyStatus(company.getCompanyStatus());
+        companyDTO.setProgramCost(company.getProgramCost());
+        companyDTO.setCompanyPlan(company.getCompanyPlan());
         return companyDTO;
     }
 
@@ -289,6 +301,8 @@ public class CompanyServiceImpl implements CompanyService {
         company.setDateBoundaryRefill(companyDTO.getDateBoundaryRefill());
         company.setCanLogin(companyDTO.getCanLogin());
         company.setCompanyStatus(companyDTO.getCompanyStatus());
+        company.setProgramCost(companyDTO.getProgramCost());
+        company.setCompanyPlan(companyDTO.getCompanyPlan());
         return company;
     }
 }

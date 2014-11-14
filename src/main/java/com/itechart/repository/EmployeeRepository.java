@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-    @Query("select e from Employee e where e.fired = false and e.department.company.id=:company order by e.dateContractEnd asc")
+    @Query("select e from Employee e where e.fired = false and e.company.id=:company order by e.dateContractEnd asc")
     public List<Employee> readEmployeeList(@Param("company") Long company, Pageable pageable);
 
     @Query("select count(e) from Employee e where e.fired = false and e.department.company.id=:company")

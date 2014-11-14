@@ -6,6 +6,9 @@ app.run(function($rootScope, $cookieStore){
 
     $rootScope.isAuth = function(){
         var user = $cookieStore.get("userInfo");
+        $rootScope.name = $cookieStore.get("name");
+        var photoURL = $cookieStore.get("photoURL");
+        $('#photoEmployeeNavbar').attr('src', photoURL);
         return !(angular.isUndefined && user == null);
     }
 

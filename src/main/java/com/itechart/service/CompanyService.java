@@ -23,4 +23,5 @@ public interface CompanyService {
     public Date getDateBoundaryRefill();
     public Long getCurrentCompanyId();
     public void pay(String number);
+    public CompanyDTO getCurrentCompany();
 }

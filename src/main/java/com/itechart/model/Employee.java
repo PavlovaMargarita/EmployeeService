@@ -289,9 +289,9 @@ public class Employee {
                 ", house=" + house +
                 ", flat='" + flat + '\'' +
                 ", photoURL='" + photoURL + '\'' +
-                ", departmentAddress: country='" + address.getCountry().getCountry() + ", city='"+ address.getCity() +
-                ", street='" + address.getStreet() + ", house='" + address.getHouse() + ", flat='" + address.getFlat() +'\'' +
-                ", department=" + department.getDepartmentName() +
+//                ", departmentAddress: country='" + address.getCountry().getCountry() + ", city='"+ address.getCity() +
+//                ", street='" + address.getStreet() + ", house='" + address.getHouse() + ", flat='" + address.getFlat() +'\'' +
+//                ", department=" + department.getDepartmentName() +
                 ", positionInCompany=" + positionInCompany.getPosition() +
                 ", dateContractEnd=" + dateContractEnd +
                 ", fired=" + fired +

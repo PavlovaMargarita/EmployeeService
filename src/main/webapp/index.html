@@ -60,8 +60,16 @@
                     <li ng-show="hasAuthority(['ROLE_CEO'])"><a href="#pay">Заплатить</a></li>
                 </ul>
 
+
+
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-show="isAuth()"><a href="j_spring_security_logout">Выход</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-show="hasAuthority(['ROLE_CEO'])"><img class="img-navbar" id="photoEmployeeNavbar"></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-show="isAuth()"><a href="" id="li-name">{{name}}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-show="!isAuth()"><a href="#login">Войти</a></li>

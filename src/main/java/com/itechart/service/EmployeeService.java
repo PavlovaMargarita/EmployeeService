@@ -1,7 +1,9 @@
 package com.itechart.service;
 
 import com.itechart.dto.EmployeeDTO;
+import com.itechart.dto.RoleDTO;
 import com.itechart.dto.SexDTO;
+import com.itechart.model.Employee;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,6 +19,7 @@ public interface EmployeeService {
     public long employeeCount();
     //load photo
     public void loadPhoto(MultipartFile photo, Long id);
-
     public List<SexDTO> readSexEnum();
+    public EmployeeDTO readCurrentEmployee();
+    public List<RoleDTO> readRoleEnum();
 }

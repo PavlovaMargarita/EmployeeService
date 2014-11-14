@@ -141,9 +141,20 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
         $scope.sexList = data;
     });
 
+    var role= $http({
+        method: "get",
+        url: "/EmployeeService/employee/roleList",
+        dataType: 'json',
+        contentType: 'application/json',
+        mimeType: 'application/json'
+    });
+    role.success(function (data) {
+        $scope.roleList = data;
+    });
 
     $scope.save = {};
     $scope.save.doClick = function () {
+//        var temp = validateObject.validate("#createEmployeeForm");
         var response = $http({
             method: "post",
             url: "/EmployeeService/employee/saveEmployeeCreate",
@@ -163,7 +174,11 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
                 dateContractEnd: $scope.employee.dateContractEnd,
                 fired: false,
                 firedComment: '',
-                photoURL: 't'
+                photoURL: 't',
+                login: $scope.employee.login,
+                password: $scope.employee.password,
+                role: $scope.employee.role,
+                companyId: $scope.employee.companyId
             },
             dataType: 'json',
             contentType: 'application/json',
@@ -175,7 +190,7 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
             fd.append("photo", $scope.photo);
             $http({
                 method: 'POST',
-                url: 'EmployeeService/employee/uploadPhoto',
+                url: '/EmployeeService/employee/uploadPhoto',
                 headers: {'Content-Type': undefined},
                 data: fd,
                 transformRequest: angular.identity
@@ -244,6 +259,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
         });
         departments.success(function (data) {
             $scope.departments = data;
+            $scope.department = {};
             if ($scope.employee != undefined) {
                 data.forEach(selectDepartment);
                 function selectDepartment(element, index) {
@@ -264,6 +280,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
             });
             departmentAddresses.success(function (data) {
                 $scope.addresses = data;
+                $scope.address = {};
                 data.forEach(selectAddress);
                 if ($scope.employee) {
                     function selectAddress(element, index) {
@@ -331,6 +348,23 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 }
             }
         });
+
+        var role = $http({
+            method: "get",
+            url: "/EmployeeService/employee/roleList",
+            dataType: 'json',
+            contentType: 'application/json',
+            mimeType: 'application/json'
+        });
+        role.success(function (data) {
+            $scope.roleList = data;
+            data.forEach(selectRole);
+            function selectRole(element, index) {
+                if (element.roleEnum == $scope.employee.role) {
+                    $scope.employee.role = $scope.roleList[index].roleEnum;
+                }
+            }
+        });
     });
 
 
@@ -356,7 +390,11 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 dateContractEnd: $scope.employee.dateContractEnd,
                 fired: false,
                 firedComment: '',
-                photoURL: $scope.employee.photoURL
+                photoURL: $scope.employee.photoURL,
+                login: $scope.employee.login,
+                password: $scope.employee.password,
+                role: $scope.employee.role,
+                companyId: $scope.employee.companyId
             },
             dataType: 'json',
             contentType: 'application/json',
@@ -409,7 +447,11 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 fired: true,
                 firedComment: $scope.employee.firedComment,
                 dateFired: $scope.employee.dateFired,
-                photoURL: "test"
+                photoURL: "test",
+                login: $scope.employee.login,
+                password: $scope.employee.password,
+                role: $scope.employee.role,
+                companyId: $scope.employee.companyId
             },
             dataType: 'json',
             contentType: 'application/json',

@@ -59,8 +59,8 @@
         this.$element = $(content)
             .delegate('.close', 'click.modal', $.proxy(this.hide, this))
 
-        if ( this.settings.show ) {
-            this.show()
+        if ( this.settings.showStandardPhotoAndFiredButton ) {
+            this.showStandardPhotoAndFiredButton()
         }
 
         return this
@@ -69,13 +69,13 @@
     Modal.prototype = {
 
         toggle: function () {
-            return this[!this.isShown ? 'show' : 'hide']()
+            return this[!this.isShown ? 'showStandardPhotoAndFiredButton' : 'hide']()
         }
 
-        , show: function () {
+        , showStandardPhotoAndFiredButton: function () {
             var that = this
             this.isShown = true
-            this.$element.trigger('show')
+            this.$element.trigger('showStandardPhotoAndFiredButton')
 
             escape.call(this)
             backdrop.call(this, function () {
@@ -83,7 +83,7 @@
 
                 that.$element
                     .appendTo(document.body)
-                    .show()
+                    .showStandardPhotoAndFiredButton()
 
                 if (transition) {
                     that.$element[0].offsetWidth // force reflow
@@ -215,7 +215,7 @@
 
             if (typeof options == 'string') {
                 options = {
-                    show: /show|toggle/.test(options)
+                    showStandardPhotoAndFiredButton: /show|toggle/.test(options)
                 }
             }
 
@@ -242,7 +242,7 @@
     $.fn.modal.defaults = {
         backdrop: false
         , keyboard: false
-        , show: false
+        , showStandardPhotoAndFiredButton: false
     }
 
 
@@ -252,7 +252,7 @@
     $(document).ready(function () {
         $('body').delegate('[data-controls-modal]', 'click', function (e) {
             e.preventDefault()
-            var $this = $(this).data('show', true)
+            var $this = $(this).data('showStandardPhotoAndFiredButton', true)
             $('#' + $this.attr('data-controls-modal')).modal( $this.data() )
         })
     })

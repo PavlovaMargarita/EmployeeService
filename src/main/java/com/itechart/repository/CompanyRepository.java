@@ -19,11 +19,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     @Query("select c from Company c where c.canLogin = true")
     public List<Company> readCompanyList(Pageable pageable);
 
-    @Query("select p from PositionInCompany p where p.company.id=:company")
-    public List<PositionInCompany> readPositionInCompanyList(@Param("company")Long company, Pageable pageable);
-
-    @Query("select p from PositionInCompany p where p.id=:id")
-    public PositionInCompany readPositionInCompany(@Param("id")Long id);
 
     @Query("select d from Department d where d.company.id=:company")
     public List<Department> readDepartmentList(@Param("company") Long company,Pageable pageable);

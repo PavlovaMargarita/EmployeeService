@@ -3,6 +3,7 @@ package com.itechart.controller;
 import com.itechart.dto.EmployeeDTO;
 import com.itechart.dto.RoleDTO;
 import com.itechart.dto.SexDTO;
+import com.itechart.enumProperty.RoleEnum;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Margarita on 20.10.2014.
@@ -37,7 +38,7 @@ public class EmployeeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreate")
-    public @ResponseBody Long saveEmployeeCorrect(@RequestBody EmployeeDTO employeeDTO){
+    public @ResponseBody Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO){
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
         Long id = employeeService.createEmployee(employeeDTO);
         return id;
@@ -79,14 +80,29 @@ public class EmployeeController {
     @ResponseBody
     public EmployeeDTO readCurrentEmployee(){
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/currentEmployee");
-        EmployeeDTO employeeDTO= employeeService.readCurrentEmployee();
+        EmployeeDTO employeeDTO = employeeService.readCurrentEmployee();
         return employeeDTO;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/roleList")
     @ResponseBody
-    public List<RoleDTO> readRoleList(){
+    public List readRoleList(){
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/roleList");
-        return employeeService.readRoleEnum();
+//        return Arrays.asList(RoleEnum.values());
+        return employeeService.readRoleEnumForCurrentEmployee();
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreateCEO")
+    public @ResponseBody void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO){
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
+        employeeService.createEmployeeCeo(employeeDTO);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/employeeCeoByCompanyId")
+    @ResponseBody
+    public EmployeeDTO readEmployeeCEO(@RequestParam("companyId") Long companyId ){
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/employeeCeoByCompanyId");
+        EmployeeDTO employeeDTO = employeeService.readEmployeeCeoByCompanyId(companyId);
+        return employeeDTO;
     }
 }

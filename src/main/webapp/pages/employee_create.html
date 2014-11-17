@@ -1,29 +1,28 @@
 <div class="container">
-    <div class="div-employee-service-form" ng-show="show">
+    <div class="div-employee-service-form" ng-show="showStandardPhotoAndFiredButton && hasAuthority(['ROLE_HRM'])" >
         <button type="button" class="btn btn-danger button-save-delete button-style" onclick="showModalFiredComment()">
             Уволить
         </button>
     </div>
 
     <div class="div-employee-service-form">
-        <img class="employee-photo" ng-show="!show" id="employeePhotoCreate" src="../images/silhouette.jpg"/>
+        <img class="employee-photo" ng-show="!showStandardPhotoAndFiredButton" id="employeePhotoCreate" src="../images/silhouette.jpg"/>
         <img class="employee-photo" ng-show="showPhoto" id="employeePhotoEdit"/>
 
-        <button class="btn bg-info button-add-photo" type="button" ng-click="loadPhotoButton.doClick()">Загрузить фото
+        <button class="btn bg-info button-add-photo" type="button" ng-click="loadPhotoButton.doClick()" ng-show="hasAuthority(['ROLE_HRM'])">Загрузить фото
         </button>
     </div>
 
 
     <form class="form-horizontal" id="createEmployeeForm">
-        <input type="file" id="photoFileID" style="display: none" ng-file-select="onFileSelect($files)" multiple
-               accept="image/*"/>
+        <input type="file" id="photoFileID" style="display: none" ng-file-select="onFileSelect($files)" multipleaccept="image/*"/>
+
         <div class="div-error error-font" id="secondNameError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="s_name">Фамилия</label>
-
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="s_name" id="s_name" ng-model="employee.s_name"
-                       placeholder="Введите фамилию" validate="second_name" errorLabel="#secondNameError"/>
+                       placeholder="Введите фамилию" validate="second_name" errorLabel="#secondNameError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -32,7 +31,7 @@
             <label class="control-label col-sm-4 label-font-size" for="f_name">Имя</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" id="f_name" name="f_name" ng-model="employee.f_name"
-                       placeholder="Введите имя" validate="first_name" errorLabel="#firstNameError"/>
+                       placeholder="Введите имя" validate="first_name" errorLabel="#firstNameError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -41,7 +40,7 @@
             <label class="control-label col-sm-4 label-font-size" for="date-of-birth">Дата рождения</label>
             <div class="col-sm-8">
                 <input type="date" class="form-control input-size" name="date-of-birth" id="date-of-birth"
-                       ng-model="employee.dateOfBirth"  validate="date" errorLabel="#dateOfBirthError"/>
+                       ng-model="employee.dateOfBirth"  validate="date" errorLabel="#dateOfBirthError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -50,8 +49,17 @@
             <label class="control-label col-sm-4 label-font-size" for="sex">Пол</label>
             <div class="col-sm-8">
                 <select class="form-control input-size" name="sex" id="sex" data-ng-model="employee.sex"
-                        ng-options="s.sexEnum as s.roleRussian for s in sexList" validate="sex-select" errorLabel="#sexSelectError">
+                        ng-options="s.sexEnum as s.sexRussian for s in sexList" validate="sex-select" errorLabel="#sexSelectError" ng-readonly="!editEmployeeInput">
                 </select>
+            </div>
+        </div>
+
+        <div class="div-error error-font" id="emailError" align="right"></div>
+        <div class="form-group">
+            <label class="control-label col-sm-4 label-font-size" for="email">Email</label>
+            <div class="col-sm-8">
+                <input type="email" class="form-control input-size" id="email" name="email" ng-model="employee.email"
+                       placeholder="Введите email" validate="email" errorLabel="#emailError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -60,7 +68,7 @@
             <label class="control-label col-sm-4 label-font-size" for="country">Страна</label>
             <div class="col-sm-8">
                 <select class="form-control input-size" name="country" id="country" data-ng-model="country.id"
-                        ng-options="c.id as c.country for c in countries"  validate="country-select" errorLabel="#countrySelectError">
+                        ng-options="c.id as c.country for c in countries"  validate="country-select" errorLabel="#countrySelectError" ng-readonly="!editEmployeeInput">
                 </select>
             </div>
         </div>
@@ -71,7 +79,7 @@
             <label class="control-label col-sm-4 label-font-size" for="city">Город</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control  input-size" name="city" id="city" ng-model="employee.city"
-                       placeholder="Введите грод" validate="city" errorLabel="#cityError"/>
+                       placeholder="Введите грод" validate="city" errorLabel="#cityError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -80,7 +88,7 @@
             <label class="control-label col-sm-4 label-font-size" for="street">Улица</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="street" id="street" ng-model="employee.street"
-                       placeholder="Введите улицу" validate="street" errorLabel="#streetError"/>
+                       placeholder="Введите улицу" validate="street" errorLabel="#streetError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -90,7 +98,7 @@
 
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="house" id="house" ng-model="employee.house"
-                       placeholder="Введите улицу" validate="house" errorLabel="#houseError"/>
+                       placeholder="Введите улицу" validate="house" errorLabel="#houseError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -99,7 +107,7 @@
             <label class="control-label col-sm-4 label-font-size" for="flat">Квартира</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="flat" id="flat" ng-model="employee.flat"
-                       placeholder="Введите улицу" validate="flat" errorLabel="#flatError"/>
+                       placeholder="Введите улицу" validate="flat" errorLabel="#flatError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -107,7 +115,7 @@
             <label class="control-label col-sm-4 label-font-size" for="department">Отдел</label>
             <div class="col-sm-8">
                 <select class="form-control input-size" name="department" id="department" data-ng-model="department.id"
-                        ng-options="d.id as d.department for d in departments" ng-change="changeDepartment.change()">
+                        ng-options="d.id as d.department for d in departments" ng-change="changeDepartment.change()" ng-readonly="!editEmployeeInput">
                 </select>
             </div>
         </div>
@@ -116,8 +124,7 @@
             <label class="control-label col-sm-4 label-font-size" for="department_address">Адрес офиса</label>
             <div class="col-sm-8">
                 <select class="form-control input-size" name="department_address" id="department_address"
-                        data-ng-model="address.id"
-                        ng-options="a.id as a.fullAddress for a in addresses">
+                        data-ng-model="address.id" ng-options="a.id as a.fullAddress for a in addresses" ng-readonly="!editEmployeeInput">
                 </select>
             </div>
         </div>
@@ -127,7 +134,7 @@
             <label class="control-label col-sm-4 label-font-size" for="position">Должность</label>
             <div class="col-sm-8">
                 <select class="form-control input-size" name="position" id="position" data-ng-model="position.id"
-                        ng-options="p.id as p.position for p in positions" validate="position-select" errorLabel="#positionSelectError">
+                        ng-options="p.id as p.position for p in positions" validate="position-select" errorLabel="#positionSelectError" ng-readonly="!editEmployeeInput">
                 </select>
             </div>
         </div>
@@ -137,7 +144,7 @@
             <label class="control-label col-sm-4 label-font-size" for="contract-end-date">Дата окончания контракта</label>
             <div class="col-sm-8">
                 <input type="date" class="form-control input-size" name="contract-end-date" id="contract-end-date"
-                       ng-model="employee.dateContractEnd" validate="date" errorLabel="#dateContractEndError"/>
+                       ng-model="employee.dateContractEnd" validate="date" errorLabel="#dateContractEndError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -147,7 +154,7 @@
 
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="login" id="login" ng-model="employee.login"
-                       placeholder="Введите логин" validate="username" errorLabel="#loginError"/>
+                       placeholder="Введите логин" validate="username" errorLabel="#loginError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -157,7 +164,7 @@
 
             <div class="col-sm-8">
                 <input type="password" class="form-control input-size" name="password" id="password" ng-model="employee.password"
-                       placeholder="Введите пароль" validate="password" errorLabel="#passwordError"/>
+                       placeholder="Введите пароль" validate="password" errorLabel="#passwordError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -166,7 +173,7 @@
             <label class="control-label col-sm-4 label-font-size" for="role">Роль</label>
             <div class="col-sm-8">
                 <select class="form-control input-size" name="role" id="role" data-ng-model="employee.role"
-                        ng-options="r.roleEnum as r.roleRussian for r in roleList" validate="role-select" errorLabel="#roleSelectError">
+                        ng-options="r.roleEnum as r.roleTranslate for r in roleList" validate="role-select" errorLabel="#roleSelectError" ng-readonly="!editEmployeeInput">
                 </select>
             </div>
         </div>
@@ -175,7 +182,7 @@
             <label class="control-label col-sm-4 label-font-size"></label>
 
             <div class="col-sm-8">
-                <button type="button" class="btn btn-primary col-sm-3 button-style" ng-click="save.doClick()">
+                <button type="button" class="btn btn-primary col-sm-3 button-style" ng-click="save.doClick()" id='saveEmployee'>
                     Сохранить
                 </button>
                 <button type="button" class="btn btn-danger col-sm-offset-1 col-sm-3 button-style"

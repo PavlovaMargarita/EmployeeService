@@ -7,6 +7,7 @@ import com.itechart.model.*;
 import com.itechart.projectValue.Params;
 import com.itechart.repository.AccountNumberRepository;
 import com.itechart.repository.CompanyRepository;
+import com.itechart.repository.PositionInCompanyRepository;
 import com.itechart.service.CompanyService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private AccountNumberRepository accountNumberRepository;
 
+    @Autowired
+    private PositionInCompanyRepository positionInCompanyRepository;
+
     private final int COUNT_COMPANY_FOR_SELECT = 50;
 
     @Override
@@ -44,7 +48,7 @@ public class CompanyServiceImpl implements CompanyService {
         Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(CompanyServiceImpl.class).info("Read PositionInCompanyList");
-        List<PositionInCompany> positionInCompanyList = companyRepository.readPositionInCompanyList(companyId, topTen);
+        List<PositionInCompany> positionInCompanyList = positionInCompanyRepository.readPositionInCompanyList(companyId, topTen);
         List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList(positionInCompanyList.size());
         for (PositionInCompany positionInCompany : positionInCompanyList) {
             positionInCompanyDTOList.add(positionInCompanyToPositionInCompanyDTO(positionInCompany));
@@ -183,13 +187,15 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void createCompany(CompanyDTO companyDTO) {
+    public Long createCompany(CompanyDTO companyDTO) {
         Company company = companyDTOToCompany(companyDTO);
 //        company.setAccountSum(companyDTO.getAddSum());
         company.setCanLogin(true);
         company.setCompanyStatus(CompanyStatusEnum.CONTINUE_FUNCTIONING);
         Logger.getLogger(CompanyServiceImpl.class).info("Create company: " + company.toString());
-        companyRepository.save(company);
+        company = companyRepository.save(company);
+
+        return company.getId();
     }
 
     @Override

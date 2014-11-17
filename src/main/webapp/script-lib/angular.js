@@ -13363,7 +13363,7 @@
                  * {@link ng.$rootScope.Scope#$new $new()} method. (Most scopes are created automatically when
                  * compiled HTML template is executed.)
                  *
-                 * Here is a simple scope snippet to show how you can interact with the scope.
+                 * Here is a simple scope snippet to showStandardPhotoAndFiredButton how you can interact with the scope.
                  * ```html
                  * <file src="./test/ng/rootScopeSpec.js" tag="docs1" />
                  * ```
@@ -18322,7 +18322,7 @@
      </style>
      <form name="myForm" ng-controller="FormController" class="my-form">
      userType: <input name="input" ng-model="userType" required>
-     <span class="error" ng-show="myForm.input.$error.required">Required!</span><br>
+     <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.required">Required!</span><br>
      <tt>userType = {{userType}}</tt><br>
      <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br>
      <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br>
@@ -18494,9 +18494,9 @@
          <form name="myForm" ng-controller="ExampleController">
          Single word: <input type="text" name="input" ng-model="text"
          ng-pattern="word" required ng-trim="false">
-         <span class="error" ng-show="myForm.input.$error.required">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.required">
          Required!</span>
-         <span class="error" ng-show="myForm.input.$error.pattern">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.pattern">
          Single word only!</span>
 
          <tt>text = {{text}}</tt><br/>
@@ -18578,9 +18578,9 @@
          Pick a date in 2013:
          <input type="date" id="exampleInput" name="input" ng-model="value"
          placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required />
-         <span class="error" ng-show="myForm.input.$error.required">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.required">
          Required!</span>
-         <span class="error" ng-show="myForm.input.$error.date">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.date">
          Not a valid date!</span>
          <tt>value = {{value | date: "yyyy-MM-dd"}}</tt><br/>
          <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
@@ -18669,9 +18669,9 @@
          Pick a date between in 2013:
          <input type="datetime-local" id="exampleInput" name="input" ng-model="value"
          placeholder="yyyy-MM-ddTHH:mm:ss" min="2001-01-01T00:00:00" max="2013-12-31T00:00:00" required />
-         <span class="error" ng-show="myForm.input.$error.required">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.required">
          Required!</span>
-         <span class="error" ng-show="myForm.input.$error.datetimelocal">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.datetimelocal">
          Not a valid date!</span>
          <tt>value = {{value | date: "yyyy-MM-ddTHH:mm:ss"}}</tt><br/>
          <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
@@ -18761,9 +18761,9 @@
          Pick a between 8am and 5pm:
          <input type="time" id="exampleInput" name="input" ng-model="value"
          placeholder="HH:mm:ss" min="08:00:00" max="17:00:00" required />
-         <span class="error" ng-show="myForm.input.$error.required">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.required">
          Required!</span>
-         <span class="error" ng-show="myForm.input.$error.time">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.time">
          Not a valid date!</span>
          <tt>value = {{value | date: "HH:mm:ss"}}</tt><br/>
          <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
@@ -18852,9 +18852,9 @@
          Pick a date between in 2013:
          <input id="exampleInput" type="week" name="input" ng-model="value"
          placeholder="YYYY-W##" min="2012-W32" max="2013-W52" required />
-         <span class="error" ng-show="myForm.input.$error.required">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.required">
          Required!</span>
-         <span class="error" ng-show="myForm.input.$error.week">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.week">
          Not a valid date!</span>
          <tt>value = {{value | date: "yyyy-Www"}}</tt><br/>
          <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
@@ -18943,9 +18943,9 @@
          Pick a month int 2013:
          <input id="exampleInput" type="month" name="input" ng-model="value"
          placeholder="yyyy-MM" min="2013-01" max="2013-12" required />
-         <span class="error" ng-show="myForm.input.$error.required">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.required">
          Required!</span>
-         <span class="error" ng-show="myForm.input.$error.month">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.month">
          Not a valid month!</span>
          <tt>value = {{value | date: "yyyy-MM"}}</tt><br/>
          <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
@@ -19033,9 +19033,9 @@
          <form name="myForm" ng-controller="ExampleController">
          Number: <input type="number" name="input" ng-model="value"
          min="0" max="99" required>
-         <span class="error" ng-show="myForm.input.$error.required">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.required">
          Required!</span>
-         <span class="error" ng-show="myForm.input.$error.number">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.number">
          Not valid number!</span>
          <tt>value = {{value}}</tt><br/>
          <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
@@ -19114,9 +19114,9 @@
          </script>
          <form name="myForm" ng-controller="ExampleController">
          URL: <input type="url" name="input" ng-model="text" required>
-         <span class="error" ng-show="myForm.input.$error.required">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.required">
          Required!</span>
-         <span class="error" ng-show="myForm.input.$error.url">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.url">
          Not valid url!</span>
          <tt>text = {{text}}</tt><br/>
          <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
@@ -19197,9 +19197,9 @@
          </script>
          <form name="myForm" ng-controller="ExampleController">
          Email: <input type="email" name="input" ng-model="text" required>
-         <span class="error" ng-show="myForm.input.$error.required">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.required">
          Required!</span>
-         <span class="error" ng-show="myForm.input.$error.email">
+         <span class="error" ng-showStandardPhotoAndFiredButton="myForm.input.$error.email">
          Not valid email!</span>
          <tt>text = {{text}}</tt><br/>
          <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
@@ -19834,13 +19834,13 @@
      <div ng-controller="ExampleController">
      <form name="myForm">
      User name: <input type="text" name="userName" ng-model="user.name" required>
-     <span class="error" ng-show="myForm.userName.$error.required">
+     <span class="error" ng-showStandardPhotoAndFiredButton="myForm.userName.$error.required">
      Required!</span><br>
      Last name: <input type="text" name="lastName" ng-model="user.last"
      ng-minlength="3" ng-maxlength="10">
-     <span class="error" ng-show="myForm.lastName.$error.minlength">
+     <span class="error" ng-showStandardPhotoAndFiredButton="myForm.lastName.$error.minlength">
      Too short!</span>
-     <span class="error" ng-show="myForm.lastName.$error.maxlength">
+     <span class="error" ng-showStandardPhotoAndFiredButton="myForm.lastName.$error.maxlength">
      Too long!</span><br>
      </form>
      <hr>
@@ -20095,7 +20095,7 @@
      name="myWidget" ng-model="userContent"
      strip-br="true"
      required>Change me!</div>
-     <span ng-show="myForm.myWidget.$error.required">Required!</span>
+     <span ng-showStandardPhotoAndFiredButton="myForm.myWidget.$error.required">Required!</span>
      <hr>
      <textarea ng-model="userContent"></textarea>
      </form>
@@ -21097,7 +21097,7 @@
      *   <file name="index.html">
      *    <form name="myForm" ng-controller="ExampleController">
      *      List: <input name="namesInput" ng-model="names" ng-list required>
-     *      <span class="error" ng-show="myForm.namesInput.$error.required">
+     *      <span class="error" ng-showStandardPhotoAndFiredButton="myForm.namesInput.$error.required">
      *        Required!</span>
      *      <br>
      *      <tt>names = {{names}}</tt><br/>
@@ -21697,7 +21697,7 @@
      *
      * You may also bypass sanitization for values you know are safe. To do so, bind to
      * an explicitly trusted value via {@link ng.$sce#trustAsHtml $sce.trustAsHtml}.  See the example
-     * under {@link ng.$sce#show-me-an-example-using-sce- Strict Contextual Escaping (SCE)}.
+     * under {@link ng.$sce#showStandardPhotoAndFiredButton-me-an-example-using-sce- Strict Contextual Escaping (SCE)}.
      *
      * Note: If a `$sanitize` service is unavailable and the bound value isn't explicitly trusted, you
      * will have an exception (instead of an exploit.)
@@ -23631,7 +23631,7 @@
      * specify this rule, 0 would be matched to the "other" category and "0 people are viewing"
      * would be shown instead of "Nobody is viewing". You can specify an explicit number rule for
      * other numbers, for example 12, so that instead of showing "12 people are viewing", you can
-     * show "a dozen people are viewing".
+     * showStandardPhotoAndFiredButton "a dozen people are viewing".
      *
      * You can use a set of closed braces (`{}`) as a placeholder for the number that you want substituted
      * into pluralized strings. In the previous example, Angular will replace `{}` with
@@ -23708,7 +23708,7 @@
      </div>
      </file>
      <file name="protractor.js" type="protractor">
-     it('should show correct pluralized string', function() {
+     it('should showStandardPhotoAndFiredButton correct pluralized string', function() {
           var withoutOffset = element.all(by.css('ng-pluralize')).get(0);
           var withOffset = element.all(by.css('ng-pluralize')).get(1);
           var countInput = element(by.model('personCount'));
@@ -23740,7 +23740,7 @@
           expect(withoutOffset.getText()).toEqual('4 people are viewing.');
           expect(withOffset.getText()).toEqual('Igor, Misko and 2 other people are viewing.');
         });
-     it('should show data-bound names', function() {
+     it('should showStandardPhotoAndFiredButton data-bound names', function() {
           var withOffset = element.all(by.css('ng-pluralize')).get(1);
           var personCount = element(by.model('personCount'));
           var person1 = element(by.model('person1'));
@@ -24254,10 +24254,10 @@
      *
      * ```html
      * <!-- when $scope.myValue is truthy (element is visible) -->
-     * <div ng-show="myValue"></div>
+     * <div ng-showStandardPhotoAndFiredButton="myValue"></div>
      *
      * <!-- when $scope.myValue is falsy (element is hidden) -->
-     * <div ng-show="myValue" class="ng-hide"></div>
+     * <div ng-showStandardPhotoAndFiredButton="myValue" class="ng-hide"></div>
      * ```
      *
      * When the `ngShow` expression evaluates to a falsy value then the `.ng-hide` CSS class is added to the class
@@ -24271,7 +24271,7 @@
      * as changing the display style on a HTML list item would make hidden elements appear visible.
      * This also becomes a bigger issue when dealing with CSS frameworks.
      *
-     * By using !important, the show and hide behavior will work as expected despite any clash between CSS selector
+     * By using !important, the showStandardPhotoAndFiredButton and hide behavior will work as expected despite any clash between CSS selector
      * specificity (when !important isn't used with any conflicting styles). If a developer chooses to override the
      * styling to change how to hide an element then it is just a matter of using !important in their own CSS code.
      *
@@ -24295,7 +24295,7 @@
      *
      * ## A note about animations with `ngShow`
      *
-     * Animations in ngShow/ngHide work with the show and hide events that are triggered when the directive expression
+     * Animations in ngShow/ngHide work with the showStandardPhotoAndFiredButton and hide events that are triggered when the directive expression
      * is true and false. This system works like the animation system present with ngClass except that
      * you must also include the !important flag to override the display property
      * so that you can perform an animation when the element is hidden during the time of the animation.
@@ -24306,7 +24306,7 @@
      * //
      * .my-element.ng-hide-add, .my-element.ng-hide-remove {
  *   /&#42; this is required as of 1.3x to properly
- *      apply all styling in a show/hide animation &#42;/
+ *      apply all styling in a showStandardPhotoAndFiredButton/hide animation &#42;/
  *   transition:0s linear all;
  * }
      *
@@ -24339,13 +24339,13 @@
      Click me: <input type="checkbox" ng-model="checked"><br/>
      <div>
      Show:
-     <div class="check-element animate-show" ng-show="checked">
-     <span class="glyphicon glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
+     <div class="check-element animate-showStandardPhotoAndFiredButton" ng-showStandardPhotoAndFiredButton="checked">
+     <span class="glyphicon glyphicon-thumbs-up"></span> I showStandardPhotoAndFiredButton up when your checkbox is checked.
      </div>
      </div>
      <div>
      Hide:
-     <div class="check-element animate-show" ng-hide="checked">
+     <div class="check-element animate-showStandardPhotoAndFiredButton" ng-hide="checked">
      <span class="glyphicon glyphicon-thumbs-down"></span> I hide when your checkbox is checked.
      </div>
      </div>
@@ -24354,7 +24354,7 @@
      @import url(../../components/bootstrap-3.1.1/css/bootstrap.css);
      </file>
      <file name="animations.css">
-     .animate-show {
+     .animate-showStandardPhotoAndFiredButton {
         line-height:20px;
         opacity:1;
         padding:10px;
@@ -24362,13 +24362,13 @@
         background:white;
       }
 
-     .animate-show.ng-hide-add.ng-hide-add-active,
-     .animate-show.ng-hide-remove.ng-hide-remove-active {
+     .animate-showStandardPhotoAndFiredButton.ng-hide-add.ng-hide-add-active,
+     .animate-showStandardPhotoAndFiredButton.ng-hide-remove.ng-hide-remove-active {
         -webkit-transition:all linear 0.5s;
         transition:all linear 0.5s;
       }
 
-     .animate-show.ng-hide {
+     .animate-showStandardPhotoAndFiredButton.ng-hide {
         line-height:0;
         opacity:0;
         padding:0 10px;
@@ -24384,7 +24384,7 @@
      var thumbsUp = element(by.css('span.glyphicon-thumbs-up'));
      var thumbsDown = element(by.css('span.glyphicon-thumbs-down'));
 
-     it('should check ng-show / ng-hide', function() {
+     it('should check ng-showStandardPhotoAndFiredButton / ng-hide', function() {
         expect(thumbsUp.isDisplayed()).toBeFalsy();
         expect(thumbsDown.isDisplayed()).toBeTruthy();
 
@@ -24445,7 +24445,7 @@
      * as changing the display style on a HTML list item would make hidden elements appear visible.
      * This also becomes a bigger issue when dealing with CSS frameworks.
      *
-     * By using !important, the show and hide behavior will work as expected despite any clash between CSS selector
+     * By using !important, the showStandardPhotoAndFiredButton and hide behavior will work as expected despite any clash between CSS selector
      * specificity (when !important isn't used with any conflicting styles). If a developer chooses to override the
      * styling to change how to hide an element then it is just a matter of using !important in their own CSS code.
      *
@@ -24469,7 +24469,7 @@
      *
      * ## A note about animations with `ngHide`
      *
-     * Animations in ngShow/ngHide work with the show and hide events that are triggered when the directive expression
+     * Animations in ngShow/ngHide work with the showStandardPhotoAndFiredButton and hide events that are triggered when the directive expression
      * is true and false. This system works like the animation system present with ngClass, except that the `.ng-hide`
      * CSS class is added and removed for you instead of your own CSS class.
      *
@@ -24504,8 +24504,8 @@
      Click me: <input type="checkbox" ng-model="checked"><br/>
      <div>
      Show:
-     <div class="check-element animate-hide" ng-show="checked">
-     <span class="glyphicon glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
+     <div class="check-element animate-hide" ng-showStandardPhotoAndFiredButton="checked">
+     <span class="glyphicon glyphicon-thumbs-up"></span> I showStandardPhotoAndFiredButton up when your checkbox is checked.
      </div>
      </div>
      <div>
@@ -24545,7 +24545,7 @@
      var thumbsUp = element(by.css('span.glyphicon-thumbs-up'));
      var thumbsDown = element(by.css('span.glyphicon-thumbs-down'));
 
-     it('should check ng-show / ng-hide', function() {
+     it('should check ng-showStandardPhotoAndFiredButton / ng-hide', function() {
         expect(thumbsUp.isDisplayed()).toBeFalsy();
         expect(thumbsDown.isDisplayed()).toBeTruthy();
 
@@ -24564,7 +24564,7 @@
             link: function(scope, element, attr) {
                 scope.$watch(attr.ngHide, function ngHideWatchAction(value) {
                     // The comment inside of the ngShowDirective explains why we add and
-                    // remove a temporary class for the show/hide animation
+                    // remove a temporary class for the showStandardPhotoAndFiredButton/hide animation
                     $animate[value ? 'addClass' : 'removeClass'](element,NG_HIDE_CLASS, {
                         tempClasses: NG_HIDE_IN_PROGRESS_CLASS
                     });

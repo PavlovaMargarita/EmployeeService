@@ -46,7 +46,8 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
                 .success(function (data){
                     //$('#li-name').text(data.f_name);
                     $cookieStore.put("name", data.f_name);
-                    $cookieStore.put("photoURL", "/EmployeeService/files/company/" + data.companyId+ "/photoEmployee/" + data.id + "/" +data.photoURL)
+                    $cookieStore.put("photoURL", "/EmployeeService/files/company/" + data.companyId+ "/photoEmployee/" + data.id + "/" +data.photoURL);
+                    $cookieStore.put("role", data.role);
                 });
         });
     }
@@ -92,6 +93,9 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
         if (data.role == 'ROLE_CEO') {
             $location.path('/pay');
         }
+        if (data.role == 'ROLE_ADMIN') {
+            $location.path('/employeeList');
+        }
         $location.replace();
     }
 
@@ -99,32 +103,4 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
     $scope.authorization.doClick = function () {
         validateObject.validateAndSubmit('#formID');
     };
-//
-//    $(function(){
-//        $("#form").validate({
-//            rules: {
-//                j_username: {
-//                    required: true,
-//                    minlength: 5
-//                },
-//                j_password: {
-//                    required: true,
-//                    minlength: 6
-//                }
-//            },
-//            messages: {
-//                j_username: {
-//                    required: "Введите свой логин",
-//                    minlength: "Логин должно содержать не менее 5 символов"
-//                },
-//                j_password: {
-//                    required: "Введите свой пароль",
-//                    minlength: "Пароль должно содержать не менее 6 символов"
-//                }
-//            },
-//            submitHandler: function (form) {
-//                form.submit();
-//            }
-//        });
-//    })
 });

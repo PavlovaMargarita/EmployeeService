@@ -39,7 +39,7 @@
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown" ng-show="hasAuthority(['ROLE_HRM'])">
+                    <li class="dropdown" ng-show="hasAuthority(['ROLE_HRM', 'ROLE_CEO', 'ROLE_ADMIN'])">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">Сотрудник <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="#employeeList">Список сотрудников</a></li>
@@ -60,16 +60,20 @@
                     <li ng-show="hasAuthority(['ROLE_CEO'])"><a href="#pay">Заплатить</a></li>
                 </ul>
 
-
-
                 <ul class="nav navbar-nav navbar-right">
+
                     <li ng-show="isAuth()"><a href="j_spring_security_logout">Выход</a></li>
                 </ul>
+
+
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-show="hasAuthority(['ROLE_CEO'])"><img class="img-navbar" id="photoEmployeeNavbar"></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li ng-show="isAuth()"><a href="" id="li-name">{{name}}</a></li>
+                    <li ng-show="isAuth()"><a href="">{{name}}</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-show="isAuth()"><a href="">{{role}}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-show="!isAuth()"><a href="#login">Войти</a></li>

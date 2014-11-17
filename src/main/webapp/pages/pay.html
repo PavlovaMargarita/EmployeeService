@@ -1,6 +1,6 @@
 <div class="container">
 
-    <form class="form-horizontal" role="form" id="payForm">
+    <form class="form-horizontal" role="form" id="payForm" ng-submit="pay()" ng-controller="payController">
         <div class="div-error error-font" id="accountNumberError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="accountNumber">Номер платежного счета</label>
@@ -34,7 +34,10 @@
             <label class="control-label col-sm-4 label-font-size"></label>
 
             <div class="col-sm-8">
-                <button type="button" class="btn btn-primary col-sm-3 button-style" ng-click="pay.doClick()">
+                <!--<button type="button" class="btn btn-primary col-sm-3 button-style" ng-click="pay.doClick()">-->
+                    <!--Заплатить-->
+                <!--</button>-->
+                <button type="submit" class="btn btn-primary col-sm-3 button-style">
                     Заплатить
                 </button>
                 <button type="button" class="btn btn-danger col-sm-offset-1 col-sm-3 button-style"

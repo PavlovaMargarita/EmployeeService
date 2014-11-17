@@ -809,7 +809,7 @@
         }
     };
 
-    $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
+    $.each( { showStandardPhotoAndFiredButton: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
         $.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
             if ( typeof options === "string" ) {
                 options = { effect: options };
@@ -1569,11 +1569,11 @@
         },
 
         showProps: {
-            borderTopWidth: "show",
-            borderBottomWidth: "show",
-            paddingTop: "show",
-            paddingBottom: "show",
-            height: "show"
+            borderTopWidth: "showStandardPhotoAndFiredButton",
+            borderBottomWidth: "showStandardPhotoAndFiredButton",
+            paddingTop: "showStandardPhotoAndFiredButton",
+            paddingBottom: "showStandardPhotoAndFiredButton",
+            height: "showStandardPhotoAndFiredButton"
         },
 
         _create: function() {
@@ -1796,7 +1796,7 @@
                 .removeClass( "ui-corner-all" );
             this.active.next()
                 .addClass( "ui-accordion-content-active" )
-                .show();
+                .showStandardPhotoAndFiredButton();
 
             this.headers
                 .attr( "role", "tab" )
@@ -1984,7 +1984,7 @@
                 this._animate( toShow, toHide, data );
             } else {
                 toHide.hide();
-                toShow.show();
+                toShow.showStandardPhotoAndFiredButton();
                 this._toggleComplete( data );
             }
 
@@ -2046,7 +2046,7 @@
                 return toHide.animate( this.hideProps, duration, easing, complete );
             }
 
-            total = toShow.show().outerHeight();
+            total = toShow.showStandardPhotoAndFiredButton().outerHeight();
             toHide.animate( this.hideProps, {
                 duration: duration,
                 easing: easing,
@@ -2233,7 +2233,7 @@
                 .removeAttr( "aria-hidden" )
                 .removeAttr( "aria-disabled" )
                 .removeUniqueId()
-                .show();
+                .showStandardPhotoAndFiredButton();
 
             // Destroy menu items
             this.element.find( ".ui-menu-item" )
@@ -2536,7 +2536,7 @@
                 .attr( "aria-hidden", "true" );
 
             submenu
-                .show()
+                .showStandardPhotoAndFiredButton()
                 .removeAttr( "aria-hidden" )
                 .attr( "aria-expanded", "true" )
                 .position( position );
@@ -3210,7 +3210,7 @@
             this.menu.refresh();
 
             // size and position menu
-            ul.show();
+            ul.showStandardPhotoAndFiredButton();
             this._resizeMenu();
             ul.position( $.extend({
                 of: this.element
@@ -3821,9 +3821,9 @@
             yearRange: "c-10:c+10", // Range of years to display in drop-down,
             // either relative to today's year (-nn:+nn), relative to currently displayed year
             // (c-nn:c+nn), absolute (nnnn:nnnn), or a combination of the above (nnnn:-n)
-            showOtherMonths: false, // True to show dates in other months, false to leave blank
+            showOtherMonths: false, // True to showStandardPhotoAndFiredButton dates in other months, false to leave blank
             selectOtherMonths: false, // True to allow selection of dates in other months, false for unselectable
-            showWeek: false, // True to show week of the year, false to not show it
+            showWeek: false, // True to showStandardPhotoAndFiredButton week of the year, false to not showStandardPhotoAndFiredButton it
             calculateWeek: this.iso8601Week, // How to calculate the week of the year,
             // takes a Date and returns the number of the week for it
             shortYearCutoff: "+10", // Short year values < this are in the current century,
@@ -3840,14 +3840,14 @@
             onSelect: null, // Define a callback function when a date is selected
             onChangeMonthYear: null, // Define a callback function when the month or year is changed
             onClose: null, // Define a callback function when the datepicker is closed
-            numberOfMonths: 1, // Number of months to show at a time
-            showCurrentAtPos: 0, // The position in multipe months at which to show the current month (starting at 0)
+            numberOfMonths: 1, // Number of months to showStandardPhotoAndFiredButton at a time
+            showCurrentAtPos: 0, // The position in multipe months at which to showStandardPhotoAndFiredButton the current month (starting at 0)
             stepMonths: 1, // Number of months to step back/forward
             stepBigMonths: 12, // Number of months to step back/forward for the big links
             altField: "", // Selector for an alternate field to store selected dates into
             altFormat: "", // The date format to use for the alternate field
             constrainInput: true, // The input is constrained by the current date format
-            showButtonPanel: false, // True to show button panel, false to not show it
+            showButtonPanel: false, // True to showStandardPhotoAndFiredButton button panel, false to not showStandardPhotoAndFiredButton it
             autoSize: false, // True to size the input for the date format, false to leave as is
             disabled: false // The initial disabled state
         };
@@ -4020,7 +4020,7 @@
             if( inst.settings.disabled ) {
                 this._disableDatepicker( target );
             }
-            // Set display:block in place of inst.dpDiv.show() which won't work on disconnected elements
+            // Set display:block in place of inst.dpDiv.showStandardPhotoAndFiredButton() which won't work on disconnected elements
             // http://bugs.jqueryui.com/ticket/7552 - A Datepicker created on a detached div has zero height
             inst.dpDiv.css( "display", "block" );
         },
@@ -4422,7 +4422,7 @@
         },
 
         /* Pop-up the date picker for a given input field.
-         * If false returned from beforeShow event handler do not show.
+         * If false returned from beforeShow event handler do not showStandardPhotoAndFiredButton.
          * @param  input  element - the input field attached to the date picker or
          *					event - if triggered by focus
          */
@@ -4493,9 +4493,9 @@
                 $.datepicker._datepickerShowing = true;
 
                 if ( $.effects && $.effects.effect[ showAnim ] ) {
-                    inst.dpDiv.show(showAnim, $.datepicker._get(inst, "showOptions"), duration);
+                    inst.dpDiv.showStandardPhotoAndFiredButton(showAnim, $.datepicker._get(inst, "showOptions"), duration);
                 } else {
-                    inst.dpDiv[showAnim || "show"](showAnim ? duration : null);
+                    inst.dpDiv[showAnim || "showStandardPhotoAndFiredButton"](showAnim ? duration : null);
                 }
 
                 if ( $.datepicker._shouldFocusInput( inst ) ) {
@@ -5617,7 +5617,7 @@
             }
         },
 
-        /* Determine the number of months to show. */
+        /* Determine the number of months to showStandardPhotoAndFiredButton. */
         _getNumberOfMonths: function(inst) {
             var numMonths = this._get(inst, "numberOfMonths");
             return (numMonths == null ? [1, 1] : (typeof numMonths === "number" ? [1, numMonths] : numMonths));
@@ -6981,7 +6981,7 @@
                 for (i in this.handles) {
 
                     if (this.handles[i].constructor === String) {
-                        this.handles[i] = this.element.children( this.handles[ i ] ).first().show();
+                        this.handles[i] = this.element.children( this.handles[ i ] ).first().showStandardPhotoAndFiredButton();
                     }
 
                     if (this.elementIsWrapper && this.originalElement[0].nodeName.match(/textarea|input|select|button/i)) {
@@ -7032,7 +7032,7 @@
                             return;
                         }
                         $(this).removeClass("ui-resizable-autohide");
-                        that._handles.show();
+                        that._handles.showStandardPhotoAndFiredButton();
                     })
                     .mouseleave(function() {
                         if (o.disabled) {
@@ -8004,7 +8004,7 @@
                 }
             },
             resizable: true,
-            show: null,
+            showStandardPhotoAndFiredButton: null,
             title: null,
             width: 300,
 
@@ -8056,7 +8056,7 @@
             this._createWrapper();
 
             this.element
-                .show()
+                .showStandardPhotoAndFiredButton()
                 .removeAttr( "title" )
                 .addClass( "ui-dialog-content ui-widget-content" )
                 .appendTo( this.uiDialog );
@@ -8212,7 +8212,7 @@
                 this.overlay.css( "z-index", this.uiDialog.css( "z-index" ) - 1 );
             }
 
-            this._show( this.uiDialog, this.options.show, function() {
+            this._show( this.uiDialog, this.options.showStandardPhotoAndFiredButton, function() {
                 that._focusTabbable();
                 that._trigger( "focus" );
             });
@@ -8571,10 +8571,10 @@
         },
 
         _position: function() {
-            // Need to show the dialog to get the actual offset in the position plugin
+            // Need to showStandardPhotoAndFiredButton the dialog to get the actual offset in the position plugin
             var isVisible = this.uiDialog.is( ":visible" );
             if ( !isVisible ) {
-                this.uiDialog.show();
+                this.uiDialog.showStandardPhotoAndFiredButton();
             }
             this.uiDialog.position( this.options.position );
             if ( !isVisible ) {
@@ -8683,7 +8683,7 @@
                 options = this.options;
 
             // Reset content sizing
-            this.element.show().css({
+            this.element.showStandardPhotoAndFiredButton().css({
                 width: "auto",
                 minHeight: 0,
                 maxHeight: "none",
@@ -10142,7 +10142,7 @@
 
             setMode: function( el, mode ) {
                 if (mode === "toggle") {
-                    mode = el.is( ":hidden" ) ? "show" : "hide";
+                    mode = el.is( ":hidden" ) ? "showStandardPhotoAndFiredButton" : "hide";
                 }
                 return mode;
             },
@@ -10242,7 +10242,7 @@
                 }
                 element.css(size);
 
-                return wrapper.css( props ).show();
+                return wrapper.css( props ).showStandardPhotoAndFiredButton();
             },
 
             removeWrapper: function( element ) {
@@ -10358,7 +10358,7 @@
                     effectMethod = $.effects.effect[ args.effect ];
 
                 if ( $.fx.off || !effectMethod ) {
-                    // delegate to the original method (e.g., .show()) if possible
+                    // delegate to the original method (e.g., .showStandardPhotoAndFiredButton()) if possible
                     if ( mode ) {
                         return this[ mode ]( args.duration, args.complete );
                     } else {
@@ -10386,7 +10386,7 @@
 
                     // If the element already has the correct final state, delegate to
                     // the core methods so the internal tracking of "olddisplay" works.
-                    if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
+                    if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "showStandardPhotoAndFiredButton" ) {
                         elem[ mode ]();
                         done();
                     } else {
@@ -10397,17 +10397,17 @@
                 return queue === false ? this.each( run ) : this.queue( queue || "fx", run );
             },
 
-            show: (function( orig ) {
+            showStandardPhotoAndFiredButton: (function( orig ) {
                 return function( option ) {
                     if ( standardAnimationOption( option ) ) {
                         return orig.apply( this, arguments );
                     } else {
                         var args = _normalizeArguments.apply( this, arguments );
-                        args.mode = "show";
+                        args.mode = "showStandardPhotoAndFiredButton";
                         return this.effect.call( this, args );
                     }
                 };
-            })( $.fn.show ),
+            })( $.fn.showStandardPhotoAndFiredButton ),
 
             hide: (function( orig ) {
                 return function( option ) {
@@ -10539,7 +10539,7 @@
         } else {
             $.effects.save( el, props );
         }
-        el.show();
+        el.showStandardPhotoAndFiredButton();
         wrapper = $.effects.createWrapper( el ).css({
             overflow: "hidden"
         });
@@ -10628,7 +10628,7 @@
         }
 
         $.effects.save( el, props );
-        el.show();
+        el.showStandardPhotoAndFiredButton();
         $.effects.createWrapper( el ); // Create Wrapper
 
         // default distance for the BIGGEST bounce is the outer Distance / 3
@@ -10719,7 +10719,7 @@
 
         // Save & Show
         $.effects.save( el, props );
-        el.show();
+        el.showStandardPhotoAndFiredButton();
 
         // Create Wrapper
         wrapper = $.effects.createWrapper( el ).css({
@@ -10784,7 +10784,7 @@
 
         // Adjust
         $.effects.save( el, props );
-        el.show();
+        el.showStandardPhotoAndFiredButton();
         $.effects.createWrapper( el );
 
         distance = o.distance || el[ ref === "top" ? "outerHeight": "outerWidth" ]( true ) / 2;
@@ -10838,8 +10838,8 @@
             mode = $.effects.setMode( el, o.mode || "hide" ),
             show = mode === "show",
 
-        // show and then visibility:hidden the element before calculating offset
-            offset = el.show().css( "visibility", "hidden" ).offset(),
+        // showStandardPhotoAndFiredButton and then visibility:hidden the element before calculating offset
+            offset = el.showStandardPhotoAndFiredButton().css( "visibility", "hidden" ).offset(),
 
         // width and height of a piece
             width = Math.ceil( el.outerWidth() / cells ),
@@ -10970,7 +10970,7 @@
             animation2 = {};
 
         $.effects.save( el, props );
-        el.show();
+        el.showStandardPhotoAndFiredButton();
 
         // Create Wrapper
         wrapper = $.effects.createWrapper( el ).css({
@@ -11027,7 +11027,7 @@
     var effectHighlight = $.effects.effect.highlight = function( o, done ) {
         var elem = $( this ),
             props = [ "backgroundImage", "backgroundColor", "opacity" ],
-            mode = $.effects.setMode( elem, o.mode || "show" ),
+            mode = $.effects.setMode( elem, o.mode || "showStandardPhotoAndFiredButton" ),
             animation = {
                 backgroundColor: elem.css( "backgroundColor" )
             };
@@ -11039,7 +11039,7 @@
         $.effects.save( elem, props );
 
         elem
-            .show()
+            .showStandardPhotoAndFiredButton()
             .css({
                 backgroundImage: "none",
                 backgroundColor: o.color || "#ffff99"
@@ -11101,8 +11101,8 @@
                 outerWidth: 0
             };
 
-        if ( mode === "show" ) {
-            el.show();
+        if ( mode === "showStandardPhotoAndFiredButton" ) {
+            el.showStandardPhotoAndFiredButton();
         }
         original = {
             height: el.height(),
@@ -11111,11 +11111,11 @@
             outerWidth: el.outerWidth()
         };
 
-        if ( o.mode === "toggle" && mode === "show" ) {
+        if ( o.mode === "toggle" && mode === "showStandardPhotoAndFiredButton" ) {
             el.from = o.to || zero;
             el.to = o.from || original;
         } else {
-            el.from = o.from || ( mode === "show" ? zero : original );
+            el.from = o.from || ( mode === "showStandardPhotoAndFiredButton" ? zero : original );
             el.to = o.to || ( mode === "hide" ? zero : original );
         }
 
@@ -11161,7 +11161,7 @@
         }
 
         $.effects.save( el, props );
-        el.show();
+        el.showStandardPhotoAndFiredButton();
         $.effects.createWrapper( el );
         el.css( "overflow", "hidden" ).css( el.from );
 
@@ -11317,13 +11317,13 @@
         options.queue = false;
         options.complete = done;
 
-        // Set default origin and restore for show/hide
+        // Set default origin and restore for showStandardPhotoAndFiredButton/hide
         if ( mode !== "effect" ) {
             options.origin = origin || [ "middle", "center" ];
             options.restore = true;
         }
 
-        options.from = o.from || ( mode === "show" ? {
+        options.from = o.from || ( mode === "showStandardPhotoAndFiredButton" ? {
             height: 0,
             width: 0,
             outerHeight: 0,
@@ -11338,7 +11338,7 @@
 
         // Fade option to support puff
         if ( options.fade ) {
-            if ( mode === "show" ) {
+            if ( mode === "showStandardPhotoAndFiredButton" ) {
                 options.from.opacity = 0;
                 options.to.opacity = 1;
             }
@@ -11428,7 +11428,7 @@
             i;
 
         if ( show || !elem.is(":visible")) {
-            elem.css( "opacity", 0 ).show();
+            elem.css( "opacity", 0 ).showStandardPhotoAndFiredButton();
             animateTo = 1;
         }
 
@@ -11494,7 +11494,7 @@
             queuelen = queue.length;
 
         $.effects.save( el, props );
-        el.show();
+        el.showStandardPhotoAndFiredButton();
         $.effects.createWrapper( el );
 
         // Animation
@@ -11558,7 +11558,7 @@
 
         // Adjust
         $.effects.save( el, props );
-        el.show();
+        el.showStandardPhotoAndFiredButton();
         distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true );
 
         $.effects.createWrapper( el ).css({
@@ -12560,7 +12560,7 @@
             var width = this.options.width;
 
             if ( !width ) {
-                width = this.element.show().outerWidth();
+                width = this.element.showStandardPhotoAndFiredButton().outerWidth();
                 this.element.hide();
             }
 
@@ -12602,7 +12602,7 @@
         _destroy: function() {
             this.menuWrap.remove();
             this.button.remove();
-            this.element.show();
+            this.element.showStandardPhotoAndFiredButton();
             this.element.removeUniqueId();
             this.label.attr( "for", this.ids.element );
         }
@@ -13750,7 +13750,7 @@
                 if(this.options.helper === "original") {
                     this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
                 } else {
-                    this.currentItem.show();
+                    this.currentItem.showStandardPhotoAndFiredButton();
                 }
 
                 //Post deactivating events to containers
@@ -14471,7 +14471,7 @@
                 }
                 this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
             } else {
-                this.currentItem.show();
+                this.currentItem.showStandardPhotoAndFiredButton();
             }
 
             if(this.fromOutside && !noPropagation) {
@@ -15100,7 +15100,7 @@
             event: "click",
             heightStyle: "content",
             hide: null,
-            show: null,
+            showStandardPhotoAndFiredButton: null,
 
             // callbacks
             activate: null,
@@ -15431,7 +15431,7 @@
                         tabIndex: 0
                     });
                 this._getPanelForTab( this.active )
-                    .show()
+                    .showStandardPhotoAndFiredButton()
                     .attr({
                         "aria-hidden": "false"
                     });
@@ -15667,7 +15667,7 @@
             this._toggle( event, eventData );
         },
 
-        // handles show/hide for selecting tabs
+        // handles showStandardPhotoAndFiredButton/hide for selecting tabs
         _toggle: function( event, eventData ) {
             var that = this,
                 toShow = eventData.newPanel,
@@ -15683,10 +15683,10 @@
             function show() {
                 eventData.newTab.closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
 
-                if ( toShow.length && that.options.show ) {
-                    that._show( toShow, that.options.show, complete );
+                if ( toShow.length && that.options.showStandardPhotoAndFiredButton ) {
+                    that._show( toShow, that.options.showStandardPhotoAndFiredButton, complete );
                 } else {
-                    toShow.show();
+                    toShow.showStandardPhotoAndFiredButton();
                     complete();
                 }
             }
@@ -15812,7 +15812,7 @@
                 }
             });
 
-            this.panels.show();
+            this.panels.showStandardPhotoAndFiredButton();
 
             if ( this.options.heightStyle !== "content" ) {
                 this.panels.css( "height", "" );
@@ -15965,7 +15965,7 @@
                 at: "left bottom",
                 collision: "flipfit flip"
             },
-            show: true,
+            showStandardPhotoAndFiredButton: true,
             tooltipClass: null,
             track: false,
 
@@ -16083,7 +16083,7 @@
                     // but always pointing at the same event target
                     .closest( this.options.items );
 
-            // No element to show a tooltip for or the tooltip is already open
+            // No element to showStandardPhotoAndFiredButton a tooltip for or the tooltip is already open
             if ( !target.length || target.data( "ui-tooltip-id" ) ) {
                 return;
             }
@@ -16222,11 +16222,11 @@
             this.closing = false;
             tooltip.hide();
 
-            this._show( tooltip, this.options.show );
+            this._show( tooltip, this.options.showStandardPhotoAndFiredButton );
             // Handle tracking tooltips that are shown with a delay (#8644). As soon
             // as the tooltip is visible, position the tooltip using the most recent
             // event.
-            if ( this.options.show && this.options.show.delay ) {
+            if ( this.options.showStandardPhotoAndFiredButton && this.options.showStandardPhotoAndFiredButton.delay ) {
                 delayedShow = this.delayedShow = setInterval(function() {
                     if ( tooltip.is( ":visible" ) ) {
                         position( positionOption.of );

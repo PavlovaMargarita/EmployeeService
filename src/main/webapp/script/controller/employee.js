@@ -84,7 +84,8 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
 });
 
 app.controller("employeeCreateController", function ($scope, $rootScope, $http, $location, $route, $upload) {
-    $scope.show = false;
+    $scope.showStandardPhotoAndFiredButton = false;
+    $scope.editEmployeeInput = true;
     $scope.onFileSelect = function ($files) {
         $scope.photo = $files[0];
         var reader = new FileReader();
@@ -96,7 +97,7 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
         };
         reader.readAsDataURL($scope.photo);
 
-    }
+    };
     var departments = $http({
         method: "get",
         url: "/EmployeeService/company/departmentList",
@@ -130,16 +131,21 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
         $scope.positions = data;
     });
 
-    var sex = $http({
-        method: "get",
-        url: "/EmployeeService/employee/sexList",
-        dataType: 'json',
-        contentType: 'application/json',
-        mimeType: 'application/json'
-    });
-    sex.success(function (data) {
-        $scope.sexList = data;
-    });
+//    var sex = $http({
+//        method: "get",
+//        url: "/EmployeeService/employee/sexList",
+//        dataType: 'json',
+//        contentType: 'application/json',
+//        mimeType: 'application/json'
+//    });
+//    sex.success(function (data) {
+//        $scope.sexList = data;
+//    });
+    $scope.sexList = [];
+    $scope.sexList[0] = {'sexEnum': 'MALE', sexRussian: 'Мужской'};
+    $scope.sexList[1] = {'sexEnum': 'FEMALE', sexRussian: 'Женский'};
+
+
 
     var role= $http({
         method: "get",
@@ -149,59 +155,73 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
         mimeType: 'application/json'
     });
     role.success(function (data) {
-        $scope.roleList = data;
+        $scope.roleList = [];
+        data.forEach(addRoleName);
+        function addRoleName(element, index) {
+            switch(element){
+                case 'ROLE_HRM': var value = {roleEnum: element, roleTranslate: 'HRM'};
+                    $scope.roleList.push(value); break;
+                case 'ROLE_ADMIN': var value = {roleEnum: element, roleTranslate: 'Администратор'};
+                    $scope.roleList.push(value);break;
+                case 'ROLE_EMPLOYEE': var value = {roleEnum: element, roleTranslate: 'Сотрудник'};
+                    $scope.roleList.push(value);break;
+            }
+
+        }
+
     });
 
     $scope.save = {};
     $scope.save.doClick = function () {
-//        var temp = validateObject.validate("#createEmployeeForm");
-        var response = $http({
-            method: "post",
-            url: "/EmployeeService/employee/saveEmployeeCreate",
-            data: {
-                f_name: $scope.employee.f_name,
-                s_name: $scope.employee.s_name,
-                sex: $scope.employee.sex,
-                dateOfBirth: $scope.employee.dateOfBirth,
-                countryId: $scope.country.id,
-                city: $scope.employee.city,
-                street: $scope.employee.street,
-                house: $scope.employee.house,
-                flat: $scope.employee.flat,
-                addressId: $scope.address.id,
-                departmentId: $scope.department.id,
-                positionInCompanyId: $scope.position.id,
-                dateContractEnd: $scope.employee.dateContractEnd,
-                fired: false,
-                firedComment: '',
-                photoURL: 't',
-                login: $scope.employee.login,
-                password: $scope.employee.password,
-                role: $scope.employee.role,
-                companyId: $scope.employee.companyId
-            },
-            dataType: 'json',
-            contentType: 'application/json',
-            mimeType: 'application/json'
-        });
-        response.success(function (data) {
-            var fd = new FormData();
-            fd.append('idEmployee', data);
-            fd.append("photo", $scope.photo);
-            $http({
-                method: 'POST',
-                url: '/EmployeeService/employee/uploadPhoto',
-                headers: {'Content-Type': undefined},
-                data: fd,
-                transformRequest: angular.identity
-            })
-                .success(function (data, status) {
-                    alert("success");
-                    $location.path('/employeeList');
-                    $location.replace();
-                });
-
-        });
+        var temp = validateObject.validate("#createEmployeeForm");
+//        var response = $http({
+//            method: "post",
+//            url: "/EmployeeService/employee/saveEmployeeCreate",
+//            data: {
+//                f_name: $scope.employee.f_name,
+//                s_name: $scope.employee.s_name,
+//                sex: $scope.employee.sex,
+//                dateOfBirth: $scope.employee.dateOfBirth,
+//                countryId: $scope.country.id,
+//                city: $scope.employee.city,
+//                street: $scope.employee.street,
+//                house: $scope.employee.house,
+//                flat: $scope.employee.flat,
+//                addressId: $scope.address.id,
+//                departmentId: $scope.department.id,
+//                positionInCompanyId: $scope.position.id,
+//                dateContractEnd: $scope.employee.dateContractEnd,
+//                fired: false,
+//                firedComment: '',
+//                photoURL: 't',
+//                login: $scope.employee.login,
+//                password: $scope.employee.password,
+//                role: $scope.employee.role,
+//                companyId: $scope.employee.companyId,
+//                email: $scope.employee.email
+//            },
+//            dataType: 'json',
+//            contentType: 'application/json',
+//            mimeType: 'application/json'
+//        });
+//        response.success(function (data) {
+//            var fd = new FormData();
+//            fd.append('idEmployee', data);
+//            fd.append("photo", $scope.photo);
+//            $http({
+//                method: 'POST',
+//                url: '/EmployeeService/employee/uploadPhoto',
+//                headers: {'Content-Type': undefined},
+//                data: fd,
+//                transformRequest: angular.identity
+//            })
+//                .success(function (data, status) {
+//                    alert("success");
+//                    $location.path('/employeeList');
+//                    $location.replace();
+//                });
+//
+//        });
     }
 
     $scope.changeDepartment = {};
@@ -221,8 +241,16 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
     }
 });
 
-app.controller("employeeCorrectController", function ($scope, $http, $routeParams, $location) {
-    $scope.show = true;
+app.controller("employeeCorrectController", function ($scope, $http, $routeParams, $location, $rootScope) {
+    $scope.showStandardPhotoAndFiredButton = true;
+    if($rootScope.hasAuthority(['ROLE_CEO', 'ROLE_ADMIN'])){
+        $scope.editEmployeeInput = false;
+        $('#saveEmployee').attr('disabled', 'disabled');
+    } else{
+        $scope.editEmployeeInput = true;
+        $('#saveEmployee').removeAttr('disabled');
+    }
+
     var currentCompany = $http({
         method: "get",
         url: "/EmployeeService/company/currentCompanyId",
@@ -238,6 +266,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
 
     $scope.showPhoto = false;
     var id = $routeParams.id;
+
     var response = $http({
         method: "get",
         url: "/EmployeeService/employee/employeeById",
@@ -331,40 +360,46 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
             }
         });
 
-
-        var sex = $http({
-            method: "get",
-            url: "/EmployeeService/employee/sexList",
-            dataType: 'json',
-            contentType: 'application/json',
-            mimeType: 'application/json'
-        });
-        sex.success(function (data) {
-            $scope.sexList = data;
-            data.forEach(selectSex);
-            function selectSex(element, index) {
-                if (element.sexEnum == $scope.employee.sex) {
-                    $scope.employee.sex = $scope.sexList[index].sexEnum;
-                }
+        $scope.sexList = new Array();
+        $scope.sexList[0] = {'sexEnum': 'MALE', sexRussian: 'Мужской'};
+        $scope.sexList[1] = {'sexEnum': 'FEMALE', sexRussian: 'Женский'};
+        $scope.sexList.forEach(selectSex);
+        function selectSex(element, index) {
+            if (element.sexEnum == $scope.employee.sex) {
+                $scope.employee.sex = $scope.sexList[index].sexEnum;
             }
-        });
+        }
 
-        var role = $http({
+        var role= $http({
             method: "get",
             url: "/EmployeeService/employee/roleList",
             dataType: 'json',
             contentType: 'application/json',
             mimeType: 'application/json'
         });
+
         role.success(function (data) {
-            $scope.roleList = data;
-            data.forEach(selectRole);
-            function selectRole(element, index) {
-                if (element.roleEnum == $scope.employee.role) {
-                    $scope.employee.role = $scope.roleList[index].roleEnum;
+            $scope.roleList = [];
+            data.forEach(addRoleName);
+            function addRoleName(element, index) {
+                switch(element){
+                    case 'ROLE_HRM': var value = {roleEnum: element, roleTranslate: 'HRM'};
+                        $scope.roleList.push(value); break;
+                    case 'ROLE_ADMIN': var value = {roleEnum: element, roleTranslate: 'Администратор'};
+                        $scope.roleList.push(value);break;
+                    case 'ROLE_EMPLOYEE': var value = {roleEnum: element, roleTranslate: 'Сотрудник'};
+                        $scope.roleList.push(value);break;
                 }
+
             }
+
         });
+        $scope.roleList.forEach(selectRole);
+        function selectRole(element, index) {
+            if (element.roleEnum == $scope.employee.role) {
+                $scope.employee.role = $scope.roleList[index].roleEnum;
+            }
+        }
     });
 
 
@@ -394,7 +429,8 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 login: $scope.employee.login,
                 password: $scope.employee.password,
                 role: $scope.employee.role,
-                companyId: $scope.employee.companyId
+                companyId: $scope.employee.companyId,
+                email: $scope.employee.email
             },
             dataType: 'json',
             contentType: 'application/json',
@@ -451,7 +487,8 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 login: $scope.employee.login,
                 password: $scope.employee.password,
                 role: $scope.employee.role,
-                companyId: $scope.employee.companyId
+                companyId: $scope.employee.companyId,
+                email: $scope.employee.email
             },
             dataType: 'json',
             contentType: 'application/json',

@@ -2,7 +2,7 @@ var validateObject = {
     showLabel: function(label, text){
         if (label){
             $(label).text(text);
-            $(label).show();
+            $(label).showStandardPhotoAndFiredButton();
         }
     },
 
@@ -166,13 +166,17 @@ var validateObject = {
         var instance = this;
         var correct = true;
 
-        $(formSelector + ' input:not([type="button"]), ' + formSelector + ' select').each(function () {
+//        $(formSelector + ' input:not([type="button"]), ' + formSelector + ' select').each(function (elem) {
+        $(formSelector).each(function (elem) {
             switch ($(this).attr('validate')) {
                 case 'username':
                     correct = instance.validateUsername($(this).val(), $(this).attr('errorLabel')) && correct;
                     break;
                 case 'password':
                     correct = instance.validatePassword($(this).val(), $(this).attr('errorLabel')) && correct;
+                    break;
+                case 'accountNumber':
+                    correct = instance.validateAccountNumber($(this).val(), $(this).attr('errorLabel')) && correct;
                     break;
                 case 'first_name':
                     correct = instance.validateFirstName($(this).val(), $(this).attr('errorLabel')) && correct;
@@ -206,6 +210,9 @@ var validateObject = {
                     break;
                 case 'flat':
                     correct = instance.validateFlat($(this).val(), $(this).attr('errorLabel')) && correct;
+                    break;
+                case 'email':
+                    correct = instance.validateEmail($(this).val(), $(this).attr('errorLabel')) && correct;
                     break;
             }
         });

@@ -9,8 +9,9 @@ app.controller("payController", function ($scope, $rootScope, $http) {
     response.success(function (data) {
         $scope.company = data;
     });
-    $scope.pay = {};
-    $scope.pay.doClick = function(){
+//    $scope.pay = {};
+//    $scope.pay.doClick = function(){
+    $scope.pay = function(){
         var ok = validateObject.validate('#payForm');
         if(ok) {
             var response = $http({

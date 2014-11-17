@@ -48,8 +48,11 @@ public class Employee {
     @Column(nullable = false)
     private String flat;
 
-    @Column(nullable = false, name="photo_url")
+    @Column(nullable = true, name="photo_url")
     private String photoURL;
+
+    @Column(nullable = false)
+    private String email;
 
     @ManyToOne
     @JoinColumn(name = "office_address_id", nullable = true)
@@ -82,7 +85,7 @@ public class Employee {
     private List<Project> projectList;
 
 
-    @Column(nullable = false, name="date_contract_end")
+    @Column(nullable = true, name="date_contract_end")
     private Date dateContractEnd;
 
     @Column(nullable = false)
@@ -321,5 +324,13 @@ public class Employee {
 
     public void setRole(RoleEnum role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

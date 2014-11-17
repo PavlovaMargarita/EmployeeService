@@ -33,6 +33,7 @@ public class EmployeeDTO {
     private String password;
     private RoleEnum role;
     private Long companyId;
+    private String email;
 
     public EmployeeDTO(){}
 
@@ -218,5 +219,13 @@ public class EmployeeDTO {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

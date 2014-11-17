@@ -79,23 +79,33 @@ app.controller("companyListController", function ($scope, $rootScope, $http, Pag
 });
 
 app.controller("companyCreateController", function ($scope, $rootScope, $http, $location) {
+    $scope.readonly = false;
     $scope.showStatus = false;
-    $scope.showAddSumInput = false;
     $scope.company = {};
-    $scope.company.accountSum = 0;
-    $scope.company.addSum = 0;
-    var currentDate = new Date;
-    currentDate.setMonth(currentDate.getMonth() + 2);
-    $scope.company.dateBoundaryRefill = currentDate.getFullYear() + "-" + currentDate.getMonth() + "-" + currentDate.getDate();
-    $scope.addMoney = {};
-    $scope.addMoney.doClick = function(){
-        $scope.showAddSumInput = true;
-        $scope.company.addSum = $scope.company.addSum - 0;
-        $scope.company.addMoney = $scope.company.addMoney - 0;
-        $scope.company.addSum += $scope.company.addMoney;
-        $scope.company.addMoney = "";
-        $('#modal-add-sum').modal('hide');
-    }
+    $scope.employee = {};
+    var currentDate = new Date();
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    var newMonth = currentDate.getMonth() + 1;
+    $scope.company.dateBoundaryRefill = currentDate.getFullYear() + "-" + newMonth + "-" + currentDate.getDate();
+    var countries = $http({
+        method: "get",
+        url: "/EmployeeService/country/countryList",
+        dataType: 'json',
+        contentType: 'application/json',
+        mimeType: 'application/json'
+    });
+    countries.success(function (data) {
+        $scope.countries = data;
+    });
+    $scope.sexList = new Array();
+    $scope.sexList[0] = {'sexEnum': 'MALE', sexRussian: 'Мужской'};
+    $scope.sexList[1] = {'sexEnum': 'FEMALE', sexRussian: 'Женский'};
+
+    $scope.roleList = new Array();
+    $scope.roleList[0] = {'roleEnum': 'ROLE_CEO', roleRussian: 'CEO'};
+    $scope.employee.role = $scope.roleList[0].roleEnum;
+
+
     $scope.save = {};
     $scope.save.doClick = function () {
         var response = $http({
@@ -104,18 +114,43 @@ app.controller("companyCreateController", function ($scope, $rootScope, $http, $
             data: {
                 companyName: $scope.company.companyName,
                 dateBoundaryRefill: $scope.company.dateBoundaryRefill,
-                addSum: $scope.company.addSum,
+                companyPlan: $scope.company.companyPlan,
+                programCost: $scope.company.programCost
             },
             dataType: 'json',
             contentType: 'application/json',
             mimeType: 'application/json'
         });
-        response.success(function () {
-            $location.path('/companyList');
-            $location.replace();
+        response.success(function (data) {
+            var employee = $http({
+                method: "post",
+                url: "/EmployeeService/employee/saveEmployeeCreateCEO",
+                data: {
+                    f_name: $scope.employee.f_name,
+                    s_name: $scope.employee.s_name,
+                    sex: $scope.employee.sex,
+                    dateOfBirth: $scope.employee.dateOfBirth,
+                    countryId: $scope.country.id,
+                    city: $scope.employee.city,
+                    street: $scope.employee.street,
+                    house: $scope.employee.house,
+                    flat: $scope.employee.flat,
+                    login: $scope.employee.login,
+                    password: $scope.employee.password,
+                    role: $scope.employee.role,
+                    companyId: data,
+                    email: $scope.employee.email
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                mimeType: 'application/json'
+
+            }).success(function(){
+                $location.path('/companyList');
+                $location.replace();
+            })
         });
     }
-
 
     $scope.cancel = {};
     $scope.cancel.doClick = function () {
@@ -125,7 +160,7 @@ app.controller("companyCreateController", function ($scope, $rootScope, $http, $
 });
 
 app.controller("companyCorrectController", function ($scope, $http, $routeParams, $location) {
-    $scope.showAddSumInput = false;
+    $scope.readonly = true;
     $scope.showStatus = true;
     var id = $routeParams.id;
     var response = $http({
@@ -137,35 +172,59 @@ app.controller("companyCorrectController", function ($scope, $http, $routeParams
     });
     response.success(function (data) {
         $scope.company = data;
+        $scope.statusList = new Array();
+        $scope.statusList[0] = {companyStatusEnum: 'CONTINUE_FUNCTIONING', companyStatusEnumRussian: 'Активное'};
+        $scope.statusList[1] = {companyStatusEnum: 'SUSPEND_FUNCTIONING', companyStatusEnumRussian: 'Приостановленное'};
+        $scope.statusList[2] = {companyStatusEnum: 'FINISH_FUNCTIONING', companyStatusEnumRussian: 'Завершенное'};
+        $scope.statusList.forEach(selectStatus);
+        function selectStatus(element, index) {
+            if (element.companyStatusEnum == $scope.company.companyStatus) {
+                $scope.company.companyStatus = $scope.statusList[index].companyStatusEnum;
+            }
+        }
+    });
+    $scope.sexList = new Array();
+    $scope.sexList[0] = {'sexEnum': 'MALE', sexRussian: 'Мужской'};
+    $scope.sexList[1] = {'sexEnum': 'FEMALE', sexRussian: 'Женский'};
 
-        var companyStatus = $http({
+    $scope.roleList = new Array();
+    $scope.roleList[0] = {'roleEnum': 'ROLE_CEO', roleRussian: 'CEO'};
+
+
+    var ceo = $http({
+        method: "get",
+        url: "/EmployeeService/employee/employeeCeoByCompanyId",
+        params: {
+            companyId: id
+        }
+    }).success(function(data){
+        $scope.employee = data;
+        $scope.employee.role = $scope.roleList[0].roleEnum;
+        $scope.sexList.forEach(selectSex);
+        function selectSex(element, index) {
+            if (element.sexEnum == $scope.employee.sex) {
+                $scope.employee.sex = $scope.sexList[index].sexEnum;
+            }
+        };
+        var countries = $http({
             method: "get",
-            url: "/EmployeeService/company/companyStatusList",
+            url: "/EmployeeService/country/countryList",
             dataType: 'json',
             contentType: 'application/json',
             mimeType: 'application/json'
         });
-        companyStatus.success(function (data) {
-            $scope.statusList = data;
-            data.forEach(selectStatus);
-            function selectStatus(element, index) {
-                if (element.companyStatusEnum == $scope.company.companyStatus) {
-                    $scope.company.companyStatus = $scope.statusList[index].companyStatusEnum;
+        countries.success(function (data) {
+            $scope.countries = data;
+            data.forEach(selectCountry);
+            if ($scope.employee != undefined) {
+                function selectCountry(element, index) {
+                    if (element.id == $scope.employee.countryId) {
+                        $scope.country = $scope.countries[index];
+                    }
                 }
             }
         });
     });
-
-    $scope.addMoney = {};
-    $scope.addMoney.doClick = function(){
-        $scope.showAddSumInput = true;
-        $scope.company.addSum = $scope.company.addSum - 0;
-        $scope.company.addMoney = $scope.company.addMoney - 0;
-        $scope.company.addSum += $scope.company.addMoney;
-        $scope.company.addMoney = "";
-        $('#modal-add-sum').modal('hide');
-    }
-
     $scope.save = {};
     $scope.save.doClick = function () {
         var response = $http({
@@ -175,7 +234,6 @@ app.controller("companyCorrectController", function ($scope, $http, $routeParams
                 id: $scope.company.id,
                 companyName: $scope.company.companyName,
                 companyStatus: $scope.company.companyStatus,
-                accountSum: $scope.company.accountSum,
                 dateBoundaryRefill: $scope.company.dateBoundaryRefill,
                 addSum: $scope.company.addSum,
                 canLogin: $scope.company.canLogin
@@ -201,7 +259,7 @@ app.controller("companyCorrectController", function ($scope, $http, $routeParams
 
 
 function showModalAddSum() {
-    $('#modal-add-sum').modal('show');
+    $('#modal-add-sum').modal('showStandardPhotoAndFiredButton');
 }
 
 function hideModalAddSum() {

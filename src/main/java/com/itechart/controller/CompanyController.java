@@ -76,9 +76,9 @@ public class CompanyController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveCompanyCreate")
-    public @ResponseBody void saveCompanyCreate(@RequestBody CompanyDTO companyDTO){
+    public @ResponseBody Long saveCompanyCreate(@RequestBody CompanyDTO companyDTO){
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveCompanyCreate ");
-        companyService.createCompany(companyDTO);
+        return companyService.createCompany(companyDTO);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/dateBoundaryRefill")

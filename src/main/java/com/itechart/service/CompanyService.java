@@ -19,7 +19,7 @@ public interface CompanyService {
     public long companyCount();
     public List<CompanyStatusDTO> readCompanyStatusEnum();
     public CompanyDTO readCompany(Long id);
-    public void createCompany(CompanyDTO companyDTO);
+    public Long createCompany(CompanyDTO companyDTO);
     public Date getDateBoundaryRefill();
     public Long getCurrentCompanyId();
     public void pay(String number);

@@ -44,6 +44,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private PositionInCompanyRepository positionInCompanyRepository;
+
     //private final String LOCATION = "D:/EmployeeService/src/main/webapp/files/company/";
     private final String LOCATION = "C:/apache-tomcat-7.0.56/webapps/EmployeeService/files/company/";
     @Override
@@ -185,23 +188,42 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<RoleDTO> readRoleEnum() {
-        List<RoleDTO> roleEnum = new ArrayList();
+    public List readRoleEnumForCurrentEmployee() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
+        String company = authority.get(2).getAuthority();
+        Long employeeId = Long.parseLong(company.substring(11));
+        EmployeeDTO employeeDTO = readEmployee(employeeId);
+        List roleList = new ArrayList();
         for(int i = 0; i < RoleEnum.values().length; i++) {
-            RoleDTO roleDTO = new RoleDTO();
-            roleDTO.setRoleEnum(RoleEnum.values()[i]);
-            if(roleDTO.getRoleEnum().equals(RoleEnum.ROLE_ADMIN)){
-                roleDTO.setRoleRussian("Администратор");
-            }
-            if(roleDTO.getRoleEnum().equals(RoleEnum.ROLE_EMPLOYEE)){
-                roleDTO.setRoleRussian("Сотрудник");
-            }
-            if(roleDTO.getRoleEnum().equals(RoleEnum.ROLE_HRM)){
-                roleDTO.setRoleRussian("HRM");
-            }
-            roleEnum.add(roleDTO);
+            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_HRM) && (employeeDTO.getRole().equals(RoleEnum.ROLE_HRM) || employeeDTO.getRole().equals(RoleEnum.ROLE_ADMIN)))
+                roleList.add(RoleEnum.values()[i]);
+            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_ADMIN) && (employeeDTO.getRole().equals(RoleEnum.ROLE_HRM) || employeeDTO.getRole().equals(RoleEnum.ROLE_CEO)))
+                roleList.add(RoleEnum.values()[i]);
+            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_EMPLOYEE) && employeeDTO.getRole().equals(RoleEnum.ROLE_HRM))
+                roleList.add(RoleEnum.values()[i]);
+
         }
-        return roleEnum;
+        return roleList;
+    }
+
+    @Override
+    public void createEmployeeCeo(EmployeeDTO employeeDTO) {
+        Employee employee = employeeDTOToEmployee(employeeDTO);
+        employee.setFired(false);
+        PositionInCompany positionInCompany = new PositionInCompany();
+        positionInCompany.setCompany(employee.getCompany());
+        positionInCompany.setPosition("CEO");
+        positionInCompanyRepository.save(positionInCompany);
+        employee.setPositionInCompany(positionInCompany);
+        employeeRepository.save(employee);
+    }
+
+    @Override
+    public EmployeeDTO readEmployeeCeoByCompanyId(Long companyId) {
+        Employee employee = employeeRepository.readEmployeeCeo(companyId);
+        EmployeeDTO employeeDTO = employeeToEmployeeDTO(employee);
+        return employeeDTO;
     }
 
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){
@@ -232,6 +254,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDTO.setPassword(employee.getPassword());
         employeeDTO.setRole(employee.getRole());
         employeeDTO.setCompanyId(employee.getCompany().getId());
+        employeeDTO.setEmail(employee.getEmail());
         return employeeDTO;
     }
 
@@ -248,12 +271,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setHouse(employeeDTO.getHouse());
         employee.setFlat(employeeDTO.getFlat());
         employee.setPhotoURL(employeeDTO.getPhotoURL());
-        Address address = companyRepository.readAddress(employeeDTO.getAddressId());
-        employee.setAddress(address);
-        Department department = companyRepository.readDepartment(employeeDTO.getDepartmentId());
-        employee.setDepartment(department);
-        PositionInCompany positionInCompany = companyRepository.readPositionInCompany(employeeDTO.getPositionInCompanyId());
-        employee.setPositionInCompany(positionInCompany);
+        if(employeeDTO.getAddressId() != null) {
+            Address address = companyRepository.readAddress(employeeDTO.getAddressId());
+            employee.setAddress(address);
+        }
+        if(employeeDTO.getDepartmentId() != null) {
+            Department department = companyRepository.readDepartment(employeeDTO.getDepartmentId());
+            employee.setDepartment(department);
+        }
+        if(employeeDTO.getPositionInCompanyId() != null) {
+            PositionInCompany positionInCompany = positionInCompanyRepository.findOne(employeeDTO.getPositionInCompanyId());
+            employee.setPositionInCompany(positionInCompany);
+        }
+
         employee.setDateContractEnd(employeeDTO.getDateContractEnd());
         employee.setFired(employeeDTO.getFired());
         employee.setFiredComment(employeeDTO.getFiredComment());
@@ -262,6 +292,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword(employeeDTO.getPassword());
         employee.setRole(employeeDTO.getRole());
         employee.setCompany(companyRepository.findOne(employeeDTO.getCompanyId()));
+        employee.setEmail(employeeDTO.getEmail());
         return employee;
     }
 

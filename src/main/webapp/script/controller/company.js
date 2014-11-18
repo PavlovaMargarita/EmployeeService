@@ -14,14 +14,6 @@ app.controller("companyListController", function ($scope, $rootScope, $http, Pag
     });
     response.success(function (data) {
         $scope.companies = data;
-        $scope.companies.forEach(checkAccountSum);
-        function checkAccountSum(element, index) {
-            if (element.accountSum < 0) {
-                element.redRow = true;
-            } else {
-                element.redRow = false;
-            }
-        }
 
         var companyCount = $http({
             method: "get",
@@ -40,7 +32,7 @@ app.controller("companyListController", function ($scope, $rootScope, $http, Pag
         if (value) {
             return "alert alert-danger";
         }
-    }
+    };
 
     $scope.getRecords = {};
     $scope.getRecords.doClick = function (pageNumber) {
@@ -51,15 +43,6 @@ app.controller("companyListController", function ($scope, $rootScope, $http, Pag
         });
         response.success(function (data) {
             $scope.companies = data;
-            $scope.companies.forEach(checkAccountSum);
-            function checkAccountSum(element, index) {
-                if (element.accountSum < 0) {
-                    element.redRow = true;
-                } else {
-                    element.redRow = false;
-                }
-            }
-
             $scope.currentPage = pageNumber;
             var companyCount = $http({
                 method: "get",
@@ -97,60 +80,64 @@ app.controller("companyCreateController", function ($scope, $rootScope, $http, $
     countries.success(function (data) {
         $scope.countries = data;
     });
-    $scope.sexList = new Array();
+    $scope.sexList = [];
     $scope.sexList[0] = {'sexEnum': 'MALE', sexRussian: 'Мужской'};
     $scope.sexList[1] = {'sexEnum': 'FEMALE', sexRussian: 'Женский'};
 
-    $scope.roleList = new Array();
+
+    $scope.roleList =[];
     $scope.roleList[0] = {'roleEnum': 'ROLE_CEO', roleRussian: 'CEO'};
     $scope.employee.role = $scope.roleList[0].roleEnum;
 
 
     $scope.save = {};
     $scope.save.doClick = function () {
-        var response = $http({
-            method: "post",
-            url: "/EmployeeService/company/saveCompanyCreate",
-            data: {
-                companyName: $scope.company.companyName,
-                dateBoundaryRefill: $scope.company.dateBoundaryRefill,
-                companyPlan: $scope.company.companyPlan,
-                programCost: $scope.company.programCost
-            },
-            dataType: 'json',
-            contentType: 'application/json',
-            mimeType: 'application/json'
-        });
-        response.success(function (data) {
-            var employee = $http({
+        var ok = validateObject.validate('#createCompanyForm');
+        if(ok) {
+            var response = $http({
                 method: "post",
-                url: "/EmployeeService/employee/saveEmployeeCreateCEO",
+                url: "/EmployeeService/company/saveCompanyCreate",
                 data: {
-                    f_name: $scope.employee.f_name,
-                    s_name: $scope.employee.s_name,
-                    sex: $scope.employee.sex,
-                    dateOfBirth: $scope.employee.dateOfBirth,
-                    countryId: $scope.country.id,
-                    city: $scope.employee.city,
-                    street: $scope.employee.street,
-                    house: $scope.employee.house,
-                    flat: $scope.employee.flat,
-                    login: $scope.employee.login,
-                    password: $scope.employee.password,
-                    role: $scope.employee.role,
-                    companyId: data,
-                    email: $scope.employee.email
+                    companyName: $scope.company.companyName,
+                    dateBoundaryRefill: $scope.company.dateBoundaryRefill,
+                    companyPlan: $scope.company.companyPlan,
+                    programCost: $scope.company.programCost
                 },
                 dataType: 'json',
                 contentType: 'application/json',
                 mimeType: 'application/json'
+            });
+            response.success(function (data) {
+                var employee = $http({
+                    method: "post",
+                    url: "/EmployeeService/employee/saveEmployeeCreateCEO",
+                    data: {
+                        f_name: $scope.employee.f_name,
+                        s_name: $scope.employee.s_name,
+                        sex: $scope.employee.sex,
+                        dateOfBirth: $scope.employee.dateOfBirth,
+                        countryId: $scope.country.id,
+                        city: $scope.employee.city,
+                        street: $scope.employee.street,
+                        house: $scope.employee.house,
+                        flat: $scope.employee.flat,
+                        login: $scope.employee.login,
+                        password: $scope.employee.password,
+                        role: $scope.employee.role,
+                        companyId: data,
+                        email: $scope.employee.email
+                    },
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    mimeType: 'application/json'
 
-            }).success(function(){
-                $location.path('/companyList');
-                $location.replace();
-            })
-        });
-    }
+                }).success(function () {
+                    $location.path('/companyList');
+                    $location.replace();
+                })
+            });
+        }
+    };
 
     $scope.cancel = {};
     $scope.cancel.doClick = function () {
@@ -172,7 +159,7 @@ app.controller("companyCorrectController", function ($scope, $http, $routeParams
     });
     response.success(function (data) {
         $scope.company = data;
-        $scope.statusList = new Array();
+        $scope.statusList = [];
         $scope.statusList[0] = {companyStatusEnum: 'CONTINUE_FUNCTIONING', companyStatusEnumRussian: 'Активное'};
         $scope.statusList[1] = {companyStatusEnum: 'SUSPEND_FUNCTIONING', companyStatusEnumRussian: 'Приостановленное'};
         $scope.statusList[2] = {companyStatusEnum: 'FINISH_FUNCTIONING', companyStatusEnumRussian: 'Завершенное'};
@@ -183,15 +170,15 @@ app.controller("companyCorrectController", function ($scope, $http, $routeParams
             }
         }
     });
-    $scope.sexList = new Array();
+    $scope.sexList = [];
     $scope.sexList[0] = {'sexEnum': 'MALE', sexRussian: 'Мужской'};
     $scope.sexList[1] = {'sexEnum': 'FEMALE', sexRussian: 'Женский'};
 
-    $scope.roleList = new Array();
+    $scope.roleList = [];
     $scope.roleList[0] = {'roleEnum': 'ROLE_CEO', roleRussian: 'CEO'};
 
 
-    var ceo = $http({
+    $http({
         method: "get",
         url: "/EmployeeService/employee/employeeCeoByCompanyId",
         params: {
@@ -205,7 +192,7 @@ app.controller("companyCorrectController", function ($scope, $http, $routeParams
             if (element.sexEnum == $scope.employee.sex) {
                 $scope.employee.sex = $scope.sexList[index].sexEnum;
             }
-        };
+        }
         var countries = $http({
             method: "get",
             url: "/EmployeeService/country/countryList",
@@ -227,28 +214,30 @@ app.controller("companyCorrectController", function ($scope, $http, $routeParams
     });
     $scope.save = {};
     $scope.save.doClick = function () {
-        var response = $http({
-            method: "post",
-            url: "/EmployeeService/company/saveCompanyUpdate",
-            data: {
-                id: $scope.company.id,
-                companyName: $scope.company.companyName,
-                companyStatus: $scope.company.companyStatus,
-                dateBoundaryRefill: $scope.company.dateBoundaryRefill,
-                addSum: $scope.company.addSum,
-                canLogin: $scope.company.canLogin
+        var ok = validateObject.validate('#createCompanyForm');
+        if(ok) {
+            var response = $http({
+                method: "post",
+                url: "/EmployeeService/company/saveCompanyUpdate",
+                data: {
+                    id: $scope.company.id,
+                    companyName: $scope.company.companyName,
+                    companyStatus: $scope.company.companyStatus,
+                    dateBoundaryRefill: $scope.company.dateBoundaryRefill,
+                    addSum: $scope.company.addSum,
+                    canLogin: $scope.company.canLogin
 
-            },
-            dataType: 'json',
-            contentType: 'application/json',
-            mimeType: 'application/json'
-        });
-        response.success(function () {
-            $location.path('/companyList');
-            $location.replace();
-        });
-    }
-
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                mimeType: 'application/json'
+            });
+            response.success(function () {
+                $location.path('/companyList');
+                $location.replace();
+            });
+        }
+    };
 
     $scope.cancel = {};
     $scope.cancel.doClick = function () {
@@ -256,7 +245,6 @@ app.controller("companyCorrectController", function ($scope, $http, $routeParams
         $location.replace();
     }
 });
-
 
 function showModalAddSum() {
     $('#modal-add-sum').modal('showStandardPhotoAndFiredButton');

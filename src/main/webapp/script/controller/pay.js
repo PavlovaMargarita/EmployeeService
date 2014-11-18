@@ -21,8 +21,8 @@ app.controller("payController", function ($scope, $rootScope, $http) {
                     accountNumber: $scope.accountNumber
                 }
             });
-            response.success(function (data) {
-                alert("ok");
+            response.success(function () {
+
             });
         }
     }

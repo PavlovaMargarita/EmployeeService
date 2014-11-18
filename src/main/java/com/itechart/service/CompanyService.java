@@ -12,7 +12,6 @@ public interface CompanyService {
     public List<PositionInCompanyDTO> readPositionInCompanyList();
     public List<DepartmentDTO> readDepartmentList();
     public List<AddressDTO> readAddressList(Long departmentId);
-    public List<CompanyDTO> readCompanyList();
     public void updateCompanyEveryDay(CompanyDTO companyDTO);
     public void updateCompany(CompanyDTO companyDTO);
     public List<CompanyDTO> readCompanyList(int pageNumber, int pageRecords);

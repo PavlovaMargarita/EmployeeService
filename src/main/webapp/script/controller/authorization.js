@@ -57,17 +57,17 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
         if (success != null) {
             $scope.storeCurrentUserInfo();
         }
-    }
+    };
 
     $scope.processError = function () {
         var isError = ($location.search()).error;
         if (isError) {
             return "Ошибка авторизации!";
         }
-    }
+    };
 
     $scope.storeCurrentUserInfo = function () {
-        var response = $http({
+        $http({
             method: "get",
             url: "/EmployeeService/user/userInfo",
             dataType: 'json',
@@ -78,10 +78,10 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
                 $cookieStore.put("userInfo", data);
                 $scope.successRedirect(data);
             })
-            .error(function (data) {
+            .error(function () {
                 alert("ALERT");
             });
-    }
+    };
 
     $scope.successRedirect = function (data) {
         if (data.role == 'ROLE_HRM') {
@@ -97,7 +97,7 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
             $location.path('/employeeList');
         }
         $location.replace();
-    }
+    };
 
     $scope.authorization = {};
     $scope.authorization.doClick = function () {

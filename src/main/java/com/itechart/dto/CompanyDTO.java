@@ -17,6 +17,7 @@ public class CompanyDTO {
     private CompanyStatusEnum companyStatus;
     private Integer programCost;
     private String companyPlan;
+    private Integer employeeCount;
     public Long getId() {
         return id;
     }
@@ -71,5 +72,13 @@ public class CompanyDTO {
 
     public void setCompanyPlan(String companyPlan) {
         this.companyPlan = companyPlan;
+    }
+
+    public Integer getEmployeeCount() {
+        return employeeCount;
+    }
+
+    public void setEmployeeCount(Integer employeeCount) {
+        this.employeeCount = employeeCount;
     }
 }

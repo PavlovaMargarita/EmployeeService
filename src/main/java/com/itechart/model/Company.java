@@ -43,7 +43,7 @@ public class Company {
     @ManyToMany(mappedBy = "companyList")
     private List<Employee> formerEmployeeList;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
     private List<Employee> employeeList;
 
     public Company(){

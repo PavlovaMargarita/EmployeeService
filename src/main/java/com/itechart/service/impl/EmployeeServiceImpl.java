@@ -1,17 +1,24 @@
 package com.itechart.service.impl;
 
 import com.itechart.dto.EmployeeDTO;
-import com.itechart.dto.RoleDTO;
 import com.itechart.dto.SexDTO;
 import com.itechart.enumProperty.RoleEnum;
 import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
+import com.itechart.model.Employee;
 import com.itechart.repository.*;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.params.ModifiableSolrParams;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -22,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,9 +36,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Margarita on 20.10.2014.
- */
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
@@ -49,12 +52,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     //private final String LOCATION = "D:/EmployeeService/src/main/webapp/files/company/";
     private final String LOCATION = "C:/apache-tomcat-7.0.56/webapps/EmployeeService/files/company/";
+
+    private String solrUrl = "http://localhost:8984/solr";
+    private SolrServer solrServer = new HttpSolrServer( solrUrl );
+
     @Override
     @Transactional
     public List <EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String company = authority.get(1).getAuthority();
+        List authority = (List)authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(pageNumber, pageRecords);
         Logger.getLogger(EmployeeServiceImpl.class).info("Read Employee List, page = "+ pageNumber+", count=" + pageRecords);
@@ -84,7 +91,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDTO.setCompanyId(companyId);
         Employee employee = employeeDTOToEmployee(employeeDTO);
         Logger.getLogger(EmployeeService.class).info("Create Employee " + employee.toString());
-        return employeeRepository.save(employee).getId();
+        employee = employeeRepository.save(employee);
+        saveToSolr(employee);
+        return employee.getId();
 
     }
 
@@ -94,7 +103,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeDTOToEmployee(employeeDTO);
         employee.setId(employeeDTO.getId());
         Logger.getLogger(EmployeeService.class).info("Update Employee " + employee.toString());
-        employeeRepository.save(employee);
+        employee = employeeRepository.save(employee);
+        saveToSolr(employee);
         return employeeDTO.getId();
     }
 
@@ -159,24 +169,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 
-
-    @Override
-    public List<SexDTO> readSexEnum() {
-        List<SexDTO> sexEnum = new ArrayList();
-        for(int i = 0; i < SexEnum.values().length; i++) {
-            SexDTO sexDTO = new SexDTO();
-            sexDTO.setSexEnum(SexEnum.values()[i]);
-            if(sexDTO.getSexEnum().equals(SexEnum.FEMALE)){
-                sexDTO.setRoleRussian("Женский");
-            }
-            if(sexDTO.getSexEnum().equals(SexEnum.MALE)){
-                sexDTO.setRoleRussian("Мужской");
-            }
-            sexEnum.add(sexDTO);
-        }
-        return sexEnum;
-    }
-
     @Override
     public EmployeeDTO readCurrentEmployee() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -229,8 +221,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(employee.getId());
-        employeeDTO.setF_name(employee.getF_name());
-        employeeDTO.setS_name(employee.getS_name());
+        employeeDTO.setF_name(employee.getFirstName());
+        employeeDTO.setS_name(employee.getLastName());
         if(employee.getDepartment() != null ) {
             employeeDTO.setDepartmentId(employee.getDepartment().getId());
             employeeDTO.setDepartmentName(employee.getDepartment().getDepartmentName());
@@ -260,8 +252,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private Employee employeeDTOToEmployee(EmployeeDTO employeeDTO){
         Employee employee = new Employee();
-        employee.setF_name(employeeDTO.getF_name());
-        employee.setS_name(employeeDTO.getS_name());
+        employee.setFirstName(employeeDTO.getF_name());
+        employee.setLastName(employeeDTO.getS_name());
         employee.setDateOfBirth(employeeDTO.getDateOfBirth());
         employee.setSex(employeeDTO.getSex());
         Country country = countryRepository.findOne(employeeDTO.getCountryId());
@@ -294,6 +286,68 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCompany(companyRepository.findOne(employeeDTO.getCompanyId()));
         employee.setEmail(employeeDTO.getEmail());
         return employee;
+    }
+
+    private void saveToSolr(Employee employee){
+        // save to solr
+        SolrInputDocument doc = new SolrInputDocument();
+        doc.addField("id", employee.getId().toString());
+        doc.addField("first_name", employee.getFirstName());
+        doc.addField("last_name", employee.getLastName());
+        doc.addField("email", employee.getEmail());
+        try {
+            solrServer.add(doc);
+            solrServer.commit();
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteInSolr(Employee employee){
+        try {
+            solrServer.deleteById(employee.getId().toString());
+            solrServer.commit();
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private SolrDocumentList searchInSolr(String value){
+//        SolrQuery query = new SolrQuery();
+//        query.setQuery("*:*");
+//        query.addFilterQuery("first_name:qwe*", "last_name:qwe*");
+//        query.setFields("id","first_name","last_name","email");
+//        QueryResponse response = null;
+//        try {
+//            response = solrServer.query(query);
+//        } catch (SolrServerException e) {
+//            e.printStackTrace();
+//        }
+//        return response.getResults();
+        SolrQuery query = new SolrQuery();
+        query.setQuery("first_name:" + value + "* OR last_name:" + value + "* OR email:" + value + "*");
+        query.setFields("id");
+        QueryResponse response = null;
+        try {
+            response = solrServer.query(query);
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        }
+        return  response.getResults();
+    }
+
+    private List<EmployeeDTO> solrListToEmployeeList(SolrDocumentList solrDocumentList){
+        List<EmployeeDTO> employeeDTOList = new ArrayList(solrDocumentList.size());
+        for(SolrDocument solrDocument: solrDocumentList){
+            Long id = (Long)solrDocument.get("id");
+            EmployeeDTO employeeDTO = readEmployee(id);
+            employeeDTOList.add(employeeDTO);
+        }
+        return employeeDTOList;
     }
 
 }

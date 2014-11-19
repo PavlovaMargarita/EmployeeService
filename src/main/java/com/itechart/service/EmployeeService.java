@@ -19,7 +19,6 @@ public interface EmployeeService {
     public long employeeCount();
     //load photo
     public void loadPhoto(MultipartFile photo, Long id);
-    public List<SexDTO> readSexEnum();
     public EmployeeDTO readCurrentEmployee();
     public List<RoleDTO> readRoleEnumForCurrentEmployee();
     public void createEmployeeCeo(EmployeeDTO employeeDTO);

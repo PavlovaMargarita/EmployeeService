@@ -69,13 +69,6 @@ public class EmployeeController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/sexList")
-    @ResponseBody
-    public List<SexDTO> readSexList(){
-        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/sexList");
-        return employeeService.readSexEnum();
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "/currentEmployee")
     @ResponseBody
     public EmployeeDTO readCurrentEmployee(){

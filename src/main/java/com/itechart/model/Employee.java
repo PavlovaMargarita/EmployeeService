@@ -19,11 +19,11 @@ public class Employee {
     @Column(columnDefinition = "INT unsigned")
     private Long id;
 
-    @Column(nullable = false)
-    private String f_name;
+    @Column(nullable = false, name = "first_name")
+    private String firstName;
 
-    @Column(nullable = false)
-    private String s_name;
+    @Column(nullable = false, name = "last_name")
+    private String lastName;
 
     @Column(nullable = false, name = "date_of_birth")
     private Date dateOfBirth;
@@ -120,20 +120,20 @@ public class Employee {
         this.id = id;
     }
 
-    public String getF_name() {
-        return f_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setF_name(String f_name) {
-        this.f_name = f_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getS_name() {
-        return s_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setS_name(String s_name) {
-        this.s_name = s_name;
+    public void setLastName(String s_name) {
+        this.lastName = s_name;
     }
 
     public Date getDateOfBirth() {
@@ -282,8 +282,8 @@ public class Employee {
     public String toString() {
         return "Employee{" +
                 "id=" + id +
-                ", f_name='" + f_name + '\'' +
-                ", s_name='" + s_name + '\'' +
+                ", f_name='" + firstName + '\'' +
+                ", s_name='" + lastName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", sex=" + sex +
                 ", country=" + country.getCountry() +

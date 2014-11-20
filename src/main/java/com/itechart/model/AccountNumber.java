@@ -2,9 +2,6 @@ package com.itechart.model;
 
 import javax.persistence.*;
 
-/**
- * Created by marharyta.pavlova on 13.11.2014.
- */
 @Entity
 @Table(name = "account_number")
 public class AccountNumber {

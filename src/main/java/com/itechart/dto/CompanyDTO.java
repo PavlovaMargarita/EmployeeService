@@ -4,10 +4,6 @@ import com.itechart.enumProperty.CompanyStatusEnum;
 
 import java.sql.Date;
 
-/**
- * Created by Margarita on 29.10.2014.
- *
- */
 public class CompanyDTO {
 
     private Long id;

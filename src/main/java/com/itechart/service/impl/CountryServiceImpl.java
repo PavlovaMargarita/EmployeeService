@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Margarita on 20.10.2014.
- */
 @Service
 public class CountryServiceImpl implements CountryService {
 

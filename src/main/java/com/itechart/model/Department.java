@@ -4,9 +4,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.itechart.model.Employee;
-/**
- * Created by Margarita on 16.10.2014.
- */
+
 @Entity
 @Table(name = "department")
 public class Department {

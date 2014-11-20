@@ -1,9 +1,7 @@
 package com.itechart.controller;
 
 import com.itechart.dto.EmployeeDTO;
-import com.itechart.dto.RoleDTO;
-import com.itechart.dto.SexDTO;
-import com.itechart.enumProperty.RoleEnum;
+import com.itechart.dto.SearchString;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
-/**
- * Created by Margarita on 20.10.2014.
- */
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -25,44 +20,45 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/employeeList")
     @ResponseBody
-    public List<EmployeeDTO> employeeList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords){
+    public List<EmployeeDTO> employeeList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/employeeList ");
         return employeeService.readEmployeeList(currentPage - 1, pageRecords);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/employeeCount")
     @ResponseBody
-    public long employeeCount(){
+    public long employeeCount() {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/employeeCount ");
         return employeeService.employeeCount();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreate")
-    public @ResponseBody Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO){
+    public
+    @ResponseBody
+    Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
-        Long id = employeeService.createEmployee(employeeDTO);
-        return id;
+        return employeeService.createEmployee(employeeDTO);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/employeeById")
     @ResponseBody
-    public EmployeeDTO readEmployee(@RequestParam("id") Long id ){
+    public EmployeeDTO readEmployee(@RequestParam("id") Long id) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/employeeById");
-        EmployeeDTO employeeDTO= employeeService.readEmployee(id);
-        return employeeDTO;
+        return employeeService.readEmployee(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeUpdate")
-    public @ResponseBody Long saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO){
+    public
+    @ResponseBody
+    Long saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeUpdate ");
-        Long id = employeeService.updateEmployee(employeeDTO);
-        return id;
+        return employeeService.updateEmployee(employeeDTO);
     }
 
     @ResponseBody
     @RequestMapping(value = "/uploadPhoto", method = RequestMethod.POST)
-    public void uploadFile(@RequestParam(value="photo", required=false) MultipartFile file,
-                           @RequestParam(value="idEmployee") String data) throws Exception {
+    public void uploadFile(@RequestParam(value = "photo", required = false) MultipartFile file,
+                           @RequestParam(value = "idEmployee") String data) throws Exception {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/uploadPhoto ");
         Long id = Long.parseLong(data);
         employeeService.loadPhoto(file, id);
@@ -71,31 +67,55 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/currentEmployee")
     @ResponseBody
-    public EmployeeDTO readCurrentEmployee(){
+    public EmployeeDTO readCurrentEmployee() {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/currentEmployee");
-        EmployeeDTO employeeDTO = employeeService.readCurrentEmployee();
-        return employeeDTO;
+        return employeeService.readCurrentEmployee();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/roleList")
     @ResponseBody
-    public List readRoleList(){
+    public List readRoleList() {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/roleList");
-//        return Arrays.asList(RoleEnum.values());
         return employeeService.readRoleEnumForCurrentEmployee();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreateCEO")
-    public @ResponseBody void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO){
+    public
+    @ResponseBody
+    void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
         employeeService.createEmployeeCeo(employeeDTO);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/employeeCeoByCompanyId")
     @ResponseBody
-    public EmployeeDTO readEmployeeCEO(@RequestParam("companyId") Long companyId ){
+    public EmployeeDTO readEmployeeCEO(@RequestParam("companyId") Long companyId) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/employeeCeoByCompanyId");
-        EmployeeDTO employeeDTO = employeeService.readEmployeeCeoByCompanyId(companyId);
-        return employeeDTO;
+        return employeeService.readEmployeeCeoByCompanyId(companyId);
     }
+
+
+    @RequestMapping(method = RequestMethod.POST, value = "/search")
+    public
+    @ResponseBody
+    List search(@RequestBody SearchString searchValue, @RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/search");
+        return employeeService.search(searchValue.getValue(), currentPage - 1, pageRecords);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/qwerty")
+    public
+    @ResponseBody
+    long searchCount(@RequestBody SearchString searchValue) {
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/search");
+        return employeeService.searchCount(searchValue.getValue());
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/fullRoleList")
+    @ResponseBody
+    public List readFullRoleList() {
+        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/roleList");
+        return employeeService.readRoleEnum();
+    }
+
 }

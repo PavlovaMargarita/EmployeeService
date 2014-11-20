@@ -8,9 +8,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Margarita on 17.10.2014.
- */
 @Entity
 @Table(name = "employee")
 public class Employee {
@@ -108,8 +105,8 @@ public class Employee {
     private RoleEnum role;
 
     public Employee(){
-        companyList = new ArrayList<Company>();
-        projectList = new ArrayList<Project>();
+        companyList = new ArrayList();
+        projectList = new ArrayList();
     }
 
     public Long getId() {

@@ -3,10 +3,6 @@ package com.itechart.model;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * Created by Margarita on 17.10.2014.
- */
-
 @Entity
 @Table(name = "country")
 public class Country {

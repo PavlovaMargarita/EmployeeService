@@ -8,9 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-/**
- * Created by Margarita on 19.10.2014.
- */
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     @Query("select count(c) from Company c where c.canLogin = true")

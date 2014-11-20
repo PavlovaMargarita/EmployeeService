@@ -1,10 +1,10 @@
-app.controller("employeeListController", function ($scope, $rootScope, $http, PagerService) {
+app.controller("employeeListController", function ($scope, $rootScope, $http, PagerService, $route) {
 
     $scope.range = [];
     $scope.currentPage = 1;
     $scope.totalPages = 1;
     $scope.totalRecords = 0;
-
+    $scope.statusForList = 'list';
     var response = $http({
         method: "get",
         url: "/EmployeeService/employee/employeeList",
@@ -16,16 +16,15 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
     response.success(function (data) {
         $scope.employees = data;
         $scope.employees.forEach(checkDateContractEnd);
-        function checkDateContractEnd(element) {
-            var employeeDateContractEnd = new Date(element.dateContractEnd);
-            var currentDate = new Date();
-            if ((employeeDateContractEnd - currentDate) / (1000 * 60 * 60 * 24) <= 10) {
-                element.redRow = true;
-            } else {
-                element.redRow = false;
-            }
-        }
-
+//        function checkDateContractEnd(element) {
+//            var employeeDateContractEnd = new Date(element.dateContractEnd);
+//            var currentDate = new Date();
+//            if ((employeeDateContractEnd - currentDate) / (1000 * 60 * 60 * 24) <= 10) {
+//                element.redRow = true;
+//            } else {
+//                element.redRow = false;
+//            }
+//        }
         var employeeCount = $http({
             method: "get",
             url: "/EmployeeService/employee/employeeCount",
@@ -47,28 +46,92 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
 
     $scope.getRecords = {};
     $scope.getRecords.doClick = function (pageNumber) {
-        var response = $http({
-            method: "get",
-            url: "/EmployeeService/employee/employeeList",
-            params: {currentPage: pageNumber, pageRecords: $rootScope.recordsOnPage}
-        });
+        var response;
+        if($scope.statusForList == 'list'){
+            response = $http({
+                method: "get",
+                url: "/EmployeeService/employee/employeeList",
+                params: {currentPage: pageNumber, pageRecords: $rootScope.recordsOnPage}
+            });
+        } else{
+            response = $http({
+                method: "post",
+                url: "/EmployeeService/employee/search",
+                data: {
+                    value:$scope.searchValue
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                mimeType: 'application/json',
+                params: {currentPage: pageNumber, pageRecords: $rootScope.recordsOnPage}
+            });
+        }
+
         response.success(function (data) {
             $scope.employees = data;
             $scope.employees.forEach(checkDateContractEnd);
-            function checkDateContractEnd(element) {
-                var employeeDateContractEnd = new Date(element.dateContractEnd);
-                var currentDate = new Date();
-                if ((employeeDateContractEnd - currentDate) / (1000 * 60 * 60 * 24) <= 10) {
-                    element.redRow = true;
-                } else {
-                    element.redRow = false;
-                }
-            }
-
+//            function checkDateContractEnd(element) {
+//                var employeeDateContractEnd = new Date(element.dateContractEnd);
+//                var currentDate = new Date();
+//                if ((employeeDateContractEnd - currentDate) / (1000 * 60 * 60 * 24) <= 10) {
+//                    element.redRow = true;
+//                } else {
+//                    element.redRow = false;
+//                }
+//            }
             $scope.currentPage = pageNumber;
+            var employeeCount;
+            if($scope.statusForList == 'list') {
+                employeeCount = $http({
+                    method: "get",
+                    url: "/EmployeeService/employee/employeeCount",
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    mimeType: 'application/json'
+                });
+            } else{
+                employeeCount = $http({
+                    method: "get",
+                    url: "/EmployeeService/employee/searchCount",
+                    data: {
+                        value:$scope.searchValue
+                    },
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    mimeType: 'application/json'
+                });
+            }
+            employeeCount.success(function (data) {
+                $scope.totalRecords = data - 0;
+                $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
+                $scope.range = PagerService.buildRange($scope.totalPages);
+            });
+        });
+    };
+
+    $scope.search = function () {
+        $scope.statusForList = 'search';
+        var response = $http({
+            method: "post",
+            url: "/EmployeeService/employee/search",
+            data: {
+               value:$scope.searchValue
+            },
+            dataType: 'json',
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            params: {currentPage: 1, pageRecords: $rootScope.recordsOnPage}
+        });
+        response.success(function (data) {
+
+            $scope.employees = data;
+            $scope.employees.forEach(checkDateContractEnd);
             var employeeCount = $http({
-                method: "get",
-                url: "/EmployeeService/employee/employeeCount",
+                method: "post",
+                url: "/EmployeeService/employee/qwerty",
+                data: {
+                    value: $scope.searchValue
+                },
                 dataType: 'json',
                 contentType: 'application/json',
                 mimeType: 'application/json'
@@ -78,6 +141,7 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
                 $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
                 $scope.range = PagerService.buildRange($scope.totalPages);
             });
+            $scope.currentPage = 1;
         });
     }
 
@@ -85,6 +149,7 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
 
 app.controller("employeeCreateController", function ($scope, $rootScope, $http, $location) {
     $scope.employee = {};
+    $scope.create = true;
     $scope.showStandardPhotoAndFiredButton = false;
     $scope.editEmployeeInput = true;
     $scope.onFileSelect = function ($files) {
@@ -141,7 +206,7 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
     $scope.sexList[1] = {'sexEnum': 'FEMALE', sexRussian: 'Женский'};
     $scope.employee.sex = $scope.sexList[0].sexEnum;
 
-    var role= $http({
+    var role = $http({
         method: "get",
         url: "/EmployeeService/employee/roleList",
         dataType: 'json',
@@ -153,22 +218,31 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
         data.forEach(addRoleName);
         function addRoleName(element) {
             var value;
-            switch(element){
-                case 'ROLE_HRM': value = {roleEnum: element, roleTranslate: 'HRM'};
-                    $scope.roleList.push(value); break;
-                case 'ROLE_ADMIN': value = {roleEnum: element, roleTranslate: 'Администратор'};
-                    $scope.roleList.push(value);break;
-                case 'ROLE_EMPLOYEE': value = {roleEnum: element, roleTranslate: 'Сотрудник'};
-                    $scope.roleList.push(value);break;
+            switch (element) {
+                case 'ROLE_HRM':
+                    value = {roleEnum: element, roleTranslate: 'HRM'};
+                    $scope.roleList.push(value);
+                    break;
+                case 'ROLE_ADMIN':
+                    value = {roleEnum: element, roleTranslate: 'Администратор'};
+                    $scope.roleList.push(value);
+                    break;
+                case 'ROLE_EMPLOYEE':
+                    value = {roleEnum: element, roleTranslate: 'Сотрудник'};
+                    $scope.roleList.push(value);
+                    break;
             }
         }
+
         $scope.employee.role = $scope.roleList[0].roleEnum;
     });
 
     $scope.save = {};
     $scope.save.doClick = function () {
         var ok = validateObject.validate("#createEmployeeForm");
-        if(ok) {
+        if (ok) {
+            $scope.address = {};
+            $scope.department = {};
             var response = $http({
                 method: "post",
                 url: "/EmployeeService/employee/saveEmployeeCreate",
@@ -200,21 +274,22 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
                 mimeType: 'application/json'
             });
             response.success(function (data) {
-                var fd = new FormData();
-                fd.append('idEmployee', data);
-                fd.append("photo", $scope.photo);
-                $http({
-                    method: 'POST',
-                    url: '/EmployeeService/employee/uploadPhoto',
-                    headers: {'Content-Type': undefined},
-                    data: fd,
-                    transformRequest: angular.identity
-                })
-                    .success(function () {
-                        $location.path('/employeeList');
-                        $location.replace();
-                    });
-
+                if( $scope.photo) {
+                    var fd = new FormData();
+                    fd.append('idEmployee', data);
+                    fd.append("photo", $scope.photo);
+                    $http({
+                        method: 'POST',
+                        url: '/EmployeeService/employee/uploadPhoto',
+                        headers: {'Content-Type': undefined},
+                        data: fd,
+                        transformRequest: angular.identity
+                    })
+                        .success(function () {
+                            $location.path('/employeeList');
+                            $location.replace();
+                        });
+                }
             });
         }
     };
@@ -237,11 +312,12 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
 });
 
 app.controller("employeeCorrectController", function ($scope, $http, $routeParams, $location, $rootScope) {
+    $scope.create = false;
     $scope.showStandardPhotoAndFiredButton = true;
-    if($rootScope.hasAuthority(['ROLE_CEO', 'ROLE_ADMIN'])){
+    if ($rootScope.hasAuthority(['ROLE_CEO', 'ROLE_ADMIN'])) {
         $scope.editEmployeeInput = false;
         $('#saveEmployee').attr('disabled', 'disabled');
-    } else{
+    } else {
         $scope.editEmployeeInput = true;
         $('#saveEmployee').removeAttr('disabled');
     }
@@ -272,7 +348,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
     response.success(function (data) {
         $scope.employee = data;
         //load photo
-        $('#employeePhotoEdit').attr('src', "/EmployeeService/files/company/" + $scope.company.id+ "/photoEmployee/" + $scope.employee.id + "/" +$scope.employee.photoURL);
+        $('#employeePhotoEdit').attr('src', "/EmployeeService/files/company/" + $scope.company.id + "/photoEmployee/" + $scope.employee.id + "/" + $scope.employee.photoURL);
         $scope.showPhoto = true;
         var departments = $http({
             method: "get",
@@ -365,9 +441,9 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
             }
         }
 
-        var role= $http({
+        var role = $http({
             method: "get",
-            url: "/EmployeeService/employee/roleList",
+            url: "/EmployeeService/employee/fullRoleList",
             dataType: 'json',
             contentType: 'application/json',
             mimeType: 'application/json'
@@ -378,13 +454,20 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
             data.forEach(addRoleName);
             function addRoleName(element) {
                 var value;
-                switch(element){
-                    case 'ROLE_HRM': value = {roleEnum: element, roleTranslate: 'HRM'};
-                        $scope.roleList.push(value); break;
-                    case 'ROLE_ADMIN': value = {roleEnum: element, roleTranslate: 'Администратор'};
-                        $scope.roleList.push(value);break;
-                    case 'ROLE_EMPLOYEE': value = {roleEnum: element, roleTranslate: 'Сотрудник'};
-                        $scope.roleList.push(value);break;
+                switch (element) {
+                    case 'ROLE_HRM':
+                        value = {roleEnum: element, roleTranslate: 'HRM'};
+                        $scope.roleList.push(value);
+                        break;
+                    case 'ROLE_ADMIN':
+                        value = {roleEnum: element, roleTranslate: 'Администратор'};
+                        $scope.roleList.push(value);
+                        break;
+                    case 'ROLE_EMPLOYEE':
+                        value = {roleEnum: element, roleTranslate: 'Сотрудник'};
+                        $scope.roleList.push(value);
+                        break;
+
                 }
 
             }
@@ -402,7 +485,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
     $scope.save = {};
     $scope.save.doClick = function () {
         var ok = validateObject.validate("#createEmployeeForm");
-        if(ok) {
+        if (ok) {
             var response = $http({
                 method: "post",
                 url: "/EmployeeService/employee/saveEmployeeUpdate",
@@ -461,7 +544,7 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
     $scope.delete.doClick = function () {
         $('#modal-fired-comment').modal('hide');
         var ok = validateObject.validate("#createEmployeeForm");
-        if(ok) {
+        if (ok) {
             var response = $http({
                 method: "post",
                 url: "/EmployeeService/employee/saveEmployeeUpdate",
@@ -523,7 +606,10 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
         reader.readAsDataURL($scope.photo);
 
     };
-
+    $scope.changeDepartment = {};
+    $scope.changeDepartment.change = function () {
+        loadAddress($scope.department.id, $http, $scope);
+    };
     $scope.cancel = {};
     $scope.cancel.doClick = function () {
         $location.path('/employeeList');
@@ -554,4 +640,13 @@ function loadAddress(idDepartment, $http, $scope) {
     departmentAddresses.success(function (data) {
         $scope.addresses = data;
     });
+}
+function checkDateContractEnd(element) {
+    var employeeDateContractEnd = new Date(element.dateContractEnd);
+    var currentDate = new Date();
+    if ((employeeDateContractEnd - currentDate) / (1000 * 60 * 60 * 24) <= 10) {
+        element.redRow = true;
+    } else {
+        element.redRow = false;
+    }
 }

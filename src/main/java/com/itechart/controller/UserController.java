@@ -23,10 +23,9 @@ public class UserController {
     public LoginDTO currentUserInfo(){
         Logger.getLogger(UserController.class).info("Request: /EmployeeService/user/userInfo");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String stringRole = authority.get(0).getAuthority();
+        List authority = (List)authentication.getAuthorities();
+        String stringRole = ((GrantedAuthority)authority.get(0)).getAuthority();
         String username = authentication.getName();
-        LoginDTO loginDTO = new LoginDTO(RoleEnum.valueOf(stringRole), username);
-        return loginDTO;
+        return new LoginDTO(RoleEnum.valueOf(stringRole), username);
     }
 }

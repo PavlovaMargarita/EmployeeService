@@ -79,11 +79,13 @@ app.controller("companyCreateController", function ($scope, $rootScope, $http, $
     });
     countries.success(function (data) {
         $scope.countries = data;
+        $scope.country = {};
+        $scope.country.id = $scope.countries[0].id;
     });
     $scope.sexList = [];
     $scope.sexList[0] = {'sexEnum': 'MALE', sexRussian: 'Мужской'};
     $scope.sexList[1] = {'sexEnum': 'FEMALE', sexRussian: 'Женский'};
-
+    $scope.employee.sex = $scope.sexList[0].sexEnum;
 
     $scope.roleList =[];
     $scope.roleList[0] = {'roleEnum': 'ROLE_CEO', roleRussian: 'CEO'};

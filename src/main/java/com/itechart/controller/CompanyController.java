@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.sql.Date;
 
-/**
- * Created by Margarita on 29.10.2014.
- */
 @Controller
 @RequestMapping("/company")
 public class CompanyController {
@@ -58,8 +55,7 @@ public class CompanyController {
     @ResponseBody
     public CompanyDTO readCompany(@RequestParam("id") Long id ){
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyById");
-        CompanyDTO companyDTO = companyService.readCompany(id);
-        return companyDTO;
+        return companyService.readCompany(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/companyStatusList")

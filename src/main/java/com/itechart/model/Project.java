@@ -4,9 +4,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Margarita on 17.10.2014.
- */
 @Entity
 @Table(name = "project")
 public class Project {

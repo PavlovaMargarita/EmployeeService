@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-/**
- * Created by Margarita on 20.10.2014.
- */
 @Controller
 @RequestMapping("/country")
 public class CountryController {

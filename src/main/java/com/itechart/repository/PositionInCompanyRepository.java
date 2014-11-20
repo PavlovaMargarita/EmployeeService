@@ -8,11 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-/**
- * Created by marharyta.pavlova on 17.11.2014.
- */
 public interface PositionInCompanyRepository extends JpaRepository<PositionInCompany, Long> {
-    @Query("select p from PositionInCompany p where p.company.id=:company")
+    @Query("select p from PositionInCompany p where p.company.id=:company and p.position <> 'CEO'")
     public List<PositionInCompany> readPositionInCompanyList(@Param("company")Long company, Pageable pageable);
 
 }

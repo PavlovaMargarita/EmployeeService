@@ -1,8 +1,5 @@
 package com.itechart.dto;
 
-/**
- * Created by Margarita on 20.10.2014.
- */
 public class CountryDTO {
     private Long id;
     private String country;

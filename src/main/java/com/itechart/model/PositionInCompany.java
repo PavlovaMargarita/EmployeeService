@@ -4,9 +4,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Margarita on 17.10.2014.
- */
 @Entity
 @Table(name = "position_in_company")
 public class PositionInCompany {
@@ -61,4 +58,6 @@ public class PositionInCompany {
     public void setEmployeeList(List<Employee> employeeList) {
         this.employeeList = employeeList;
     }
+
+
 }

@@ -5,9 +5,6 @@ import com.itechart.enumProperty.SexEnum;
 
 import java.sql.Date;
 
-/**
- * Created by Margarita on 20.10.2014.
- */
 public class EmployeeDTO {
 
     private Long id;

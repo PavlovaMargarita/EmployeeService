@@ -2,7 +2,7 @@ var app = angular.module("EmployeeService", ['ngRoute', 'checklist-model', 'ngCo
 
 app.run(function ($rootScope, $cookieStore) {
 
-    $rootScope.recordsOnPage = 20;
+    $rootScope.recordsOnPage = 5;
 
     $rootScope.isAuth = function () {
         var user = $cookieStore.get("userInfo");

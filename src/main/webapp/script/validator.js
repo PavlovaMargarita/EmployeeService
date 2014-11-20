@@ -153,7 +153,7 @@ var validateObject = {
     },
 
     validateFlat: function(value, inputAttributes){
-        var regexp =  /^[0-9]+[A-Za-zА-Яа-я]+$/;
+        var regexp =  /^[0-9]+[A-Za-zА-Яа-я]*$/;
         if(regexp.test(value)){
             this.hideLabel(inputAttributes);
             return true;

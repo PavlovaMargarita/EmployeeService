@@ -5,38 +5,59 @@
         <hr>
     </div>
 
+    <form>
+        <div class="form-group">
+            <label class="control-label label-font-size" for="search_value">Искать</label>
+            <div>
+                <input type="text" class="form-control input-size" name="search_value" id="search_value" ng-model="searchValue" ng-change="search()"/>
+            </div>
+        </div>
+    </form>
+    <br/>
+    <br/>
+    <br/>
     <table class="table table-hover">
         <thead>
-            <tr class="warning">
-                <th>Фамилия</th>
-                <th>Имя</th>
-                <th>Отдел</th>
-                <th>Дата окончания контакта</th>
-                <th>Редактировать</th>
-            </tr>
+        <tr class="warning">
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отдел</th>
+            <th>Дата окончания контакта</th>
+            <th>Редактировать</th>
+        </tr>
         </thead>
         <!--ng-style="setColor({{employee.redRow}})"-->
-        <tr data-ng-repeat="employee in employees" ng-class="setColor({{employee.redRow}})">
-            <td>{{employee.s_name}} </td>
-            <td>{{employee.f_name}} </td>
-            <td>{{employee.departmentName}} </td>
-            <td>{{employee.dateContractEnd}} </td>
+        <tr data-ng-repeat="employee in employees" ng-class="setColor(employee.redRow)">
+            <td>{{employee.s_name}}</td>
+            <td>{{employee.f_name}}</td>
+            <td>{{employee.departmentName}}</td>
+            <td>{{employee.dateContractEnd}}</td>
             <td><a class="btn btn-success btn-sm" href="#employeeCorrect/{{employee.id}}">Редактировать</a></td>
         </tr>
     </table>
 
     <!--постраничная навигация-->
-    <div class="page-menu">
+    <div class="page-menu" id="pagination">
         <ul class="pagination">
             <li ng-show="currentPage == 1" class="disabled"><a href="">Первая</a></li>
             <li ng-show="currentPage == 1" class="disabled"><a href="">&laquo;</a></li>
-            <li ng-show="currentPage != 1" ng-class="isFirstDisabled()"><a href="javascript:void(0)" ng-click="getRecords.doClick(1)">Первая</a></li>
-            <li ng-show="currentPage != 1" ng-class="isPrevDisabled()"><a href="javascript:void(0)" ng-click="getRecords.doClick(currentPage-1)">&laquo;</a></li>
-            <li ng-repeat="i in range" ng-class="{active : currentPage == i}">
+            <li ng-show="currentPage != 1" ng-class="isFirstDisabled()"><a href="javascript:void(0)"
+                                                                           ng-click="getRecords.doClick(1)">Первая</a>
+            </li>
+            <li ng-show="currentPage != 1" ng-class="isPrevDisabled()"><a href="javascript:void(0)"
+                                                                          ng-click="getRecords.doClick(currentPage-1)">&laquo;</a>
+            </li>
+
+            <li ng-repeat="i in range" ng-class="{active : currentPage == i}" id="pagination{{i}}">
                 <a href="javascript:void(0)" ng-click="getRecords.doClick(i)">{{i}}</a>
             </li>
-            <li ng-show="currentPage != totalPages" ng-class="isNextDisabled()"><a href="javascript:void(0)" ng-click="getRecords.doClick(currentPage+1)">&raquo;</a></li>
-            <li ng-show="currentPage != totalPages" ng-class="isLastDisabled()"><a href="javascript:void(0)" ng-click="getRecords.doClick(totalPages)">Последняя</a></li>
+
+            <li ng-show="currentPage != totalPages" ng-class="isNextDisabled()"><a href="javascript:void(0)"
+                                                                                   ng-click="getRecords.doClick(currentPage+1)">&raquo;</a>
+            </li>
+            <li ng-show="currentPage != totalPages" ng-class="isLastDisabled()"><a href="javascript:void(0)"
+                                                                                   ng-click="getRecords.doClick(totalPages)">Последняя</a>
+            </li>
             <li ng-show="currentPage == totalPages" class="disabled"><a href="">&raquo;</a></li>
             <li ng-show="currentPage == totalPages" class="disabled"><a href="">Последняя</a></li>
         </ul>

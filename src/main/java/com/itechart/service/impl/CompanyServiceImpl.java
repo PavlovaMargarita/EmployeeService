@@ -4,7 +4,6 @@ import com.itechart.dto.*;
 import com.itechart.enumProperty.CompanyStatusEnum;
 import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
-import com.itechart.projectValue.Params;
 import com.itechart.repository.AccountNumberRepository;
 import com.itechart.repository.CompanyRepository;
 import com.itechart.repository.PositionInCompanyRepository;
@@ -23,9 +22,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * Created by Margarita on 16.10.2014.
- */
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
@@ -38,18 +34,16 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private PositionInCompanyRepository positionInCompanyRepository;
 
-    private final int COUNT_COMPANY_FOR_SELECT = 50;
-
     @Override
     public List<PositionInCompanyDTO> readPositionInCompanyList() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String company = authority.get(1).getAuthority();
+        List authority = (List) authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(CompanyServiceImpl.class).info("Read PositionInCompanyList");
         List<PositionInCompany> positionInCompanyList = positionInCompanyRepository.readPositionInCompanyList(companyId, topTen);
-        List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList(positionInCompanyList.size());
+        List positionInCompanyDTOList = new ArrayList(positionInCompanyList.size());
         for (PositionInCompany positionInCompany : positionInCompanyList) {
             positionInCompanyDTOList.add(positionInCompanyToPositionInCompanyDTO(positionInCompany));
         }
@@ -59,13 +53,13 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<DepartmentDTO> readDepartmentList() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String company = authority.get(1).getAuthority();
+        List authority = (List) authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(CompanyServiceImpl.class).info("Read Department ");
         List<Department> departmentList = companyRepository.readDepartmentList(companyId, topTen);
-        List<DepartmentDTO> departmentDTOList = new ArrayList(departmentList.size());
+        List<DepartmentDTO>  departmentDTOList = new ArrayList(departmentList.size());
         for (Department department : departmentList) {
             departmentDTOList.add(departmentToDepartmentDTO(department));
         }
@@ -165,8 +159,7 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyDTO readCompany(Long id) {
         Logger.getLogger(CompanyServiceImpl.class).info("Read company by id = " + id);
         Company company = companyRepository.findOne(id);
-        CompanyDTO companyDTO = companyToCompanyDTO(company);
-        return companyDTO;
+        return companyToCompanyDTO(company);
     }
 
     @Override
@@ -184,8 +177,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Date getDateBoundaryRefill() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String companyStringID = authority.get(1).getAuthority();
+        List authority = (List) authentication.getAuthorities();
+        String companyStringID = ((GrantedAuthority)authority.get(1)).getAuthority();
         Long companyId = Long.parseLong(companyStringID.substring(10));
         CompanyDTO companyDTO = readCompany(companyId);
         Logger.getLogger(CompanyServiceImpl.class).info("Get date boundary refill");
@@ -195,10 +188,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Long getCurrentCompanyId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String company = authority.get(1).getAuthority();
-        Long companyId = Long.parseLong(company.substring(10));
-        return companyId;
+        List authority = (List) authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
+        return Long.parseLong(company.substring(10));
     }
 
     @Override
@@ -208,8 +200,8 @@ public class CompanyServiceImpl implements CompanyService {
             accountNumber.setNumber(number);
             accountNumberRepository.save(accountNumber);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-            String companyStringID = authority.get(1).getAuthority();
+            List authority = (List) authentication.getAuthorities();
+            String companyStringID = ((GrantedAuthority)authority.get(1)).getAuthority();
             Long companyId = Long.parseLong(companyStringID.substring(10));
             CompanyDTO companyDTO = readCompany(companyId);
             java.util.Date companyDate = new java.util.Date(companyDTO.getDateBoundaryRefill().getTime());
@@ -224,11 +216,10 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDTO getCurrentCompany() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String company = authority.get(1).getAuthority();
+        List authority = (List) authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
-        CompanyDTO companyDTO = readCompany(companyId);
-        return companyDTO;
+        return readCompany(companyId);
     }
 
     private DepartmentDTO departmentToDepartmentDTO(Department department) {
@@ -295,4 +286,6 @@ public class CompanyServiceImpl implements CompanyService {
         company.setCompanyPlan(companyDTO.getCompanyPlan());
         return company;
     }
+
+
 }

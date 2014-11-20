@@ -1,9 +1,7 @@
 package com.itechart.service.impl;
 
 import com.itechart.dto.EmployeeDTO;
-import com.itechart.dto.SexDTO;
 import com.itechart.enumProperty.RoleEnum;
-import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
 import com.itechart.model.Employee;
 import com.itechart.repository.*;
@@ -17,7 +15,6 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.ModifiableSolrParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -78,15 +75,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         Logger.getLogger(EmployeeService.class).info(String.format("Read Employee by id %s",id));
         Employee employee = employeeRepository.findOne(id);
         Logger.getLogger(EmployeeService.class).info("Return Employee" + employee.toString());
-        EmployeeDTO employeeDTO = employeeToEmployeeDTO(employee);
-        return employeeDTO;
+        return employeeToEmployeeDTO(employee);
     }
 
     @Override
     public Long createEmployee(EmployeeDTO employeeDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String company = authority.get(1).getAuthority();
+        List authority = (List) authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
         employeeDTO.setCompanyId(companyId);
         Employee employee = employeeDTOToEmployee(employeeDTO);
@@ -104,15 +100,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setId(employeeDTO.getId());
         Logger.getLogger(EmployeeService.class).info("Update Employee " + employee.toString());
         employee = employeeRepository.save(employee);
-        saveToSolr(employee);
+        if(employee.getFired()){
+            deleteInSolr(employee);
+        } else {
+            saveToSolr(employee);
+        }
         return employeeDTO.getId();
     }
 
     @Override
     public long employeeCount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String company = authority.get(1).getAuthority();
+        List authority = (List) authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
         Long companyId = Long.parseLong(company.substring(10));
         Logger.getLogger(EmployeeServiceImpl.class).info("Read employee count");
         return employeeRepository.employeeCount(companyId);
@@ -128,8 +128,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 //create new photo path
                 StringBuilder photoPath = new StringBuilder(LOCATION);
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-                String company = authority.get(1).getAuthority();
+                List authority = (List) authentication.getAuthorities();
+                String company = ((GrantedAuthority)authority.get(1)).getAuthority();
                 Long companyId = Long.parseLong(company.substring(10));
                 photoPath.append(companyId);
                 photoPath.append("/photoEmployee/");
@@ -172,21 +172,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO readCurrentEmployee() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String company = authority.get(2).getAuthority();
+        List authority = (List) authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(2)).getAuthority();
         Long employeeId = Long.parseLong(company.substring(11));
-        EmployeeDTO employeeDTO = readEmployee(employeeId);
-        return employeeDTO;
+        return readEmployee(employeeId);
     }
 
     @Override
     public List readRoleEnumForCurrentEmployee() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<GrantedAuthority> authority = (List<GrantedAuthority>) authentication.getAuthorities();
-        String company = authority.get(2).getAuthority();
+        List authority = (List) authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(2)).getAuthority();
         Long employeeId = Long.parseLong(company.substring(11));
         EmployeeDTO employeeDTO = readEmployee(employeeId);
-        List roleList = new ArrayList();
+        List<RoleEnum> roleList = new ArrayList();
         for(int i = 0; i < RoleEnum.values().length; i++) {
             if(RoleEnum.values()[i].equals(RoleEnum.ROLE_HRM) && (employeeDTO.getRole().equals(RoleEnum.ROLE_HRM) || employeeDTO.getRole().equals(RoleEnum.ROLE_ADMIN)))
                 roleList.add(RoleEnum.values()[i]);
@@ -200,6 +199,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List readRoleEnum() {
+        List<RoleEnum> roleList = new ArrayList();
+        for(int i = 0; i < RoleEnum.values().length; i++) {
+            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_HRM))
+                roleList.add(RoleEnum.values()[i]);
+            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_ADMIN))
+                roleList.add(RoleEnum.values()[i]);
+            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_EMPLOYEE))
+                roleList.add(RoleEnum.values()[i]);
+        }
+        return roleList;
+    }
+
+    @Override
     public void createEmployeeCeo(EmployeeDTO employeeDTO) {
         Employee employee = employeeDTOToEmployee(employeeDTO);
         employee.setFired(false);
@@ -208,14 +221,32 @@ public class EmployeeServiceImpl implements EmployeeService {
         positionInCompany.setPosition("CEO");
         positionInCompanyRepository.save(positionInCompany);
         employee.setPositionInCompany(positionInCompany);
-        employeeRepository.save(employee);
+        employee = employeeRepository.save(employee);
+        saveToSolr(employee);
     }
 
     @Override
     public EmployeeDTO readEmployeeCeoByCompanyId(Long companyId) {
         Employee employee = employeeRepository.readEmployeeCeo(companyId);
-        EmployeeDTO employeeDTO = employeeToEmployeeDTO(employee);
-        return employeeDTO;
+        return employeeToEmployeeDTO(employee);
+    }
+
+    @Override
+    public List<EmployeeDTO> search(String searchValue, int page, int pageRecords) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List authority = (List)authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
+        String companyId = company.substring(10);
+        return solrListToEmployeeList(searchInSolr(searchValue,companyId, page, pageRecords));
+    }
+
+    @Override
+    public long searchCount(String searchValue) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List authority = (List)authentication.getAuthorities();
+        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
+        String companyId = company.substring(10);
+        return searchInSolr(searchValue,companyId, 0, 1).getNumFound();
     }
 
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){
@@ -295,6 +326,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         doc.addField("first_name", employee.getFirstName());
         doc.addField("last_name", employee.getLastName());
         doc.addField("email", employee.getEmail());
+        doc.addField("companyId", employee.getCompany().getId());
         try {
             solrServer.add(doc);
             solrServer.commit();
@@ -316,20 +348,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-    private SolrDocumentList searchInSolr(String value){
-//        SolrQuery query = new SolrQuery();
-//        query.setQuery("*:*");
-//        query.addFilterQuery("first_name:qwe*", "last_name:qwe*");
-//        query.setFields("id","first_name","last_name","email");
-//        QueryResponse response = null;
-//        try {
-//            response = solrServer.query(query);
-//        } catch (SolrServerException e) {
-//            e.printStackTrace();
-//        }
-//        return response.getResults();
+
+    private SolrDocumentList searchInSolr(String value, String companyId, int page, int pageRecords){
         SolrQuery query = new SolrQuery();
-        query.setQuery("first_name:" + value + "* OR last_name:" + value + "* OR email:" + value + "*");
+        query.setQuery("(first_name:" + value + "* OR last_name:" + value + "* OR email:" + value + "*) AND companyId:" + companyId);
+        query.setStart(page * pageRecords);
+        query.setRows(pageRecords);
         query.setFields("id");
         QueryResponse response = null;
         try {
@@ -337,13 +361,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         } catch (SolrServerException e) {
             e.printStackTrace();
         }
-        return  response.getResults();
+        return response.getResults();
     }
 
     private List<EmployeeDTO> solrListToEmployeeList(SolrDocumentList solrDocumentList){
         List<EmployeeDTO> employeeDTOList = new ArrayList(solrDocumentList.size());
         for(SolrDocument solrDocument: solrDocumentList){
-            Long id = (Long)solrDocument.get("id");
+            Long id = Long.parseLong(solrDocument.get("id").toString());
             EmployeeDTO employeeDTO = readEmployee(id);
             employeeDTOList.add(employeeDTO);
         }

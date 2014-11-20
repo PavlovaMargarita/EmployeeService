@@ -2,9 +2,6 @@ package com.itechart.dto;
 
 import com.itechart.enumProperty.CompanyStatusEnum;
 
-/**
- * Created by Margarita on 30.10.2014.
- */
 public class CompanyStatusDTO {
     private CompanyStatusEnum companyStatusEnum;
     private String companyStatusEnumRussian;

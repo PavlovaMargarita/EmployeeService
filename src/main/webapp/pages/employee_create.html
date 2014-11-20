@@ -9,7 +9,7 @@
         <img class="employee-photo" ng-show="!showStandardPhotoAndFiredButton" id="employeePhotoCreate" src="../images/silhouette.jpg"/>
         <img class="employee-photo" ng-show="showPhoto" id="employeePhotoEdit"/>
 
-        <button class="btn bg-info button-add-photo" type="button" ng-click="loadPhotoButton.doClick()" ng-show="hasAuthority(['ROLE_HRM'])">Загрузить фото
+        <button class="btn bg-info button-add-photo" type="button" ng-click="loadPhotoButton.doClick()" ng-show="create || hasAuthority(['ROLE_HRM'])">Загрузить фото
         </button>
     </div>
 

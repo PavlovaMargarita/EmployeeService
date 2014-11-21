@@ -1,21 +1,10 @@
 package com.itechart.timer;
 
-import com.itechart.dto.CompanyDTO;
-import com.itechart.service.CompanyService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-/**
- * Created by Margarita on 29.10.2014.
- */
 public class CheckCompanyAccount {
 
-//    @Autowired
-//    private CompanyService companyService;
+
 
     @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
     public void checkCompanyAccount() {

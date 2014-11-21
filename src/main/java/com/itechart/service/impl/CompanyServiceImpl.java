@@ -71,14 +71,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void updateCompanyEveryDay(CompanyDTO companyDTO) {
-        Company company = companyDTOToCompany(companyDTO);
-        company.setId(companyDTO.getId());
-        Logger.getLogger(CompanyServiceImpl.class).info("Update company every day:" + company.toString());
-        companyRepository.save(company);
-    }
-
-    @Override
     public void updateCompany(CompanyDTO companyDTO) {
         Company company = companyDTOToCompany(companyDTO);
         company.setId(companyDTO.getId());

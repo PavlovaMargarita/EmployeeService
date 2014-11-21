@@ -20,9 +20,6 @@ import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -350,16 +347,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             return response.getResults();
         } else
             return null;
-    }
-
-    private List<EmployeeDTO> solrListToEmployeeList(SolrDocumentList solrDocumentList){
-        List<EmployeeDTO> employeeDTOList = new ArrayList<>(solrDocumentList.size());
-        for(SolrDocument solrDocument: solrDocumentList){
-            Long id = Long.parseLong(solrDocument.get("id").toString());
-            EmployeeDTO employeeDTO = readEmployee(id);
-            employeeDTOList.add(employeeDTO);
-        }
-        return employeeDTOList;
     }
 
 }

@@ -5,6 +5,7 @@ import com.itechart.dto.SearchResult;
 import com.itechart.enumProperty.RoleEnum;
 import com.itechart.model.*;
 import com.itechart.model.Employee;
+import com.itechart.params.CurrentEmployeeParam;
 import com.itechart.repository.*;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
@@ -54,10 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public List <EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List authority = (List)authentication.getAuthorities();
-        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
-        Long companyId = Long.parseLong(company.substring(10));
+        Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
         Pageable topTen = new PageRequest(pageNumber, pageRecords);
         Logger.getLogger(EmployeeServiceImpl.class).info("Read Employee List, page = "+ pageNumber+", count=" + pageRecords);
         List<Employee> employeeList = employeeRepository.readEmployeeList(companyId, topTen);
@@ -78,10 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Long createEmployee(EmployeeDTO employeeDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List authority = (List) authentication.getAuthorities();
-        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
-        Long companyId = Long.parseLong(company.substring(10));
+        Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
         employeeDTO.setCompanyId(companyId);
         Employee employee = employeeDTOToEmployee(employeeDTO);
         Logger.getLogger(EmployeeService.class).info("Create Employee " + employee.toString());
@@ -108,10 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public long employeeCount() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List authority = (List) authentication.getAuthorities();
-        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
-        Long companyId = Long.parseLong(company.substring(10));
+        Long companyId =CurrentEmployeeParam.getCurrentCompanyId();
         Logger.getLogger(EmployeeServiceImpl.class).info("Read employee count");
         return employeeRepository.employeeCount(companyId);
     }
@@ -126,10 +118,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 //create new photo path
                 String location = "C:/apache-tomcat-7.0.56/webapps/EmployeeService/files/company/";
                 StringBuilder photoPath = new StringBuilder(location);
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                List authority = (List) authentication.getAuthorities();
-                String company = ((GrantedAuthority)authority.get(1)).getAuthority();
-                Long companyId = Long.parseLong(company.substring(10));
+                Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
                 photoPath.append(companyId);
                 photoPath.append("/photoEmployee/");
                 photoPath.append(id);
@@ -170,19 +159,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO readCurrentEmployee() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List authority = (List) authentication.getAuthorities();
-        String company = ((GrantedAuthority)authority.get(2)).getAuthority();
-        Long employeeId = Long.parseLong(company.substring(11));
+        Long employeeId = CurrentEmployeeParam.getCurrentEmployeeId();
         return readEmployee(employeeId);
     }
 
     @Override
     public List readRoleEnumForCurrentEmployee() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List authority = (List) authentication.getAuthorities();
-        String company = ((GrantedAuthority)authority.get(2)).getAuthority();
-        Long employeeId = Long.parseLong(company.substring(11));
+        Long employeeId = CurrentEmployeeParam.getCurrentEmployeeId();
         EmployeeDTO employeeDTO = readEmployee(employeeId);
         List<RoleEnum> roleList = new ArrayList<>();
         for(int i = 0; i < RoleEnum.values().length; i++) {
@@ -232,10 +215,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public SearchResult search(String searchValue, int page, int pageRecords) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List authority = (List)authentication.getAuthorities();
-        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
-        String companyId = company.substring(10);
+        String companyId = CurrentEmployeeParam.getCurrentCompanyId().toString();
         SolrDocumentList solrDocuments =searchInSolr(searchValue,companyId, page, pageRecords);
         SearchResult searchResult = new SearchResult();
         searchResult.setEmployeeList(solrListToEmployeeList(solrDocuments));

@@ -1,6 +1,7 @@
 package com.itechart.service.impl;
 
 import com.itechart.dto.EmployeeDTO;
+import com.itechart.dto.SearchResult;
 import com.itechart.enumProperty.RoleEnum;
 import com.itechart.model.*;
 import com.itechart.model.Employee;
@@ -232,21 +233,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDTO> search(String searchValue, int page, int pageRecords) {
+    public SearchResult search(String searchValue, int page, int pageRecords) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List authority = (List)authentication.getAuthorities();
         String company = ((GrantedAuthority)authority.get(1)).getAuthority();
         String companyId = company.substring(10);
-        return solrListToEmployeeList(searchInSolr(searchValue,companyId, page, pageRecords));
-    }
-
-    @Override
-    public long searchCount(String searchValue) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List authority = (List)authentication.getAuthorities();
-        String company = ((GrantedAuthority)authority.get(1)).getAuthority();
-        String companyId = company.substring(10);
-        return searchInSolr(searchValue,companyId, 0, 1).getNumFound();
+        SolrDocumentList solrDocuments =searchInSolr(searchValue,companyId, page, pageRecords);
+        SearchResult searchResult = new SearchResult();
+        searchResult.setEmployeeList(solrListToEmployeeList(solrDocuments));
+        searchResult.setTotalSearchCount(solrDocuments.getNumFound());
+        return searchResult;
     }
 
     private EmployeeDTO employeeToEmployeeDTO(Employee employee){

@@ -1,7 +1,6 @@
 package com.itechart.timer;
 
 import com.itechart.dto.CompanyDTO;
-import com.itechart.projectValue.Params;
 import com.itechart.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

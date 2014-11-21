@@ -1,6 +1,7 @@
 package com.itechart.service;
 
 import com.itechart.dto.EmployeeDTO;
+import com.itechart.dto.SearchResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -21,6 +22,6 @@ public interface EmployeeService {
     public List readRoleEnum();
     public void createEmployeeCeo(EmployeeDTO employeeDTO);
     public EmployeeDTO readEmployeeCeoByCompanyId(Long companyId);
-    public List<EmployeeDTO> search(String searchValue, int page, int pageRecords);
-    public long searchCount(String searchValue);
+    public SearchResult search(String searchValue, int page, int pageRecords);
+
 }

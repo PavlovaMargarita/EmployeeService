@@ -16,15 +16,6 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
     response.success(function (data) {
         $scope.employees = data;
         $scope.employees.forEach(checkDateContractEnd);
-//        function checkDateContractEnd(element) {
-//            var employeeDateContractEnd = new Date(element.dateContractEnd);
-//            var currentDate = new Date();
-//            if ((employeeDateContractEnd - currentDate) / (1000 * 60 * 60 * 24) <= 10) {
-//                element.redRow = true;
-//            } else {
-//                element.redRow = false;
-//            }
-//        }
         var employeeCount = $http({
             method: "get",
             url: "/EmployeeService/employee/employeeCount",
@@ -46,15 +37,31 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
 
     $scope.getRecords = {};
     $scope.getRecords.doClick = function (pageNumber) {
-        var response;
         if($scope.statusForList == 'list'){
-            response = $http({
+            var response = $http({
                 method: "get",
                 url: "/EmployeeService/employee/employeeList",
                 params: {currentPage: pageNumber, pageRecords: $rootScope.recordsOnPage}
             });
+            response.success(function (data) {
+                $scope.employees = data;
+                $scope.employees.forEach(checkDateContractEnd);
+                $scope.currentPage = pageNumber;
+                var employeeCount = $http({
+                    method: "get",
+                    url: "/EmployeeService/employee/employeeCount",
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    mimeType: 'application/json'
+                });
+                employeeCount.success(function (data) {
+                    $scope.totalRecords = data - 0;
+                    $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
+                    $scope.range = PagerService.buildRange($scope.totalPages);
+                });
+            });
         } else{
-            response = $http({
+            var response = $http({
                 method: "post",
                 url: "/EmployeeService/employee/search",
                 data: {
@@ -65,48 +72,16 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
                 mimeType: 'application/json',
                 params: {currentPage: pageNumber, pageRecords: $rootScope.recordsOnPage}
             });
-        }
-
-        response.success(function (data) {
-            $scope.employees = data;
-            $scope.employees.forEach(checkDateContractEnd);
-//            function checkDateContractEnd(element) {
-//                var employeeDateContractEnd = new Date(element.dateContractEnd);
-//                var currentDate = new Date();
-//                if ((employeeDateContractEnd - currentDate) / (1000 * 60 * 60 * 24) <= 10) {
-//                    element.redRow = true;
-//                } else {
-//                    element.redRow = false;
-//                }
-//            }
-            $scope.currentPage = pageNumber;
-            var employeeCount;
-            if($scope.statusForList == 'list') {
-                employeeCount = $http({
-                    method: "get",
-                    url: "/EmployeeService/employee/employeeCount",
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    mimeType: 'application/json'
-                });
-            } else{
-                employeeCount = $http({
-                    method: "get",
-                    url: "/EmployeeService/employee/searchCount",
-                    data: {
-                        value:$scope.searchValue
-                    },
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    mimeType: 'application/json'
-                });
-            }
-            employeeCount.success(function (data) {
-                $scope.totalRecords = data - 0;
+            response.success(function(data){
+                $scope.employees = data.employeeList;
+                $scope.employees.forEach(checkDateContractEnd);
+                $scope.totalRecords = data.totalSearchCount - 0;
                 $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
                 $scope.range = PagerService.buildRange($scope.totalPages);
+                $scope.currentPage = pageNumber;
             });
-        });
+        }
+
     };
 
     $scope.search = function () {
@@ -123,24 +98,11 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
             params: {currentPage: 1, pageRecords: $rootScope.recordsOnPage}
         });
         response.success(function (data) {
-
-            $scope.employees = data;
+            $scope.employees = data.employeeList;
             $scope.employees.forEach(checkDateContractEnd);
-            var employeeCount = $http({
-                method: "post",
-                url: "/EmployeeService/employee/qwerty",
-                data: {
-                    value: $scope.searchValue
-                },
-                dataType: 'json',
-                contentType: 'application/json',
-                mimeType: 'application/json'
-            });
-            employeeCount.success(function (data) {
-                $scope.totalRecords = data - 0;
-                $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
-                $scope.range = PagerService.buildRange($scope.totalPages);
-            });
+            $scope.totalRecords = data.totalSearchCount - 0;
+            $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
+            $scope.range = PagerService.buildRange($scope.totalPages);
             $scope.currentPage = 1;
         });
     }

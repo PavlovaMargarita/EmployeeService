@@ -1,6 +1,7 @@
 package com.itechart.controller;
 
 import com.itechart.dto.EmployeeDTO;
+import com.itechart.dto.SearchResult;
 import com.itechart.dto.SearchString;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
@@ -98,18 +99,11 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.POST, value = "/search")
     public
     @ResponseBody
-    List search(@RequestBody SearchString searchValue, @RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
+    SearchResult search(@RequestBody SearchString searchValue, @RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/search");
         return employeeService.search(searchValue.getValue(), currentPage - 1, pageRecords);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/qwerty")
-    public
-    @ResponseBody
-    long searchCount(@RequestBody SearchString searchValue) {
-        Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/search");
-        return employeeService.searchCount(searchValue.getValue());
-    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/fullRoleList")
     @ResponseBody

@@ -433,14 +433,14 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 }
 
             }
-
-        });
-        $scope.roleList.forEach(selectRole);
-        function selectRole(element, index) {
-            if (element.roleEnum == $scope.employee.role) {
-                $scope.employee.role = $scope.roleList[index].roleEnum;
+            $scope.roleList.forEach(selectRole);
+            function selectRole(element, index) {
+                if (element.roleEnum == $scope.employee.role) {
+                    $scope.employee.role = $scope.roleList[index].roleEnum;
+                }
             }
-        }
+        });
+
     });
 
 

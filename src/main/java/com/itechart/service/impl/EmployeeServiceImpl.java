@@ -218,7 +218,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         String companyId = CurrentEmployeeParam.getCurrentCompanyId().toString();
         SolrDocumentList solrDocuments =searchInSolr(searchValue,companyId, page, pageRecords);
         SearchResult searchResult = new SearchResult();
-        searchResult.setEmployeeList(solrListToEmployeeList(solrDocuments));
+
+        List<Long> idList = new ArrayList<>(solrDocuments.size());
+        for(SolrDocument solrDocument: solrDocuments){
+            idList.add(Long.parseLong(solrDocument.get("id").toString()));
+        }
+        List <Employee> employeeList = employeeRepository.findByIdIn(idList);
+        List <EmployeeDTO> employeeDTOList = new ArrayList<>(employeeList.size());
+        for(Employee employee: employeeList){
+            employeeDTOList.add(employeeToEmployeeDTO(employee));
+        }
+        searchResult.setEmployeeList(employeeDTOList);
+//        searchResult.setEmployeeList(solrListToEmployeeList(solrDocuments));
         searchResult.setTotalSearchCount(solrDocuments.getNumFound());
         return searchResult;
     }

@@ -11,13 +11,13 @@ public class CurrentEmployeeParam {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List authority = (List)authentication.getAuthorities();
         String companyId = ((GrantedAuthority)authority.get(1)).getAuthority();
-        return Long.parseLong(companyId);
+        return Long.parseLong(companyId.substring(10));
     }
 
     public static Long getCurrentEmployeeId(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List authority = (List)authentication.getAuthorities();
         String employeeId = ((GrantedAuthority)authority.get(2)).getAuthority();
-        return Long.parseLong(employeeId);
+        return Long.parseLong(employeeId.substring(11));
     }
 }

@@ -48,9 +48,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private PositionInCompanyRepository positionInCompanyRepository;
 
-    //private final String LOCATION = "D:/EmployeeService/src/main/webapp/files/company/";
-    private final String LOCATION = "C:/apache-tomcat-7.0.56/webapps/EmployeeService/files/company/";
-
     private String solrUrl = "http://localhost:8984/solr";
     private SolrServer solrServer = new HttpSolrServer( solrUrl );
 
@@ -64,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Pageable topTen = new PageRequest(pageNumber, pageRecords);
         Logger.getLogger(EmployeeServiceImpl.class).info("Read Employee List, page = "+ pageNumber+", count=" + pageRecords);
         List<Employee> employeeList = employeeRepository.readEmployeeList(companyId, topTen);
-        List <EmployeeDTO> employeeDTOList = new ArrayList(employeeList.size());
+        List <EmployeeDTO> employeeDTOList = new ArrayList<>(employeeList.size());
         for(Employee employee: employeeList){
             employeeDTOList.add(employeeToEmployeeDTO(employee));
         }
@@ -127,7 +124,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             } else {
                 //create new photo path
-                StringBuilder photoPath = new StringBuilder(LOCATION);
+                String location = "C:/apache-tomcat-7.0.56/webapps/EmployeeService/files/company/";
+                StringBuilder photoPath = new StringBuilder(location);
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 List authority = (List) authentication.getAuthorities();
                 String company = ((GrantedAuthority)authority.get(1)).getAuthority();
@@ -186,7 +184,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         String company = ((GrantedAuthority)authority.get(2)).getAuthority();
         Long employeeId = Long.parseLong(company.substring(11));
         EmployeeDTO employeeDTO = readEmployee(employeeId);
-        List<RoleEnum> roleList = new ArrayList();
+        List<RoleEnum> roleList = new ArrayList<>();
         for(int i = 0; i < RoleEnum.values().length; i++) {
             if(RoleEnum.values()[i].equals(RoleEnum.ROLE_HRM) && (employeeDTO.getRole().equals(RoleEnum.ROLE_HRM) || employeeDTO.getRole().equals(RoleEnum.ROLE_ADMIN)))
                 roleList.add(RoleEnum.values()[i]);
@@ -201,7 +199,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List readRoleEnum() {
-        List<RoleEnum> roleList = new ArrayList();
+        List<RoleEnum> roleList = new ArrayList<>();
         for(int i = 0; i < RoleEnum.values().length; i++) {
             if(RoleEnum.values()[i].equals(RoleEnum.ROLE_HRM))
                 roleList.add(RoleEnum.values()[i]);
@@ -357,11 +355,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         } catch (SolrServerException e) {
             e.printStackTrace();
         }
-        return response.getResults();
+        if(response != null) {
+            return response.getResults();
+        } else
+            return null;
     }
 
     private List<EmployeeDTO> solrListToEmployeeList(SolrDocumentList solrDocumentList){
-        List<EmployeeDTO> employeeDTOList = new ArrayList(solrDocumentList.size());
+        List<EmployeeDTO> employeeDTOList = new ArrayList<>(solrDocumentList.size());
         for(SolrDocument solrDocument: solrDocumentList){
             Long id = Long.parseLong(solrDocument.get("id").toString());
             EmployeeDTO employeeDTO = readEmployee(id);

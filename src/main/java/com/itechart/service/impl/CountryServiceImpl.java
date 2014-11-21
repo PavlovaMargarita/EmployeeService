@@ -20,7 +20,7 @@ public class CountryServiceImpl implements CountryService {
     public List<CountryDTO> readCountryList() {
         Logger.getLogger(CountryServiceImpl.class).info("Read Country List ");
         List <Country> countryList = countryRepository.findAll();
-        List <CountryDTO> countryDTOList = new ArrayList(countryList.size());
+        List <CountryDTO> countryDTOList = new ArrayList<>(countryList.size());
         for(Country country: countryList){
             countryDTOList.add(countryToCountryDTO(country));
         }

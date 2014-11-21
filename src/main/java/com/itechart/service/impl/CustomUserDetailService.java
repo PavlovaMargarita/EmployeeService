@@ -31,7 +31,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     private List<GrantedAuthority> buildUserAuthority(Employee employee) {
 
-        List<GrantedAuthority> setAuths = new ArrayList();
+        List<GrantedAuthority> setAuths = new ArrayList<>();
 
         // Build employee's authorities
         setAuths.add(new SimpleGrantedAuthority(employee.getRole().name()));
@@ -39,9 +39,7 @@ public class CustomUserDetailService implements UserDetailsService {
         setAuths.add(new SimpleGrantedAuthority(companyId + employee.getCompany().getId()));
         String employeeId = "employeeId=";
         setAuths.add(new SimpleGrantedAuthority(employeeId + employee.getId()));
-        List<GrantedAuthority> Result = new ArrayList(setAuths);
-
-        return Result;
+        return new ArrayList<>(setAuths);
     }
 
     private User buildUserForAuthentication(Employee user,

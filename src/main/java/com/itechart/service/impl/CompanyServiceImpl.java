@@ -43,7 +43,7 @@ public class CompanyServiceImpl implements CompanyService {
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(CompanyServiceImpl.class).info("Read PositionInCompanyList");
         List<PositionInCompany> positionInCompanyList = positionInCompanyRepository.readPositionInCompanyList(companyId, topTen);
-        List positionInCompanyDTOList = new ArrayList(positionInCompanyList.size());
+        List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList<>(positionInCompanyList.size());
         for (PositionInCompany positionInCompany : positionInCompanyList) {
             positionInCompanyDTOList.add(positionInCompanyToPositionInCompanyDTO(positionInCompany));
         }
@@ -59,7 +59,7 @@ public class CompanyServiceImpl implements CompanyService {
         Pageable topTen = new PageRequest(0, 10);
         Logger.getLogger(CompanyServiceImpl.class).info("Read Department ");
         List<Department> departmentList = companyRepository.readDepartmentList(companyId, topTen);
-        List<DepartmentDTO>  departmentDTOList = new ArrayList(departmentList.size());
+        List<DepartmentDTO>  departmentDTOList = new ArrayList<>(departmentList.size());
         for (Department department : departmentList) {
             departmentDTOList.add(departmentToDepartmentDTO(department));
         }
@@ -70,7 +70,7 @@ public class CompanyServiceImpl implements CompanyService {
     public List<AddressDTO> readAddressList(Long departmentId) {
         Logger.getLogger(CompanyServiceImpl.class).info("Read Address List for Department");
         List<Address> addressList = companyRepository.readAddressList(departmentId);
-        List<AddressDTO> addressDTOList = new ArrayList(addressList.size());
+        List<AddressDTO> addressDTOList = new ArrayList<>(addressList.size());
         for (Address address : addressList) {
             addressDTOList.add(addressToAddressDTO(address));
         }
@@ -122,7 +122,7 @@ public class CompanyServiceImpl implements CompanyService {
         Pageable recordsCount = new PageRequest(pageNumber, pageRecords);
         Logger.getLogger(CompanyServiceImpl.class).info("Read company list, page = " + pageNumber);
         List<Company> companyList = companyRepository.readCompanyList(recordsCount);
-        List<CompanyDTO> companyDTOList = new ArrayList(companyList.size());
+        List<CompanyDTO> companyDTOList = new ArrayList<>(companyList.size());
         for (Company company : companyList) {
             companyDTOList.add(companyToCompanyDTO(company));
         }
@@ -137,7 +137,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<CompanyStatusDTO> readCompanyStatusEnum() {
-        List<CompanyStatusDTO> companyTaskEnum = new ArrayList(SexEnum.values().length);
+        List<CompanyStatusDTO> companyTaskEnum = new ArrayList<>(SexEnum.values().length);
         for (int i = 0; i < CompanyStatusEnum.values().length; i++) {
             CompanyStatusDTO companyStatusDTO = new CompanyStatusDTO();
             companyStatusDTO.setCompanyStatusEnum(CompanyStatusEnum.values()[i]);
@@ -240,10 +240,9 @@ public class CompanyServiceImpl implements CompanyService {
         addressDTO.setStreet(address.getStreet());
         addressDTO.setHouse(address.getHouse());
         addressDTO.setFlat(address.getFlat());
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(countryDTO.getCountry() + " г." + addressDTO.getCity() +
-                " ул." + addressDTO.getStreet() + " д." + addressDTO.getHouse() + " оф." + addressDTO.getFlat());
-        addressDTO.setFullAddress(stringBuilder.toString());
+        String fullAddress = countryDTO.getCountry() + " г." + addressDTO.getCity() +
+                " ул." + addressDTO.getStreet() + " д." + addressDTO.getHouse() + " оф." + addressDTO.getFlat();
+        addressDTO.setFullAddress(fullAddress);
         return addressDTO;
     }
 

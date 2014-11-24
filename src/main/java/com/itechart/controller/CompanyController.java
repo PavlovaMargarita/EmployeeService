@@ -13,86 +13,90 @@ import java.sql.Date;
 @Controller
 @RequestMapping("/company")
 public class CompanyController {
+
     @Autowired
     private CompanyService companyService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/positionInCompanyList")
     @ResponseBody
-    public List<PositionInCompanyDTO> positionList(){
+    public List<PositionInCompanyDTO> positionList() {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/positionInCompany/positionInCompanyList ");
         return companyService.readPositionInCompanyList();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/departmentList")
     @ResponseBody
-    public List<DepartmentDTO> departmentList(){
+    public List<DepartmentDTO> departmentList() {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/departmentList ");
         return companyService.readDepartmentList();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/addressList")
     @ResponseBody
-    public List<AddressDTO> addressList(@RequestParam("departmentId") Long id ){
+    public List<AddressDTO> addressList(@RequestParam("departmentId") Long id) {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/addressList, parameter id = " + id);
         return companyService.readAddressList(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/companyList")
     @ResponseBody
-    public List<CompanyDTO> companyList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords){
+    public List<CompanyDTO> companyList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyList");
         return companyService.readCompanyList(currentPage - 1, pageRecords);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/companyCount")
     @ResponseBody
-    public long companyCount(){
+    public long companyCount() {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyCount");
         return companyService.companyCount();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/companyById")
     @ResponseBody
-    public CompanyDTO readCompany(@RequestParam("id") Long id ){
+    public CompanyDTO readCompany(@RequestParam("id") Long id) {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyById");
         return companyService.readCompany(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/companyStatusList")
     @ResponseBody
-    public List<CompanyStatusDTO> readCompanyStatusList(){
+    public List<CompanyStatusDTO> readCompanyStatusList() {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyStatusList");
         return companyService.readCompanyStatusEnum();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveCompanyUpdate")
-    public @ResponseBody void saveCompanyUpdate(@RequestBody CompanyDTO companyDTO){
+    @ResponseBody
+    public void saveCompanyUpdate(@RequestBody CompanyDTO companyDTO) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveCompanyUpdate ");
         companyService.updateCompany(companyDTO);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveCompanyCreate")
-    public @ResponseBody Long saveCompanyCreate(@RequestBody CompanyDTO companyDTO){
+    @ResponseBody
+    public Long saveCompanyCreate(@RequestBody CompanyDTO companyDTO) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveCompanyCreate ");
         return companyService.createCompany(companyDTO);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/dateBoundaryRefill")
     @ResponseBody
-    public Date getDateBoundaryRefill(){
+    public Date getDateBoundaryRefill() {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/dateBoundaryRefill");
         return companyService.getDateBoundaryRefill();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/currentCompanyId")
     @ResponseBody
-    public Long readCurrentCompanyId(){
+    public Long readCurrentCompanyId() {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/currentCompanyId");
         return companyService.getCurrentCompany().getId();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/pay")
-    public @ResponseBody void pay(@RequestParam("accountNumber") String accountNumber) throws Exception {
+    @ResponseBody
+    public void pay(@RequestParam("accountNumber") String accountNumber) throws Exception {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/company/pay ");
         companyService.pay(accountNumber);
 
@@ -100,7 +104,7 @@ public class CompanyController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/currentCompany")
     @ResponseBody
-    public CompanyDTO readCurrentCompany(){
+    public CompanyDTO readCurrentCompany() {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/currentCompany");
         return companyService.getCurrentCompany();
     }

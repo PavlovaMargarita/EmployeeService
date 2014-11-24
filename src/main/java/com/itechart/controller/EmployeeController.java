@@ -36,9 +36,8 @@ public class EmployeeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreate")
-    public
     @ResponseBody
-    Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
+    public Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
         return employeeService.createEmployee(employeeDTO);
     }
@@ -51,9 +50,8 @@ public class EmployeeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeUpdate")
-    public
     @ResponseBody
-    Long saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
+    public Long saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeUpdate ");
         return employeeService.updateEmployee(employeeDTO);
     }
@@ -83,9 +81,8 @@ public class EmployeeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreateCEO")
-    public
     @ResponseBody
-    void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
+    public void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
         employeeService.createEmployeeCeo(employeeDTO);
     }
@@ -97,15 +94,19 @@ public class EmployeeController {
         return employeeService.readEmployeeCeoByCompanyId(companyId);
     }
 
-
     @RequestMapping(method = RequestMethod.POST, value = "/search")
-    public
     @ResponseBody
-    SearchResult search(@RequestBody SearchString searchValue, @RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) throws SolrServerException {
+    public SearchResult search(@RequestBody SearchString searchValue, @RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/search");
-        return employeeService.search(searchValue.getValue(), currentPage - 1, pageRecords);
+        SearchResult searchResult = null;
+        try {
+            searchResult = employeeService.search(searchValue.getValue(), currentPage - 1, pageRecords);
+        } catch (SolrServerException e) {
+            Logger.getLogger(EmployeeController.class).debug("Solr connection pool shutdown or bad query. Stack trace:" + e.getStackTrace());
+            throw new com.itechart.exception.SolrServerException();
+        }
+        return searchResult;
     }
-
 
     @RequestMapping(method = RequestMethod.GET, value = "/fullRoleList")
     @ResponseBody

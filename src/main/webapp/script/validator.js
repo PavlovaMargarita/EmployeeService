@@ -2,7 +2,7 @@ var validateObject = {
     showLabel: function(label, text){
         if (label){
             $(label).text(text);
-            $(label).showStandardPhotoAndFiredButton();
+            //$(label).showStandardPhotoAndFiredButton();
         }
     },
 

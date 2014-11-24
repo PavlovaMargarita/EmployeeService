@@ -28,7 +28,7 @@ app.run(function ($rootScope, $cookieStore) {
         var photoURL = $cookieStore.get("photoURL");
         $('#photoEmployeeNavbar').attr('src', photoURL);
         return !(angular.isUndefined && user == null);
-    }
+    };
 
     $rootScope.hasAuthority = function (roles) {
         var user = $cookieStore.get("userInfo");
@@ -40,7 +40,51 @@ app.run(function ($rootScope, $cookieStore) {
     }
 });
 
-app.config(function ($routeProvider) {
+app.service('ErrorPopupService', function($timeout) {
+    this.showErrorMessage = function(message){
+        document.getElementById("errorOverlay").style.visibility = "visible";
+        document.getElementById('errorMessage').innerHTML = message;
+        $timeout(function() {
+            document.getElementById("errorOverlay").style.visibility = "hidden";
+        }, 3000);
+    }
+
+});
+
+app.factory('ServerHttpResponseInterceptor', function($q, ErrorPopupService) {
+    return function (promise) {
+        return promise.then(function (response) {
+                return response;
+            },
+            function (response) {
+                var responseStatus = response.status;
+                switch(responseStatus){
+                    case 500:{
+                        ErrorPopupService.showErrorMessage("Произошла серверная ошибка.\r\n" +
+                        "Приносим свои извинения за неудобства.");
+                        break;
+                    }
+                    case 403:{
+                        ErrorPopupService.showErrorMessage("Произошла серверная ошибка.\r\n" +
+                        "Приносим свои извинения за неудобства.");
+                        break;
+                    }
+                    case 401:{
+                        ErrorPopupService.showErrorMessage("У вас нет прав доступа, или вы не авторизированы");
+                        break;
+                    }
+                    case 400:{
+                        ErrorPopupService.showErrorMessage("Введены некорректные данные.");
+                        break;
+                    }
+                }
+                return $q.reject(response);
+            });
+    };
+});
+
+
+app.config(function ($routeProvider, $httpProvider) {
     $routeProvider
         .when('/login', {
             templateUrl: 'pages/authorization.html',
@@ -73,7 +117,9 @@ app.config(function ($routeProvider) {
         .when('/pay', {
             templateUrl: 'pages/pay.html',
             controller: 'payController'
-        })
+        });
+
+    $httpProvider.responseInterceptors.push('ServerHttpResponseInterceptor');
 });
 
 app.service('PagerService', function () {
@@ -83,7 +129,7 @@ app.service('PagerService', function () {
             totalPageNumber = Math.floor((totalRecords + pageRecords - 1) / pageRecords);
         }
         return (totalPageNumber == 0) ? 1 : totalPageNumber;
-    }
+    };
 
     this.buildRange = function (totalPageNumber) {
         var pages = [];
@@ -91,19 +137,19 @@ app.service('PagerService', function () {
             pages.push(i);
         }
         return pages;
-    }
+    };
 
     this.isPrevDisabled = function (currentPage) {
         return currentPage === 1 ? "disabled" : "";
-    }
+    };
 
     this.isNextDisabled = function (currentPage, totalPageCountt) {
         return currentPage === totalPageCountt ? "disabled" : "";
-    }
+    };
 
     this.isFirstDisabled = function (currentPage) {
         return currentPage === 1 ? "disabled" : "";
-    }
+    };
 
     this.isLastDisabled = function (currentPage, totalPageCount) {
         return currentPage === totalPageCount ? "disabled" : "";

@@ -46,9 +46,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private PositionInCompanyRepository positionInCompanyRepository;
 
-    private String solrUrl = "http://localhost:8984/solr";
-    private SolrServer solrServer = new HttpSolrServer(solrUrl);
-
     @Override
     @Transactional
     public List<EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords) {
@@ -329,19 +326,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         doc.addField("last_name", employee.getLastName());
         doc.addField("email", employee.getEmail());
         doc.addField("companyId", employee.getCompany().getId());
-
+        SolrServer solrServer = new HttpSolrServer("http://localhost:8984/solr");
         solrServer.add(doc);
         solrServer.commit();
+        solrServer.shutdown();
 
     }
 
     private void deleteInSolr(Employee employee) throws IOException, SolrServerException {
+        SolrServer solrServer = new HttpSolrServer("http://localhost:8984/solr");
         solrServer.deleteById(employee.getId().toString());
         solrServer.commit();
+        solrServer.shutdown();
     }
 
 
     private SolrDocumentList searchInSolr(String value, String companyId, int page, int pageRecords) throws SolrServerException {
+        SolrServer solrServer = new HttpSolrServer("http://localhost:8984/solr");
         SolrQuery query = new SolrQuery();
         query.setQuery(String.format("(first_name:%s* OR last_name:%s* OR email:%s*) AND companyId:%s", value, value, value, companyId));
 
@@ -350,7 +351,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         query.setFields("id");
 
         QueryResponse response = solrServer.query(query);
-
+        solrServer.shutdown();
         return response.getResults();
     }
 

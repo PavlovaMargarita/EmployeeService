@@ -1,4 +1,4 @@
-app.controller("employeeListController", function ($scope, $rootScope, $http, PagerService, $route) {
+app.controller("employeeListController", function ($scope, $rootScope, $http, PagerService) {
 
     $scope.range = [];
     $scope.currentPage = 1;
@@ -37,8 +37,9 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
 
     $scope.getRecords = {};
     $scope.getRecords.doClick = function (pageNumber) {
+        var response;
         if($scope.statusForList == 'list'){
-            var response = $http({
+            response = $http({
                 method: "get",
                 url: "/EmployeeService/employee/employeeList",
                 params: {currentPage: pageNumber, pageRecords: $rootScope.recordsOnPage}
@@ -61,7 +62,7 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
                 });
             });
         } else{
-            var response = $http({
+            response = $http({
                 method: "post",
                 url: "/EmployeeService/employee/search",
                 data: {

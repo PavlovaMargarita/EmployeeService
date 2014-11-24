@@ -26,4 +26,10 @@ app.controller("payController", function ($scope, $rootScope, $http) {
             });
         }
     }
+
+    $scope.cancel = {};
+    $scope.cancel.doClick = function(){
+        $location.path('/employeeList');
+        $location.replace();
+    }
 });

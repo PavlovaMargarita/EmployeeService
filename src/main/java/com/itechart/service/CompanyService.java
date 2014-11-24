@@ -19,7 +19,6 @@ public interface CompanyService {
     public CompanyDTO readCompany(Long id);
     public Long createCompany(CompanyDTO companyDTO);
     public Date getDateBoundaryRefill();
-    public Long getCurrentCompanyId();
-    public void pay(String number);
+    public void pay(String number) throws Exception;
     public CompanyDTO getCurrentCompany();
 }

@@ -47,116 +47,127 @@ public class EmployeeServiceImpl implements EmployeeService {
     private PositionInCompanyRepository positionInCompanyRepository;
 
     private String solrUrl = "http://localhost:8984/solr";
-    private SolrServer solrServer = new HttpSolrServer( solrUrl );
+    private SolrServer solrServer = new HttpSolrServer(solrUrl);
 
     @Override
     @Transactional
-    public List <EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords) {
+    public List<EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords) {
         Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
-        Pageable topTen = new PageRequest(pageNumber, pageRecords);
-        Logger.getLogger(EmployeeServiceImpl.class).info("Read Employee List, page = "+ pageNumber+", count=" + pageRecords);
-        List<Employee> employeeList = employeeRepository.readEmployeeList(companyId, topTen);
-        List <EmployeeDTO> employeeDTOList = new ArrayList<>(employeeList.size());
-        for(Employee employee: employeeList){
+        Pageable pageable = new PageRequest(pageNumber, pageRecords);
+
+        Logger.getLogger(EmployeeServiceImpl.class).info(String.format("Read Employee List, page=%s, pageRecords=%s ", pageNumber, pageRecords));
+
+        List<Employee> employeeList = employeeRepository.readEmployeeList(companyId, pageable);
+
+        List<EmployeeDTO> employeeDTOList = new ArrayList<>(employeeList.size());
+        for (Employee employee : employeeList) {
             employeeDTOList.add(employeeToEmployeeDTO(employee));
         }
+
         return employeeDTOList;
     }
 
     @Override
     public EmployeeDTO readEmployee(Long id) {
-        Logger.getLogger(EmployeeService.class).info(String.format("Read Employee by id %s",id));
+        Logger.getLogger(EmployeeService.class).info(String.format("Read Employee by id %s", id));
+
         Employee employee = employeeRepository.findOne(id);
+
         Logger.getLogger(EmployeeService.class).info("Return Employee" + employee.toString());
+
         return employeeToEmployeeDTO(employee);
     }
 
     @Override
-    public Long createEmployee(EmployeeDTO employeeDTO) {
+    public Long createEmployee(EmployeeDTO employeeDTO) throws IOException, SolrServerException {
         Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
+
         employeeDTO.setCompanyId(companyId);
         Employee employee = employeeDTOToEmployee(employeeDTO);
+
         Logger.getLogger(EmployeeService.class).info("Create Employee " + employee.toString());
+
         employee = employeeRepository.save(employee);
         saveToSolr(employee);
+
         return employee.getId();
 
     }
 
     @Override
     @Transactional
-    public Long updateEmployee(EmployeeDTO employeeDTO) {
+    public Long updateEmployee(EmployeeDTO employeeDTO) throws IOException, SolrServerException {
         Employee employee = employeeDTOToEmployee(employeeDTO);
         employee.setId(employeeDTO.getId());
+
         Logger.getLogger(EmployeeService.class).info("Update Employee " + employee.toString());
+
         employee = employeeRepository.save(employee);
-        if(employee.getFired()){
+        if (employee.getFired()) {
             deleteInSolr(employee);
         } else {
             saveToSolr(employee);
         }
+
         return employeeDTO.getId();
     }
 
     @Override
     public long employeeCount() {
-        Long companyId =CurrentEmployeeParam.getCurrentCompanyId();
+        Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
+
         Logger.getLogger(EmployeeServiceImpl.class).info("Read employee count");
+
         return employeeRepository.employeeCount(companyId);
     }
 
     @Override
-    public void loadPhoto(MultipartFile photo, Long id) {
-        try {
-            if(ImageIO.read(photo.getInputStream()) == null){
-                System.out.println("bad image");
+    public void loadPhoto(MultipartFile photo, Long id) throws Exception {
+        if (ImageIO.read(photo.getInputStream()) == null) {
+            Logger.getLogger(EmployeeService.class).info(String.format("Try to save incorrect image. Employee id=%s", id));
+            throw new Exception("Try to save incorrect image");
+        } else {
+            //create new photo path
+            String location = "C:/apache-tomcat-7.0.56/webapps/EmployeeService/files/company/";
+            StringBuilder photoPath = new StringBuilder(location);
+            Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
+            photoPath.append(companyId);
+            photoPath.append("/photoEmployee/");
+            photoPath.append(id);
+            photoPath.append("/");
 
-            } else {
-                //create new photo path
-                String location = "C:/apache-tomcat-7.0.56/webapps/EmployeeService/files/company/";
-                StringBuilder photoPath = new StringBuilder(location);
-                Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
-                photoPath.append(companyId);
-                photoPath.append("/photoEmployee/");
-                photoPath.append(id);
-                photoPath.append("/");
-
-                String fileName  = photo.getOriginalFilename();
-                File pathFile = new File(photoPath.toString());
-                if(!pathFile.exists()){
-                    pathFile.mkdir();
+            String fileName = photo.getOriginalFilename();
+            File pathFile = new File(photoPath.toString());
+            if (!pathFile.exists()) {
+                if(!pathFile.mkdir()){
+                    Logger.getLogger(EmployeeServiceImpl.class).error(String.format("Can not create directory for save image. Directory: %s", pathFile));
+                    throw new Exception("Can not create directory for save image");
                 }
-
-                pathFile = new File(photoPath.toString() + fileName);
-                System.out.println(pathFile);
-                //delete old image
-                EmployeeDTO employeeDTO = readEmployee(id);
-                try {
-                    if(!employeeDTO.getPhotoURL().equals("t"))
-                        Files.delete(Paths.get(photoPath.toString() + employeeDTO.getPhotoURL()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    photo.transferTo(pathFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //save url on database
-                Logger.getLogger(EmployeeServiceImpl.class).info("Load file employee, id = " + employeeDTO.getId());
-                employeeDTO.setPhotoURL(fileName);
-                updateEmployee(employeeDTO);
             }
-        } catch (IOException e) {
-            //e.printStackTrace();
-            System.out.println("fail");
+
+            pathFile = new File(photoPath.toString() + fileName);
+            System.out.println(pathFile);
+
+            //delete old image
+            EmployeeDTO employeeDTO = readEmployee(id);
+            if (!employeeDTO.getPhotoURL().equals("t"))
+                Files.delete(Paths.get(photoPath.toString() + employeeDTO.getPhotoURL()));
+
+            photo.transferTo(pathFile);
+
+            //save url on database
+            Logger.getLogger(EmployeeServiceImpl.class).info("Load file employee, id = " + employeeDTO.getId());
+            employeeDTO.setPhotoURL(fileName);
+            updateEmployee(employeeDTO);
         }
 
     }
 
     @Override
     public EmployeeDTO readCurrentEmployee() {
+        Logger.getLogger(EmployeeService.class).info("Read current employee");
         Long employeeId = CurrentEmployeeParam.getCurrentEmployeeId();
+
         return readEmployee(employeeId);
     }
 
@@ -164,35 +175,40 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List readRoleEnumForCurrentEmployee() {
         Long employeeId = CurrentEmployeeParam.getCurrentEmployeeId();
         EmployeeDTO employeeDTO = readEmployee(employeeId);
+        Logger.getLogger(EmployeeServiceImpl.class).info(String.format("Read role enum list for employee with id=%s", employeeId));
         List<RoleEnum> roleList = new ArrayList<>();
-        for(int i = 0; i < RoleEnum.values().length; i++) {
-            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_HRM) && (employeeDTO.getRole().equals(RoleEnum.ROLE_HRM) || employeeDTO.getRole().equals(RoleEnum.ROLE_ADMIN)))
-                roleList.add(RoleEnum.values()[i]);
-            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_ADMIN) && (employeeDTO.getRole().equals(RoleEnum.ROLE_HRM) || employeeDTO.getRole().equals(RoleEnum.ROLE_CEO)))
-                roleList.add(RoleEnum.values()[i]);
-            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_EMPLOYEE) && employeeDTO.getRole().equals(RoleEnum.ROLE_HRM))
-                roleList.add(RoleEnum.values()[i]);
 
+        for (int i = 0; i < RoleEnum.values().length; i++) {
+            if (RoleEnum.values()[i].equals(RoleEnum.ROLE_HRM) && (employeeDTO.getRole().equals(RoleEnum.ROLE_HRM) || employeeDTO.getRole().equals(RoleEnum.ROLE_ADMIN)))
+                roleList.add(RoleEnum.values()[i]);
+            if (RoleEnum.values()[i].equals(RoleEnum.ROLE_ADMIN) && (employeeDTO.getRole().equals(RoleEnum.ROLE_HRM) || employeeDTO.getRole().equals(RoleEnum.ROLE_CEO)))
+                roleList.add(RoleEnum.values()[i]);
+            if (RoleEnum.values()[i].equals(RoleEnum.ROLE_EMPLOYEE) && employeeDTO.getRole().equals(RoleEnum.ROLE_HRM))
+                roleList.add(RoleEnum.values()[i]);
         }
+
         return roleList;
     }
 
     @Override
     public List readRoleEnum() {
+        Logger.getLogger(EmployeeServiceImpl.class).info("Read role enum list");
         List<RoleEnum> roleList = new ArrayList<>();
-        for(int i = 0; i < RoleEnum.values().length; i++) {
-            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_HRM))
+
+        for (int i = 0; i < RoleEnum.values().length; i++) {
+            if (RoleEnum.values()[i].equals(RoleEnum.ROLE_HRM))
                 roleList.add(RoleEnum.values()[i]);
-            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_ADMIN))
+            if (RoleEnum.values()[i].equals(RoleEnum.ROLE_ADMIN))
                 roleList.add(RoleEnum.values()[i]);
-            if(RoleEnum.values()[i].equals(RoleEnum.ROLE_EMPLOYEE))
+            if (RoleEnum.values()[i].equals(RoleEnum.ROLE_EMPLOYEE))
                 roleList.add(RoleEnum.values()[i]);
         }
+
         return roleList;
     }
 
     @Override
-    public void createEmployeeCeo(EmployeeDTO employeeDTO) {
+    public void createEmployeeCeo(EmployeeDTO employeeDTO) throws IOException, SolrServerException {
         Employee employee = employeeDTOToEmployee(employeeDTO);
         employee.setFired(false);
         PositionInCompany positionInCompany = new PositionInCompany();
@@ -201,42 +217,46 @@ public class EmployeeServiceImpl implements EmployeeService {
         positionInCompanyRepository.save(positionInCompany);
         employee.setPositionInCompany(positionInCompany);
         employee = employeeRepository.save(employee);
+        Logger.getLogger(EmployeeServiceImpl.class).info("Create employee CEO:" + employee.toString());
         saveToSolr(employee);
     }
 
     @Override
     public EmployeeDTO readEmployeeCeoByCompanyId(Long companyId) {
+        Logger.getLogger(EmployeeServiceImpl.class).info(String.format("Read employee CEO for company with id=%s",companyId));
         Employee employee = employeeRepository.readEmployeeCeo(companyId);
         return employeeToEmployeeDTO(employee);
     }
 
     @Override
-    public SearchResult search(String searchValue, int page, int pageRecords) {
+    public SearchResult search(String searchValue, int page, int pageRecords) throws SolrServerException {
+        Logger.getLogger(EmployeeServiceImpl.class).info(String.format("Search employee with searchValue=%s, page=%s, pageRecords=%s",searchValue, page, pageRecords));
         String companyId = CurrentEmployeeParam.getCurrentCompanyId().toString();
-        SolrDocumentList solrDocuments =searchInSolr(searchValue,companyId, page, pageRecords);
+        SolrDocumentList solrDocuments = searchInSolr(searchValue, companyId, page, pageRecords);
         SearchResult searchResult = new SearchResult();
 
         List<Long> idList = new ArrayList<>(solrDocuments.size());
-        for(SolrDocument solrDocument: solrDocuments){
+        for (SolrDocument solrDocument : solrDocuments) {
             idList.add(Long.parseLong(solrDocument.get("id").toString()));
         }
-        List <Employee> employeeList = employeeRepository.findByIdIn(idList);
-        List <EmployeeDTO> employeeDTOList = new ArrayList<>(employeeList.size());
-        for(Employee employee: employeeList){
+        List<Employee> employeeList = employeeRepository.findByIdIn(idList);
+
+        List<EmployeeDTO> employeeDTOList = new ArrayList<>(employeeList.size());
+        for (Employee employee : employeeList) {
             employeeDTOList.add(employeeToEmployeeDTO(employee));
         }
+
         searchResult.setEmployeeList(employeeDTOList);
-//        searchResult.setEmployeeList(solrListToEmployeeList(solrDocuments));
         searchResult.setTotalSearchCount(solrDocuments.getNumFound());
         return searchResult;
     }
 
-    private EmployeeDTO employeeToEmployeeDTO(Employee employee){
+    private EmployeeDTO employeeToEmployeeDTO(Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(employee.getId());
         employeeDTO.setF_name(employee.getFirstName());
         employeeDTO.setS_name(employee.getLastName());
-        if(employee.getDepartment() != null ) {
+        if (employee.getDepartment() != null) {
             employeeDTO.setDepartmentId(employee.getDepartment().getId());
             employeeDTO.setDepartmentName(employee.getDepartment().getDepartmentName());
         }
@@ -248,7 +268,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDTO.setHouse(employee.getHouse());
         employeeDTO.setFlat(employee.getFlat());
         employeeDTO.setPositionInCompanyId(employee.getPositionInCompany().getId());
-        if(employee.getAddress() != null) {
+        if (employee.getAddress() != null) {
             employeeDTO.setAddressId(employee.getAddress().getId());
         }
         employeeDTO.setDateContractEnd(employee.getDateContractEnd());
@@ -263,7 +283,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeDTO;
     }
 
-    private Employee employeeDTOToEmployee(EmployeeDTO employeeDTO){
+    private Employee employeeDTOToEmployee(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         employee.setFirstName(employeeDTO.getF_name());
         employee.setLastName(employeeDTO.getS_name());
@@ -276,15 +296,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setHouse(employeeDTO.getHouse());
         employee.setFlat(employeeDTO.getFlat());
         employee.setPhotoURL(employeeDTO.getPhotoURL());
-        if(employeeDTO.getAddressId() != null) {
+        if (employeeDTO.getAddressId() != null) {
             Address address = companyRepository.readAddress(employeeDTO.getAddressId());
             employee.setAddress(address);
         }
-        if(employeeDTO.getDepartmentId() != null) {
+        if (employeeDTO.getDepartmentId() != null) {
             Department department = companyRepository.readDepartment(employeeDTO.getDepartmentId());
             employee.setDepartment(department);
         }
-        if(employeeDTO.getPositionInCompanyId() != null) {
+        if (employeeDTO.getPositionInCompanyId() != null) {
             PositionInCompany positionInCompany = positionInCompanyRepository.findOne(employeeDTO.getPositionInCompanyId());
             employee.setPositionInCompany(positionInCompany);
         }
@@ -301,7 +321,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
-    private void saveToSolr(Employee employee){
+    private void saveToSolr(Employee employee) throws IOException, SolrServerException {
         // save to solr
         SolrInputDocument doc = new SolrInputDocument();
         doc.addField("id", employee.getId().toString());
@@ -309,44 +329,29 @@ public class EmployeeServiceImpl implements EmployeeService {
         doc.addField("last_name", employee.getLastName());
         doc.addField("email", employee.getEmail());
         doc.addField("companyId", employee.getCompany().getId());
-        try {
-            solrServer.add(doc);
-            solrServer.commit();
-        } catch (SolrServerException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        solrServer.add(doc);
+        solrServer.commit();
+
     }
 
-    private void deleteInSolr(Employee employee){
-        try {
-            solrServer.deleteById(employee.getId().toString());
-            solrServer.commit();
-        } catch (SolrServerException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void deleteInSolr(Employee employee) throws IOException, SolrServerException {
+        solrServer.deleteById(employee.getId().toString());
+        solrServer.commit();
     }
 
 
-    private SolrDocumentList searchInSolr(String value, String companyId, int page, int pageRecords){
+    private SolrDocumentList searchInSolr(String value, String companyId, int page, int pageRecords) throws SolrServerException {
         SolrQuery query = new SolrQuery();
-        query.setQuery("(first_name:" + value + "* OR last_name:" + value + "* OR email:" + value + "*) AND companyId:" + companyId);
+        query.setQuery(String.format("(first_name:%s* OR last_name:%s* OR email:%s*) AND companyId:%s", value, value, value, companyId));
+
         query.setStart(page * pageRecords);
         query.setRows(pageRecords);
         query.setFields("id");
-        QueryResponse response = null;
-        try {
-            response = solrServer.query(query);
-        } catch (SolrServerException e) {
-            e.printStackTrace();
-        }
-        if(response != null) {
-            return response.getResults();
-        } else
-            return null;
+
+        QueryResponse response = solrServer.query(query);
+
+        return response.getResults();
     }
 
 }

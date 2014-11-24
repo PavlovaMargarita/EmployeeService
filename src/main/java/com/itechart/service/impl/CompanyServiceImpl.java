@@ -20,6 +20,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -36,37 +38,47 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<PositionInCompanyDTO> readPositionInCompanyList() {
         Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
-        Pageable topTen = new PageRequest(0, 10);
-        Logger.getLogger(CompanyServiceImpl.class).info("Read PositionInCompanyList");
-        List<PositionInCompany> positionInCompanyList = positionInCompanyRepository.readPositionInCompanyList(companyId, topTen);
+        Pageable pageable = new PageRequest(0, 10);
+
+        Logger.getLogger(CompanyServiceImpl.class).info("Read PositionInCompany List");
+
+        List<PositionInCompany> positionInCompanyList = positionInCompanyRepository.readPositionInCompanyList(companyId, pageable);
+
         List<PositionInCompanyDTO> positionInCompanyDTOList = new ArrayList<>(positionInCompanyList.size());
         for (PositionInCompany positionInCompany : positionInCompanyList) {
             positionInCompanyDTOList.add(positionInCompanyToPositionInCompanyDTO(positionInCompany));
         }
+
         return positionInCompanyDTOList;
     }
 
     @Override
     public List<DepartmentDTO> readDepartmentList() {
         Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
-        Pageable topTen = new PageRequest(0, 10);
-        Logger.getLogger(CompanyServiceImpl.class).info("Read Department ");
-        List<Department> departmentList = companyRepository.readDepartmentList(companyId, topTen);
+        Pageable pageable = new PageRequest(0, 10);
+
+        Logger.getLogger(CompanyServiceImpl.class).info("Read Department List");
+
+        List<Department> departmentList = companyRepository.readDepartmentList(companyId, pageable);
+
         List<DepartmentDTO>  departmentDTOList = new ArrayList<>(departmentList.size());
         for (Department department : departmentList) {
             departmentDTOList.add(departmentToDepartmentDTO(department));
         }
+
         return departmentDTOList;
     }
 
     @Override
     public List<AddressDTO> readAddressList(Long departmentId) {
-        Logger.getLogger(CompanyServiceImpl.class).info("Read Address List for Department");
+        Logger.getLogger(CompanyServiceImpl.class).info(String.format("Read Address List for Department Id = %s", departmentId));
+
         List<Address> addressList = companyRepository.readAddressList(departmentId);
         List<AddressDTO> addressDTOList = new ArrayList<>(addressList.size());
         for (Address address : addressList) {
             addressDTOList.add(addressToAddressDTO(address));
         }
+
         return addressDTOList;
     }
 
@@ -74,17 +86,8 @@ public class CompanyServiceImpl implements CompanyService {
     public void updateCompany(CompanyDTO companyDTO) {
         Company company = companyDTOToCompany(companyDTO);
         company.setId(companyDTO.getId());
-//        company.setAccountSum(companyDTO.getAccountSum() + companyDTO.getAddSum());
-//        java.util.Date currentDate = new java.util.Date();
-//        java.util.Date companyDate = new java.util.Date(company.getDateBoundaryRefill().getTime());
-//        Calendar cal = Calendar.getInstance();
-//        while (currentDate.after(companyDate) && company.getAccountSum() - Params.COST_OF_USING_MONTH >= 0) {
-//            company.setAccountSum(company.getAccountSum() - Params.COST_OF_USING_MONTH);
-//            cal.setTime(companyDate);
-//            cal.add(Calendar.MONTH, 1);
-//            company.setDateBoundaryRefill(new java.sql.Date((cal.getTime()).getTime()));
-//            companyDate = new java.util.Date(company.getDateBoundaryRefill().getTime());
-//        }
+        Logger.getLogger(CompanyServiceImpl.class).info("Update company: " + company.toString());
+
         switch (companyDTO.getCompanyStatus()) {
             case CONTINUE_FUNCTIONING:
                 Logger.getLogger(CompanyServiceImpl.class).info("Update company:" + company.toString());
@@ -105,7 +108,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<CompanyDTO> readCompanyList(int pageNumber, int pageRecords) {
         Pageable recordsCount = new PageRequest(pageNumber, pageRecords);
-        Logger.getLogger(CompanyServiceImpl.class).info("Read company list, page = " + pageNumber);
+
+        Logger.getLogger(CompanyServiceImpl.class).info("Read company list, pageNumber=" + pageNumber + ", pageRecords=" + pageRecords);
+
         List<Company> companyList = companyRepository.readCompanyList(recordsCount);
         List<CompanyDTO> companyDTOList = new ArrayList<>(companyList.size());
         for (Company company : companyList) {
@@ -123,6 +128,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<CompanyStatusDTO> readCompanyStatusEnum() {
         List<CompanyStatusDTO> companyTaskEnum = new ArrayList<>(SexEnum.values().length);
+        Logger.getLogger(CompanyServiceImpl.class).info("Read company status list");
+
         for (int i = 0; i < CompanyStatusEnum.values().length; i++) {
             CompanyStatusDTO companyStatusDTO = new CompanyStatusDTO();
             companyStatusDTO.setCompanyStatusEnum(CompanyStatusEnum.values()[i]);
@@ -137,23 +144,27 @@ public class CompanyServiceImpl implements CompanyService {
             }
             companyTaskEnum.add(companyStatusDTO);
         }
+
         return companyTaskEnum;
     }
 
     @Override
     public CompanyDTO readCompany(Long id) {
         Logger.getLogger(CompanyServiceImpl.class).info("Read company by id = " + id);
+
         Company company = companyRepository.findOne(id);
+
         return companyToCompanyDTO(company);
     }
 
     @Override
     public Long createCompany(CompanyDTO companyDTO) {
         Company company = companyDTOToCompany(companyDTO);
-//        company.setAccountSum(companyDTO.getAddSum());
         company.setCanLogin(true);
         company.setCompanyStatus(CompanyStatusEnum.CONTINUE_FUNCTIONING);
+
         Logger.getLogger(CompanyServiceImpl.class).info("Create company: " + company.toString());
+
         company = companyRepository.save(company);
 
         return company.getId();
@@ -163,34 +174,41 @@ public class CompanyServiceImpl implements CompanyService {
     public Date getDateBoundaryRefill() {
         Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
         CompanyDTO companyDTO = readCompany(companyId);
+
         Logger.getLogger(CompanyServiceImpl.class).info("Get date boundary refill");
+
         return companyDTO.getDateBoundaryRefill();
     }
 
     @Override
-    public Long getCurrentCompanyId() {
-        return CurrentEmployeeParam.getCurrentCompanyId();
-    }
-
-    @Override
-    public void pay(String number) {
-        if(accountNumberRepository.readAccountNumber(number) == null){
-            AccountNumber accountNumber = new AccountNumber();
-            accountNumber.setNumber(number);
-            accountNumberRepository.save(accountNumber);
-            Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
-            CompanyDTO companyDTO = readCompany(companyId);
-            java.util.Date companyDate = new java.util.Date(companyDTO.getDateBoundaryRefill().getTime());
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(companyDate);
-            cal.add(Calendar.MONTH, 1);
-            companyDTO.setDateBoundaryRefill(new java.sql.Date((cal.getTime()).getTime()));
-            this.updateCompany(companyDTO);
+    public void pay(String number) throws Exception {
+        Pattern pattern = Pattern.compile("^((([0-9]){3}){1}/(19|20)?[0-9]{2}(0?[1-9]|[12][0-9][3][01]){2}(0?[1-9]|1[012]){2})");
+        Matcher matcher = pattern.matcher(number);
+        if(matcher.matches()){
+            if(accountNumberRepository.readAccountNumber(number) == null){
+                Logger.getLogger(CompanyServiceImpl.class).info(String.format("Pay with accountNumber=%s",number));
+                AccountNumber accountNumber = new AccountNumber();
+                accountNumber.setNumber(number);
+                accountNumberRepository.save(accountNumber);
+                Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
+                CompanyDTO companyDTO = readCompany(companyId);
+                java.util.Date companyDate = new java.util.Date(companyDTO.getDateBoundaryRefill().getTime());
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(companyDate);
+                cal.add(Calendar.MONTH, 1);
+                companyDTO.setDateBoundaryRefill(new java.sql.Date((cal.getTime()).getTime()));
+                this.updateCompany(companyDTO);
+            } else{
+                throw  new Exception("This account number has already been entered previously");
+            }
+        } else{
+            throw  new Exception("Incorrect account number");
         }
     }
 
     @Override
     public CompanyDTO getCurrentCompany() {
+        Logger.getLogger(CompanyServiceImpl.class).info("Read current company");
         Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
         return readCompany(companyId);
     }
@@ -237,7 +255,6 @@ public class CompanyServiceImpl implements CompanyService {
         CompanyDTO companyDTO = new CompanyDTO();
         companyDTO.setId(company.getId());
         companyDTO.setCompanyName(company.getCompanyName());
-//        companyDTO.setAccountSum(company.getAccountSum());
         companyDTO.setDateBoundaryRefill(company.getDateBoundaryRefill());
         companyDTO.setCanLogin(company.getCanLogin());
         companyDTO.setCompanyStatus(company.getCompanyStatus());
@@ -250,7 +267,6 @@ public class CompanyServiceImpl implements CompanyService {
     private Company companyDTOToCompany(CompanyDTO companyDTO) {
         Company company = new Company();
         company.setCompanyName(companyDTO.getCompanyName());
-//        company.setAccountSum(companyDTO.getAccountSum());
         company.setDateBoundaryRefill(companyDTO.getDateBoundaryRefill());
         company.setCanLogin(companyDTO.getCanLogin());
         company.setCompanyStatus(companyDTO.getCompanyStatus());
@@ -258,6 +274,5 @@ public class CompanyServiceImpl implements CompanyService {
         company.setCompanyPlan(companyDTO.getCompanyPlan());
         return company;
     }
-
 
 }

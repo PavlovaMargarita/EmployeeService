@@ -5,11 +5,13 @@ import com.itechart.dto.SearchResult;
 import com.itechart.dto.SearchString;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -36,7 +38,7 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreate")
     public
     @ResponseBody
-    Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO) {
+    Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
         return employeeService.createEmployee(employeeDTO);
     }
@@ -51,7 +53,7 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeUpdate")
     public
     @ResponseBody
-    Long saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO) {
+    Long saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeUpdate ");
         return employeeService.updateEmployee(employeeDTO);
     }
@@ -83,7 +85,7 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreateCEO")
     public
     @ResponseBody
-    void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO) {
+    void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
         employeeService.createEmployeeCeo(employeeDTO);
     }
@@ -99,7 +101,7 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.POST, value = "/search")
     public
     @ResponseBody
-    SearchResult search(@RequestBody SearchString searchValue, @RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
+    SearchResult search(@RequestBody SearchString searchValue, @RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) throws SolrServerException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/search");
         return employeeService.search(searchValue.getValue(), currentPage - 1, pageRecords);
     }

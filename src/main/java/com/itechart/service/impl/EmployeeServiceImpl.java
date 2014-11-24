@@ -150,6 +150,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             if (!employeeDTO.getPhotoURL().equals("t"))
                 Files.delete(Paths.get(photoPath.toString() + employeeDTO.getPhotoURL()));
 
+            Logger.getLogger(EmployeeServiceImpl.class).info("Load file employee, file:" + photo);
             photo.transferTo(pathFile);
 
             //save url on database

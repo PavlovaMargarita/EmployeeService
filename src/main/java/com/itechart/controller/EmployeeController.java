@@ -37,9 +37,19 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreate")
     @ResponseBody
-    public Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
+    public Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO){
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
-        return employeeService.createEmployee(employeeDTO);
+        Long idEmployee;
+        try {
+            idEmployee = employeeService.createEmployee(employeeDTO);
+        } catch (IOException e) {
+            Logger.getLogger(EmployeeController.class).error("Exception: " + e.toString());
+            throw new com.itechart.exception.IOException();
+        } catch (SolrServerException e) {
+            Logger.getLogger(EmployeeController.class).error("Solr connection pool shutdown or bad query. Stack trace:" + e.toString());
+            throw new com.itechart.exception.SolrServerException();
+        }
+        return idEmployee;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/employeeById")
@@ -53,17 +63,31 @@ public class EmployeeController {
     @ResponseBody
     public Long saveEmployeeUpdate(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeUpdate ");
-        return employeeService.updateEmployee(employeeDTO);
+        Long idEmployee;
+        try {
+            idEmployee = employeeService.updateEmployee(employeeDTO);
+        } catch (IOException e) {
+            Logger.getLogger(EmployeeController.class).error("Exception: " + e.toString());
+            throw new com.itechart.exception.IOException();
+        } catch (SolrServerException e) {
+            Logger.getLogger(EmployeeController.class).error("Solr connection pool shutdown or bad query. Stack trace:" + e.toString());
+            throw new com.itechart.exception.SolrServerException();
+        }
+        return idEmployee;
     }
 
     @ResponseBody
     @RequestMapping(value = "/uploadPhoto", method = RequestMethod.POST)
     public void uploadFile(@RequestParam(value = "photo", required = false) MultipartFile file,
-                           @RequestParam(value = "idEmployee") String data) throws Exception {
+                           @RequestParam(value = "idEmployee") String data) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/uploadPhoto ");
         Long id = Long.parseLong(data);
-        employeeService.loadPhoto(file, id);
-
+        try {
+            employeeService.loadPhoto(file, id);
+        } catch (Exception e) {
+            Logger.getLogger(EmployeeController.class).error("File upload exception: " + e.toString());
+            throw new com.itechart.exception.IOException();
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/currentEmployee")
@@ -82,9 +106,17 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreateCEO")
     @ResponseBody
-    public void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO) throws IOException, SolrServerException {
+    public void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO){
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
-        employeeService.createEmployeeCeo(employeeDTO);
+        try {
+            employeeService.createEmployeeCeo(employeeDTO);
+        } catch (IOException e) {
+            Logger.getLogger(EmployeeController.class).error("Exception: " + e.toString());
+            throw new com.itechart.exception.IOException();
+        } catch (SolrServerException e) {
+            Logger.getLogger(EmployeeController.class).error("Solr connection pool shutdown or bad query. Stack trace:" + e.toString());
+            throw new com.itechart.exception.SolrServerException();
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/employeeCeoByCompanyId")
@@ -98,11 +130,11 @@ public class EmployeeController {
     @ResponseBody
     public SearchResult search(@RequestBody SearchString searchValue, @RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/search");
-        SearchResult searchResult = null;
+        SearchResult searchResult;
         try {
             searchResult = employeeService.search(searchValue.getValue(), currentPage - 1, pageRecords);
         } catch (SolrServerException e) {
-            Logger.getLogger(EmployeeController.class).debug("Solr connection pool shutdown or bad query. Stack trace:" + e.getStackTrace());
+            Logger.getLogger(EmployeeController.class).error("Solr connection pool shutdown or bad query. Stack trace:" + e.toString());
             throw new com.itechart.exception.SolrServerException();
         }
         return searchResult;

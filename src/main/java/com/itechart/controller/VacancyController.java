@@ -18,79 +18,45 @@ public class VacancyController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/vacancyList")
     @ResponseBody
-    public List<Vacancy> vacancyList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
+    public List<Vacancy> vacancyList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) throws UnknownHostException {
         Logger.getLogger(VacancyController.class).info("Request: /EmployeeService/vacancy/vacancyList ");
-        List <Vacancy> vacancyList;
-        try {
-            vacancyList = vacancyService.readVacancyList(currentPage, pageRecords);
-        } catch (UnknownHostException e) {
-            Logger.getLogger(VacancyController.class).info("Mongo unknown host exception");
-            throw new com.itechart.exception.UnknownHostException();
-        }
-        return vacancyList;
+        return vacancyService.readVacancyList(currentPage, pageRecords);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/vacancyCount")
     @ResponseBody
-    public long positionCount() {
+    public long positionCount() throws UnknownHostException {
         Logger.getLogger(VacancyController.class).info("Request: /EmployeeService/vacancy/vacancyCount ");
-        long count;
-        try {
-            count = vacancyService.vacancyCount();
-        } catch (UnknownHostException e) {
-            Logger.getLogger(VacancyController.class).info("Mongo unknown host exception");
-            throw new com.itechart.exception.UnknownHostException();
-        }
-        return count;
+        return vacancyService.vacancyCount();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveVacancyCreate")
     @ResponseBody
-    public void saveVacancyCreate(@RequestBody Vacancy vacancy){
+    public void saveVacancyCreate(@RequestBody Vacancy vacancy) throws UnknownHostException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/vacancy/saveVacancyCreate");
-        try {
-            vacancyService.createVacancy(vacancy);
-        } catch (UnknownHostException e) {
-            Logger.getLogger(EmployeeController.class).error("Mongo unknown host exception");
-            throw new com.itechart.exception.UnknownHostException();
-        }
+        vacancyService.createVacancy(vacancy);
+
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveVacancyUpdate")
     @ResponseBody
-    public void saveVacancyUpdate(@RequestBody Vacancy vacancy){
+    public void saveVacancyUpdate(@RequestBody Vacancy vacancy) throws UnknownHostException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/vacancy/saveVacancyUpdate");
-        try {
-            vacancyService.updateVacancy(vacancy);
-        } catch (UnknownHostException e) {
-            Logger.getLogger(EmployeeController.class).error("Mongo unknown host exception");
-            throw new com.itechart.exception.UnknownHostException();
-        }
+        vacancyService.updateVacancy(vacancy);
+
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/readVacancyById")
     @ResponseBody
-    public Vacancy readVacancyById(@RequestParam("id") Long id){
+    public Vacancy readVacancyById(@RequestParam("id") Long id) throws UnknownHostException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/vacancy/vacancyById");
-        Vacancy vacancy;
-        try {
-            vacancy = vacancyService.readVacancyById(id);
-        } catch (UnknownHostException e) {
-            Logger.getLogger(EmployeeController.class).error("Mongo unknown host exception");
-            throw new com.itechart.exception.UnknownHostException();
-        }
-        return vacancy;
+        return  vacancyService.readVacancyById(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/deleteVacancyById")
     @ResponseBody
-    public void deleteVacancyById(@RequestBody Vacancy vacancy){
+    public void deleteVacancyById(@RequestBody Vacancy vacancy) throws UnknownHostException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/vacancy/vacancyById");
-        try {
-            vacancyService.deleteVacancyById(vacancy.getId());
-        } catch (UnknownHostException e) {
-            Logger.getLogger(EmployeeController.class).error("Mongo unknown host exception");
-            throw new com.itechart.exception.UnknownHostException();
-        }
+        vacancyService.deleteVacancyById(vacancy.getId());
     }
 }

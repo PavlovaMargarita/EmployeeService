@@ -60,21 +60,25 @@ app.factory('ServerHttpResponseInterceptor', function($q, ErrorPopupService) {
                 var responseStatus = response.status;
                 switch(responseStatus){
                     case 500:{
-                        ErrorPopupService.showErrorMessage("Произошла серверная ошибка.\r\n" +
-                        "Приносим свои извинения за неудобства.");
-                        break;
-                    }
-                    case 403:{
-                        ErrorPopupService.showErrorMessage("Произошла серверная ошибка.\r\n" +
-                        "Приносим свои извинения за неудобства.");
+                        ErrorPopupService.showErrorMessage("При обработке запроса возникла ошибка.\r\n" +
+                        "Повторите попытку позже.");
                         break;
                     }
                     case 401:{
                         ErrorPopupService.showErrorMessage("У вас нет прав доступа, или вы не авторизированы");
                         break;
                     }
+                    case 403:{
+                        ErrorPopupService.showErrorMessage("У вас нет прав доступа, или вы не авторизированы");
+                        break;
+                    }
                     case 400:{
                         ErrorPopupService.showErrorMessage("Введены некорректные данные.");
+                        break;
+                    }
+                    default:{
+                        ErrorPopupService.showErrorMessage("При использовании программы произошла ошибка\r\n" +
+                        "Повторите попытку позже.");
                         break;
                     }
                 }

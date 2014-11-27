@@ -1,10 +1,10 @@
 package com.itechart.service.impl;
 
-import com.itechart.dto.*;
+import com.itechart.model.dto.*;
 import com.itechart.enumProperty.CompanyStatusEnum;
 import com.itechart.enumProperty.SexEnum;
 import com.itechart.model.*;
-import com.itechart.params.CurrentEmployeeParam;
+import com.itechart.params.SecurityWrapper;
 import com.itechart.repository.AccountNumberRepository;
 import com.itechart.repository.CompanyRepository;
 import com.itechart.repository.PositionInCompanyRepository;
@@ -37,7 +37,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<PositionInCompanyDTO> readPositionInCompanyList() {
-        Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
+        Long companyId = SecurityWrapper.getCurrentCompanyId();
         Pageable pageable = new PageRequest(0, 10);
 
         Logger.getLogger(CompanyServiceImpl.class).info("Read PositionInCompany List");
@@ -54,7 +54,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<DepartmentDTO> readDepartmentList() {
-        Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
+        Long companyId = SecurityWrapper.getCurrentCompanyId();
         Pageable pageable = new PageRequest(0, 10);
 
         Logger.getLogger(CompanyServiceImpl.class).info("Read Department List");
@@ -149,7 +149,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDTO readCompany(Long id) {
+    public CompanyDTO readCompanyById(Long id) {
         Logger.getLogger(CompanyServiceImpl.class).info("Read company by id = " + id);
 
         Company company = companyRepository.findOne(id);
@@ -172,8 +172,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Date getDateBoundaryRefill() {
-        Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
-        CompanyDTO companyDTO = readCompany(companyId);
+        Long companyId = SecurityWrapper.getCurrentCompanyId();
+        CompanyDTO companyDTO = readCompanyById(companyId);
 
         Logger.getLogger(CompanyServiceImpl.class).info("Get date boundary refill");
 
@@ -190,8 +190,8 @@ public class CompanyServiceImpl implements CompanyService {
                 AccountNumber accountNumber = new AccountNumber();
                 accountNumber.setNumber(number);
                 accountNumberRepository.save(accountNumber);
-                Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
-                CompanyDTO companyDTO = readCompany(companyId);
+                Long companyId = SecurityWrapper.getCurrentCompanyId();
+                CompanyDTO companyDTO = readCompanyById(companyId);
                 java.util.Date companyDate = new java.util.Date(companyDTO.getDateBoundaryRefill().getTime());
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(companyDate);
@@ -209,8 +209,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDTO getCurrentCompany() {
         Logger.getLogger(CompanyServiceImpl.class).info("Read current company");
-        Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
-        return readCompany(companyId);
+        Long companyId = SecurityWrapper.getCurrentCompanyId();
+        return readCompanyById(companyId);
     }
 
     private DepartmentDTO departmentToDepartmentDTO(Department department) {

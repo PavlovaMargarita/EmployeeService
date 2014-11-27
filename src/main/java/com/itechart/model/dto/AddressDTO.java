@@ -1,4 +1,4 @@
-package com.itechart.dto;
+package com.itechart.model.dto;
 
 public class AddressDTO {
     private Long id;

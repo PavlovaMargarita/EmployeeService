@@ -1,6 +1,6 @@
 package com.itechart.controller;
 
-import com.itechart.dto.*;
+import com.itechart.model.dto.*;
 import com.itechart.service.CompanyService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,28 +19,28 @@ public class CompanyController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/positionInCompanyList")
     @ResponseBody
-    public List<PositionInCompanyDTO> positionList() {
+    public List<PositionInCompanyDTO> readPositionList() {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/positionInCompany/positionInCompanyList ");
         return companyService.readPositionInCompanyList();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/departmentList")
     @ResponseBody
-    public List<DepartmentDTO> departmentList() {
+    public List<DepartmentDTO> readDepartmentList() {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/departmentList ");
         return companyService.readDepartmentList();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/addressList")
     @ResponseBody
-    public List<AddressDTO> addressList(@RequestParam("departmentId") Long id) {
+    public List<AddressDTO> readAddressList(@RequestParam("departmentId") Long id) {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/addressList, parameter id = " + id);
         return companyService.readAddressList(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/companyList")
     @ResponseBody
-    public List<CompanyDTO> companyList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
+    public List<CompanyDTO> readCompanyList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyList");
         return companyService.readCompanyList(currentPage - 1, pageRecords);
     }
@@ -54,9 +54,9 @@ public class CompanyController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/companyById")
     @ResponseBody
-    public CompanyDTO readCompany(@RequestParam("id") Long id) {
+    public CompanyDTO readCompanyById(@RequestParam("id") Long id) {
         Logger.getLogger(CompanyController.class).info("Request: /EmployeeService/company/companyById");
-        return companyService.readCompany(id);
+        return companyService.readCompanyById(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/companyStatusList")

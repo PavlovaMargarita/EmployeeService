@@ -1,6 +1,6 @@
 package com.itechart.service.impl;
 
-import com.itechart.dto.CountryDTO;
+import com.itechart.model.dto.CountryDTO;
 import com.itechart.model.Country;
 import com.itechart.repository.CountryRepository;
 import com.itechart.service.CountryService;

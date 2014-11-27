@@ -1,6 +1,6 @@
 package com.itechart.controller;
 
-import com.itechart.dto.CountryDTO;
+import com.itechart.model.dto.CountryDTO;
 import com.itechart.service.CountryService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

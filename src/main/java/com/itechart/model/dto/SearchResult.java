@@ -1,4 +1,4 @@
-package com.itechart.dto;
+package com.itechart.model.dto;
 
 import java.util.ArrayList;
 import java.util.List;

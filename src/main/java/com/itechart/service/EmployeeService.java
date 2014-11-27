@@ -1,7 +1,7 @@
 package com.itechart.service;
 
-import com.itechart.dto.EmployeeDTO;
-import com.itechart.dto.SearchResult;
+import com.itechart.model.dto.EmployeeDTO;
+import com.itechart.model.dto.SearchResult;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +20,9 @@ public interface EmployeeService {
     public List readRoleEnumForCurrentEmployee();
     public List readRoleEnum();
     public void createEmployeeCeo(EmployeeDTO employeeDTO) throws IOException, SolrServerException;
+
     public EmployeeDTO readEmployeeCeoByCompanyId(Long companyId);
+
     public SearchResult search(String searchValue, int page, int pageRecords) throws SolrServerException;
 
 }

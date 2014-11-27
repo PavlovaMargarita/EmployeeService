@@ -1,4 +1,4 @@
-package com.itechart.dto;
+package com.itechart.model.dto;
 
 import com.itechart.enumProperty.RoleEnum;
 import com.itechart.enumProperty.SexEnum;
@@ -8,8 +8,8 @@ import java.sql.Date;
 public class EmployeeDTO {
 
     private Long id;
-    private String f_name;
-    private String s_name;
+    private String first_name;
+    private String last_name;
     private Date dateOfBirth;
     private SexEnum sex;
     private Long countryId;
@@ -42,20 +42,20 @@ public class EmployeeDTO {
         this.id = id;
     }
 
-    public String getF_name() {
-        return f_name;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setF_name(String f_name) {
-        this.f_name = f_name;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public String getS_name() {
-        return s_name;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setS_name(String s_name) {
-        this.s_name = s_name;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
     public Date getDateOfBirth() {

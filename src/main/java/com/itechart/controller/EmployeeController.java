@@ -1,8 +1,8 @@
 package com.itechart.controller;
 
-import com.itechart.dto.EmployeeDTO;
-import com.itechart.dto.SearchResult;
-import com.itechart.dto.SearchString;
+import com.itechart.model.dto.EmployeeDTO;
+import com.itechart.model.dto.SearchResult;
+import com.itechart.model.dto.SearchString;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.*;
 
 @Controller
@@ -23,9 +24,9 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/employeeList")
     @ResponseBody
-    public List<EmployeeDTO> employeeList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) {
+    public List<EmployeeDTO> employeeList(@RequestParam("currentPage") int currentPage, @RequestParam("pageRecords") int pageRecords) throws UnknownHostException {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/employeeList ");
-        return employeeService.readEmployeeList(currentPage - 1, pageRecords);
+        return employeeService.readEmployeeList(currentPage, pageRecords);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/employeeCount")
@@ -37,7 +38,7 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreate")
     @ResponseBody
-    public Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO){
+    public Long saveEmployeeCreate(@RequestBody EmployeeDTO employeeDTO) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
         Long idEmployee;
         try {
@@ -106,7 +107,7 @@ public class EmployeeController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveEmployeeCreateCEO")
     @ResponseBody
-    public void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO){
+    public void saveEmployeeCreateCEO(@RequestBody EmployeeDTO employeeDTO) {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/saveEmployeeCreate ");
         try {
             employeeService.createEmployeeCeo(employeeDTO);
@@ -132,13 +133,14 @@ public class EmployeeController {
         Logger.getLogger(EmployeeController.class).info("Request: /EmployeeService/employee/search");
         SearchResult searchResult;
         try {
-            searchResult = employeeService.search(searchValue.getValue(), currentPage - 1, pageRecords);
+            searchResult = employeeService.search(searchValue.getValue(), currentPage, pageRecords);
         } catch (SolrServerException e) {
-            Logger.getLogger(EmployeeController.class).error("Solr connection pool shutdown or bad query. Stack trace:" + e.toString());
+//            Logger.getLogger(EmployeeController.class).error("Solr connection pool shutdown or bad query. Stack trace:" + e.toString());
             throw new com.itechart.exception.SolrServerException();
         }
         return searchResult;
     }
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/fullRoleList")
     @ResponseBody

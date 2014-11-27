@@ -1,4 +1,4 @@
-package com.itechart.dto;
+package com.itechart.model.dto;
 
 public class PositionInCompanyDTO {
     private Long id;

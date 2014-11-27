@@ -24,13 +24,14 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
             mimeType: 'application/json'
         });
         employeeCount.success(function (data) {
-            $scope.totalRecords = data - 0;
+            $scope.totalRecords = Number(data);
             $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
             $scope.range = PagerService.buildRange($scope.totalPages);
         });
     });
-    $scope.setColor = function (value) {
-        if (value) {
+
+    $scope.getClassForEmployee = function (employeeRedRow) {
+        if (employeeRedRow) {
             return "alert alert-danger";
         }
     };
@@ -56,7 +57,7 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
                     mimeType: 'application/json'
                 });
                 employeeCount.success(function (data) {
-                    $scope.totalRecords = data - 0;
+                    $scope.totalRecords = Number(data);
                     $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
                     $scope.range = PagerService.buildRange($scope.totalPages);
                 });
@@ -76,7 +77,7 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
             response.success(function(data){
                 $scope.employees = data.employeeList;
                 $scope.employees.forEach(checkDateContractEnd);
-                $scope.totalRecords = data.totalSearchCount - 0;
+                $scope.totalRecords = Number(data.totalSearchCount);
                 $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
                 $scope.range = PagerService.buildRange($scope.totalPages);
                 $scope.currentPage = pageNumber;
@@ -101,7 +102,7 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
         response.success(function (data) {
             $scope.employees = data.employeeList;
             $scope.employees.forEach(checkDateContractEnd);
-            $scope.totalRecords = data.totalSearchCount - 0;
+            $scope.totalRecords = Number(data.totalSearchCount);
             $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
             $scope.range = PagerService.buildRange($scope.totalPages);
             $scope.currentPage = 1;
@@ -210,8 +211,8 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
                 method: "post",
                 url: "/EmployeeService/employee/saveEmployeeCreate",
                 data: {
-                    f_name: $scope.employee.f_name,
-                    s_name: $scope.employee.s_name,
+                    first_name: $scope.employee.first_name,
+                    last_name: $scope.employee.last_name,
                     sex: $scope.employee.sex,
                     dateOfBirth: $scope.employee.dateOfBirth,
                     countryId: $scope.country.id,
@@ -454,8 +455,8 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 url: "/EmployeeService/employee/saveEmployeeUpdate",
                 data: {
                     id: $scope.employee.id,
-                    f_name: $scope.employee.f_name,
-                    s_name: $scope.employee.s_name,
+                    first_name: $scope.employee.first_name,
+                    last_name: $scope.employee.last_name,
                     dateOfBirth: $scope.employee.dateOfBirth,
                     sex: $scope.employee.sex,
                     countryId: $scope.country.id,
@@ -513,8 +514,8 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
                 url: "/EmployeeService/employee/saveEmployeeUpdate",
                 data: {
                     id: $scope.employee.id,
-                    f_name: $scope.employee.f_name,
-                    s_name: $scope.employee.s_name,
+                    first_name: $scope.employee.first_name,
+                    last_name: $scope.employee.last_name,
                     dateOfBirth: $scope.employee.dateOfBirth,
                     sex: $scope.employee.sex,
                     countryId: $scope.country.id,

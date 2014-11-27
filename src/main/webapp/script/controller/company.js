@@ -23,7 +23,7 @@ app.controller("companyListController", function ($scope, $rootScope, $http, Pag
             mimeType: 'application/json'
         });
         companyCount.success(function (data) {
-            $scope.totalRecords = data - 0;
+            $scope.totalRecords = Number(data);
             $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
             $scope.range = PagerService.buildRange($scope.totalPages);
         });
@@ -52,7 +52,7 @@ app.controller("companyListController", function ($scope, $rootScope, $http, Pag
                 mimeType: 'application/json'
             });
             companyCount.success(function (data) {
-                $scope.totalRecords = data - 0;
+                $scope.totalRecords = Number(data);
                 $scope.totalPages = PagerService.totalPageNumber($rootScope.recordsOnPage, $scope.totalRecords);
                 $scope.range = PagerService.buildRange($scope.totalPages);
             });

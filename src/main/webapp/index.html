@@ -20,6 +20,7 @@
     <script type="text/javascript" src="script/controller/company.js"></script>
     <script type="text/javascript" src="script/controller/pay.js"></script>
     <script type="text/javascript" src="script/directive/checklist-model.js"></script>
+    <script type="text/javascript" src="script/controller/vacancy.js"></script>
     <!--<script type="text/javascript" src="script-lib/jQuery.js"></script>-->
 
     <script type="text/javascript" src="script-lib/jquery-ui.js"></script>
@@ -29,7 +30,9 @@
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>-->
     <!--<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>-->
     <script type="text/javascript" src="script-lib/bootstrap-modal.js"></script>
-    <!--<script type="text/javascript" src="script-lib/angular.js"></script>-->
+    <!--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>-->
+    <!--<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>-->
+    <script type="text/javascript" src="script-lib/test.js"></script>
 
 </head>
 
@@ -52,6 +55,13 @@
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="#companyList">Список компаний</a></li>
                             <li><a href="#companyCreate">Добавить компанию</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" ng-show="hasAuthority(['ROLE_HRM'])">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">Вакансии <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#vacancyList">Список вакансий</a></li>
+                            <li><a href="#vacancyCreate">Добавить вакансию</a></li>
                         </ul>
                     </li>
 
@@ -88,12 +98,13 @@
     <h3><span class="label label-danger">Произведите оплату за пользование системой</span></h3>
 </div>
 
-
 <div id="errorOverlay" class="overlay">
     <div class="errorPopup" id="errorPopup">
         <p id="errorMessage">ErrorMessage</p>
     </div>
 </div>
-<div class="content" id="content" ng-view></div>
+<div class="content" id="content" ng-view>
+
+</div>
 </body>
 </html>

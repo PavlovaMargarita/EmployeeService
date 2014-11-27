@@ -1,4 +1,4 @@
-var app = angular.module("EmployeeService", ['ngRoute', 'checklist-model', 'ngCookies', 'angularFileUpload']);
+var app = angular.module("EmployeeService", ['ngRoute', 'checklist-model', 'ngCookies', 'angularFileUpload','ui.bootstrap']);
 
 app.run(function ($rootScope, $cookieStore) {
 
@@ -117,7 +117,20 @@ app.config(function ($routeProvider, $httpProvider) {
         .when('/pay', {
             templateUrl: 'pages/pay.html',
             controller: 'payController'
+        })
+        .when('/vacancyList', {
+            templateUrl: 'pages/vacancy_list.html',
+            controller: 'vacancyListController'
+        })
+        .when('/vacancyCreate', {
+            templateUrl: 'pages/vacancy_create.html',
+            controller: 'vacancyCreateController'
+        })
+        .when('/vacancyCorrect/:id', {
+            templateUrl: 'pages/vacancy_create.html',
+            controller: 'vacancyCorrectController'
         });
+
 
     $httpProvider.responseInterceptors.push('ServerHttpResponseInterceptor');
 });

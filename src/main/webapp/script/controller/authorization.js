@@ -99,8 +99,8 @@ app.controller("authorizationController", function ($scope, $http, $location, $r
         $location.replace();
     };
 
-    $scope.authorization = {};
-    $scope.authorization.doClick = function () {
+    //$scope.authorization = {};
+    $scope.authorization = function () {
         validateObject.validateAndSubmit('#formID');
     };
 });

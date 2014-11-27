@@ -1,6 +1,6 @@
 package com.itechart.controller;
 
-import com.itechart.dto.LoginDTO;
+import com.itechart.model.dto.LoginDTO;
 import com.itechart.enumProperty.RoleEnum;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;

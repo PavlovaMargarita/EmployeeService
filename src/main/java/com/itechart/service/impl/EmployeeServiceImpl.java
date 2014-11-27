@@ -1,11 +1,11 @@
 package com.itechart.service.impl;
 
-import com.itechart.dto.EmployeeDTO;
-import com.itechart.dto.SearchResult;
+import com.itechart.model.dto.EmployeeDTO;
+import com.itechart.model.dto.SearchResult;
 import com.itechart.enumProperty.RoleEnum;
 import com.itechart.model.*;
 import com.itechart.model.Employee;
-import com.itechart.params.CurrentEmployeeParam;
+import com.itechart.params.SecurityWrapper;
 import com.itechart.repository.*;
 import com.itechart.service.EmployeeService;
 import org.apache.log4j.Logger;
@@ -49,8 +49,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public List<EmployeeDTO> readEmployeeList(int pageNumber, int pageRecords) {
-        Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
-        Pageable pageable = new PageRequest(pageNumber, pageRecords);
+        Long companyId = SecurityWrapper.getCurrentCompanyId();
+        Pageable pageable = new PageRequest(pageNumber - 1, pageRecords);
 
         Logger.getLogger(EmployeeServiceImpl.class).info(String.format("Read Employee List, page=%s, pageRecords=%s ", pageNumber, pageRecords));
 
@@ -77,7 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Long createEmployee(EmployeeDTO employeeDTO) throws IOException, SolrServerException {
-        Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
+        Long companyId = SecurityWrapper.getCurrentCompanyId();
 
         employeeDTO.setCompanyId(companyId);
         Employee employee = employeeDTOToEmployee(employeeDTO);
@@ -111,7 +111,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public long employeeCount() {
-        Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
+        Long companyId = SecurityWrapper.getCurrentCompanyId();
 
         Logger.getLogger(EmployeeServiceImpl.class).info("Read employee count");
 
@@ -127,7 +127,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             //create new photo path
             String location = "C:/apache-tomcat-7.0.56/webapps/EmployeeService/files/company/";
             StringBuilder photoPath = new StringBuilder(location);
-            Long companyId = CurrentEmployeeParam.getCurrentCompanyId();
+            Long companyId = SecurityWrapper.getCurrentCompanyId();
             photoPath.append(companyId);
             photoPath.append("/photoEmployee/");
             photoPath.append(id);
@@ -164,14 +164,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO readCurrentEmployee() {
         Logger.getLogger(EmployeeService.class).info("Read current employee");
-        Long employeeId = CurrentEmployeeParam.getCurrentEmployeeId();
+        Long employeeId = SecurityWrapper.getCurrentEmployeeId();
 
         return readEmployee(employeeId);
     }
 
     @Override
     public List readRoleEnumForCurrentEmployee() {
-        Long employeeId = CurrentEmployeeParam.getCurrentEmployeeId();
+        Long employeeId = SecurityWrapper.getCurrentEmployeeId();
         EmployeeDTO employeeDTO = readEmployee(employeeId);
         Logger.getLogger(EmployeeServiceImpl.class).info(String.format("Read role enum list for employee with id=%s", employeeId));
         List<RoleEnum> roleList = new ArrayList<>();
@@ -229,8 +229,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public SearchResult search(String searchValue, int page, int pageRecords) throws SolrServerException {
         Logger.getLogger(EmployeeServiceImpl.class).info(String.format("Search employee with searchValue=%s, page=%s, pageRecords=%s",searchValue, page, pageRecords));
-        String companyId = CurrentEmployeeParam.getCurrentCompanyId().toString();
-        SolrDocumentList solrDocuments = searchInSolr(searchValue, companyId, page, pageRecords);
+        String companyId = SecurityWrapper.getCurrentCompanyId().toString();
+        SolrDocumentList solrDocuments = searchInSolr(searchValue, companyId, page - 1, pageRecords);
         SearchResult searchResult = new SearchResult();
 
         List<Long> idList = new ArrayList<>(solrDocuments.size());
@@ -252,8 +252,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeDTO employeeToEmployeeDTO(Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(employee.getId());
-        employeeDTO.setF_name(employee.getFirstName());
-        employeeDTO.setS_name(employee.getLastName());
+        employeeDTO.setFirst_name(employee.getFirstName());
+        employeeDTO.setLast_name(employee.getLastName());
         if (employee.getDepartment() != null) {
             employeeDTO.setDepartmentId(employee.getDepartment().getId());
             employeeDTO.setDepartmentName(employee.getDepartment().getDepartmentName());
@@ -283,8 +283,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private Employee employeeDTOToEmployee(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
-        employee.setFirstName(employeeDTO.getF_name());
-        employee.setLastName(employeeDTO.getS_name());
+        employee.setFirstName(employeeDTO.getFirst_name());
+        employee.setLastName(employeeDTO.getLast_name());
         employee.setDateOfBirth(employeeDTO.getDateOfBirth());
         employee.setSex(employeeDTO.getSex());
         Country country = countryRepository.findOne(employeeDTO.getCountryId());
@@ -321,39 +321,58 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private void saveToSolr(Employee employee) throws IOException, SolrServerException {
         // save to solr
-        SolrInputDocument doc = new SolrInputDocument();
-        doc.addField("id", employee.getId().toString());
-        doc.addField("first_name", employee.getFirstName());
-        doc.addField("last_name", employee.getLastName());
-        doc.addField("email", employee.getEmail());
-        doc.addField("companyId", employee.getCompany().getId());
         SolrServer solrServer = new HttpSolrServer("http://localhost:8984/solr");
-        solrServer.add(doc);
-        solrServer.commit();
-        solrServer.shutdown();
+        try {
+            SolrInputDocument doc = new SolrInputDocument();
+            doc.addField("id", employee.getId().toString());
+            doc.addField("first_name", employee.getFirstName());
+            doc.addField("last_name", employee.getLastName());
+            doc.addField("email", employee.getEmail());
+            doc.addField("companyId", employee.getCompany().getId());
+
+            solrServer.add(doc);
+            solrServer.commit();
+        } catch (SolrServerException e){
+            solrServer.rollback();
+            throw new SolrServerException("Can not save employee");
+        } finally {
+            solrServer.shutdown();
+        }
+
 
     }
 
     private void deleteInSolr(Employee employee) throws IOException, SolrServerException {
         SolrServer solrServer = new HttpSolrServer("http://localhost:8984/solr");
-        solrServer.deleteById(employee.getId().toString());
-        solrServer.commit();
-        solrServer.shutdown();
+        try {
+            solrServer.deleteById(employee.getId().toString());
+            solrServer.commit();
+        } catch (SolrServerException e) {
+            solrServer.rollback();
+            throw new SolrServerException("Can not delete employee by id");
+        } finally {
+            solrServer.shutdown();
+        }
     }
-
 
     private SolrDocumentList searchInSolr(String value, String companyId, int page, int pageRecords) throws SolrServerException {
         SolrServer solrServer = new HttpSolrServer("http://localhost:8984/solr");
-        SolrQuery query = new SolrQuery();
-        query.setQuery(String.format("(first_name:%s* OR last_name:%s* OR email:%s*) AND companyId:%s", value, value, value, companyId));
+        QueryResponse response;
+        try{
+            SolrQuery query = new SolrQuery();
+            query.setQuery(String.format("(first_name:%s* OR last_name:%s* OR email:%s*) AND companyId:%s", value, value, value, companyId));
 
-        query.setStart(page * pageRecords);
-        query.setRows(pageRecords);
-        query.setFields("id");
+            query.setStart(page * pageRecords);
+            query.setRows(pageRecords);
+            query.setFields("id");
 
-        QueryResponse response = solrServer.query(query);
-        solrServer.shutdown();
+            response = solrServer.query(query);
+        } finally {
+            solrServer.shutdown();
+        }
+
         return response.getResults();
     }
+
 
 }

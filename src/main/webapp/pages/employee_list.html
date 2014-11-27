@@ -16,7 +16,7 @@
     <br/>
     <br/>
     <br/>
-    <table class="table table-hover">
+    <table class="table table-hover" id="table">
         <thead>
         <tr class="warning">
             <th>Фамилия</th>
@@ -26,10 +26,9 @@
             <th>Редактировать</th>
         </tr>
         </thead>
-        <!--ng-style="setColor({{employee.redRow}})"-->
-        <tr data-ng-repeat="employee in employees" ng-class="setColor(employee.redRow)">
-            <td>{{employee.s_name}}</td>
-            <td>{{employee.f_name}}</td>
+        <tr data-ng-repeat="employee in employees" ng-class="getClassForEmployee(employee.redRow)" popover="{{ (employee.redRow) ? 'Заканчивается контракт' : '' }}" popover-trigger="mouseenter" >
+            <td >{{employee.last_name}}</td>
+            <td>{{employee.first_name}}</td>
             <td>{{employee.departmentName}}</td>
             <td>{{employee.dateContractEnd}}</td>
             <td><a class="btn btn-success btn-sm" href="#employeeCorrect/{{employee.id}}">Редактировать</a></td>

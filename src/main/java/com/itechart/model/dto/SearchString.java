@@ -1,4 +1,4 @@
-package com.itechart.dto;
+package com.itechart.model.dto;
 
 public class SearchString {
     private String value;

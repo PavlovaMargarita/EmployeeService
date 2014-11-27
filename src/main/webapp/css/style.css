@@ -229,3 +229,11 @@ body {
 .img-navbar{
     height: 50px;
 }
+
+tr.red-color{
+    background-color: #dca7a7!important;
+}
+
+tr.red-color:hover{
+    background-color: #e7c3c3!important;
+}

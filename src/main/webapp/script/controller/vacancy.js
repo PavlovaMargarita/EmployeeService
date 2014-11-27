@@ -61,8 +61,9 @@ app.controller("vacancyCreateController", function ($scope, $rootScope, $http, $
     $scope.vacancy = {};
 
     $scope.save = function () {
-        //var ok = validateObject.validate('#createCompanyForm');
-        //if(ok) {
+        var vacancyValidateObject = new VacancyValidator();
+        var ok = vacancyValidateObject.validate('#createVacancyForm');
+        if (ok) {
             var response = $http({
                 method: "post",
                 url: "/EmployeeService/vacancy/saveVacancyCreate",
@@ -73,12 +74,12 @@ app.controller("vacancyCreateController", function ($scope, $rootScope, $http, $
                 contentType: 'application/json',
                 mimeType: 'application/json'
             });
-            response.success(function (data) {
+            response.success(function () {
 
-                    $location.path('/vacancyList');
-                    $location.replace();
+                $location.path('/vacancyList');
+                $location.replace();
             });
-        //}
+        }
     };
 
     $scope.cancel = {};
@@ -108,42 +109,43 @@ app.controller("vacancyCorrectController", function ($scope, $http, $routeParams
     });
 
     $scope.save = function () {
-        //var ok = validateObject.validate('#createCompanyForm');
-        //if(ok) {
-        if($scope.vacancy.status == 'false') {
-            var response = $http({
-                method: "post",
-                url: "/EmployeeService/vacancy/saveVacancyUpdate",
-                data: {
-                    id: $scope.vacancy.id,
-                    description: $scope.vacancy.description,
-                    close: $scope.vacancy.status
-                },
-                dataType: 'json',
-                contentType: 'application/json',
-                mimeType: 'application/json'
-            });
-            response.success(function () {
-                $location.path('/vacancyList');
-                $location.replace();
-            });
-        } else{
-            var response = $http({
-                method: "post",
-                url: "/EmployeeService/vacancy/deleteVacancyById",
-                data: {
-                    id: $scope.vacancy.id
-                },
-                dataType: 'json',
-                contentType: 'application/json',
-                mimeType: 'application/json'
-            });
-            response.success(function () {
-                $location.path('/vacancyList');
-                $location.replace();
-            });
+        var vacancyValidateObject = new VacancyValidator();
+        var ok = vacancyValidateObject.validate('#createVacancyForm');
+        if (ok) {
+            if ($scope.vacancy.status == 'false') {
+                var response = $http({
+                    method: "post",
+                    url: "/EmployeeService/vacancy/saveVacancyUpdate",
+                    data: {
+                        id: $scope.vacancy.id,
+                        description: $scope.vacancy.description,
+                        close: $scope.vacancy.status
+                    },
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    mimeType: 'application/json'
+                });
+                response.success(function () {
+                    $location.path('/vacancyList');
+                    $location.replace();
+                });
+            } else {
+                var response = $http({
+                    method: "post",
+                    url: "/EmployeeService/vacancy/deleteVacancyById",
+                    data: {
+                        id: $scope.vacancy.id
+                    },
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    mimeType: 'application/json'
+                });
+                response.success(function () {
+                    $location.path('/vacancyList');
+                    $location.replace();
+                });
+            }
         }
-        //}
     };
 
     $scope.cancel = {};

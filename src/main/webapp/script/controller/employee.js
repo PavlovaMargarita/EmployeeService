@@ -32,7 +32,7 @@ app.controller("employeeListController", function ($scope, $rootScope, $http, Pa
 
     $scope.getClassForEmployee = function (employeeRedRow) {
         if (employeeRedRow) {
-            return "alert alert-danger";
+            return "red-color";
         }
     };
 
@@ -417,38 +417,38 @@ app.controller("employeeCorrectController", function ($scope, $http, $routeParam
             $scope.roleList = [];
             data.forEach(addRoleName);
             function addRoleName(element) {
-                var value;
-                switch (element) {
-                    case 'ROLE_HRM':
-                        value = {roleEnum: element, roleTranslate: 'HRM'};
-                        $scope.roleList.push(value);
-                        break;
-                    case 'ROLE_ADMIN':
-                        value = {roleEnum: element, roleTranslate: 'Администратор'};
-                        $scope.roleList.push(value);
-                        break;
-                    case 'ROLE_EMPLOYEE':
-                        value = {roleEnum: element, roleTranslate: 'Сотрудник'};
-                        $scope.roleList.push(value);
-                        break;
+        var value;
+        switch (element) {
+            case 'ROLE_HRM':
+                value = {roleEnum: element, roleTranslate: 'HRM'};
+                $scope.roleList.push(value);
+                break;
+            case 'ROLE_ADMIN':
+                value = {roleEnum: element, roleTranslate: 'Администратор'};
+                $scope.roleList.push(value);
+                break;
+            case 'ROLE_EMPLOYEE':
+                value = {roleEnum: element, roleTranslate: 'Сотрудник'};
+                $scope.roleList.push(value);
+                break;
 
-                }
+        }
 
-            }
-            $scope.roleList.forEach(selectRole);
-            function selectRole(element, index) {
-                if (element.roleEnum == $scope.employee.role) {
-                    $scope.employee.role = $scope.roleList[index].roleEnum;
-                }
-            }
-        });
+    }
+    $scope.roleList.forEach(selectRole);
+    function selectRole(element, index) {
+        if (element.roleEnum == $scope.employee.role) {
+            $scope.employee.role = $scope.roleList[index].roleEnum;
+        }
+    }
+});
 
-    });
+});
 
 
-    $scope.save = {};
-    $scope.save.doClick = function () {
-        var ok = validateObject.validate("#createEmployeeForm");
+$scope.save = {};
+$scope.save.doClick = function () {
+    var ok = validateObject.validate("#createEmployeeForm");
         if (ok) {
             var response = $http({
                 method: "post",

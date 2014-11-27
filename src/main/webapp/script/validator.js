@@ -2,7 +2,7 @@ var validateObject = {
     showLabel: function(label, text){
         if (label){
             $(label).text(text);
-            //$(label).showStandardPhotoAndFiredButton();
+            $(label).showStandardPhotoAndFiredButton();
         }
     },
 
@@ -77,42 +77,6 @@ var validateObject = {
         return false;
     },
 
-//    validateSex: function(value, inputAttributes){
-//        if(value == '?'){
-//            this.showLabel(inputAttributes, "Выберить пол");
-//            return false;
-//        }
-//        this.hideLabel(inputAttributes);
-//        return true;
-//    },
-//
-//    validatePosition: function(value, inputAttributes){
-//        if(value == '?'){
-//            this.showLabel(inputAttributes, "Выберить должность");
-//            return false;
-//        }
-//        this.hideLabel(inputAttributes);
-//        return true;
-//    },
-//
-//    validateRole: function(value, inputAttributes){
-//        if(value == '?'){
-//            this.showLabel(inputAttributes, "Выберить роль");
-//            return false;
-//        }
-//        this.hideLabel(inputAttributes);
-//        return true;
-//    },
-//
-//    validateCountry: function(value, inputAttributes){
-//        if(value == '?'){
-//            this.showLabel(inputAttributes, "Выберить страну");
-//            return false;
-//        }
-//        this.hideLabel(inputAttributes);
-//        return true;
-//    },
-
     validateDate: function(value, inputAttributes){
         if(value == ""){
             this.showLabel(inputAttributes, "Введите дату");
@@ -186,61 +150,10 @@ var validateObject = {
         var instance = this;
         var correct = true;
 
-//        $(formSelector + ' input:not([type="button"]), ' + formSelector + ' select').each(function () {
         $(formSelector + ' [validate]').each(function () {
-            switch ($(this).attr('validate')) {
-                case 'username':
-                    correct = instance.validateUsername($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'password':
-                    correct = instance.validatePassword($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'accountNumber':
-                    correct = instance.validateAccountNumber($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'first_name':
-                    correct = instance.validateFirstName($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'second_name':
-                    correct = instance.validateSecondName($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-//                case 'sex-select':
-//                    correct = instance.validateSex($(this).val(), $(this).attr('errorLabel')) && correct;
-//                    break;
-//                case 'position-select':
-//                    correct = instance.validatePosition($(this).val(), $(this).attr('errorLabel')) && correct;
-//                    break;
-//                case 'role-select':
-//                    correct = instance.validateRole($(this).val(), $(this).attr('errorLabel')) && correct;
-//                    break;
-//                case 'country-select':
-//                    correct = instance.validateCountry($(this).val(), $(this).attr('errorLabel')) && correct;
-//                    break;
-                case 'date':
-                    correct = instance.validateDate($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'city':
-                    correct = instance.validateCity($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'street':
-                    correct = instance.validateStreet($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'house':
-                    correct = instance.validateHouse($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'flat':
-                    correct = instance.validateFlat($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'email':
-                    correct = instance.validateEmail($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'companyName':
-                    correct = instance.validateCompanyName($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-                case 'programCost':
-                    correct = instance.validateProgramCost($(this).val(), $(this).attr('errorLabel')) && correct;
-                    break;
-            }
+            var fn = instance[$(this).attr('validate')];
+            if (typeof fn === "function")
+                correct = fn.call(instance, $(this).val(), $(this).attr('errorLabel')) && correct;
         });
         return correct;
     },

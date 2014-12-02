@@ -22,7 +22,7 @@
             <label class="control-label col-sm-4 label-font-size" for="last_name">Фамилия</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="last_name" id="last_name" ng-model="employee.last_name"
-                       placeholder="Введите фамилию" validate="second_name" errorLabel="#secondNameError" ng-readonly="!editEmployeeInput"/>
+                       placeholder="Введите фамилию" validate="validateSecondName" errorLabel="#secondNameError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -31,7 +31,7 @@
             <label class="control-label col-sm-4 label-font-size" for="first_name">Имя</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" id="first_name" name="first_name" ng-model="employee.first_name"
-                       placeholder="Введите имя" validate="first_name" errorLabel="#firstNameError" ng-readonly="!editEmployeeInput"/>
+                       placeholder="Введите имя" validate="validateFirstName" errorLabel="#firstNameError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -39,8 +39,16 @@
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="date-of-birth">Дата рождения</label>
             <div class="col-sm-8">
-                <input type="date" class="form-control input-size" name="date-of-birth" id="date-of-birth"
-                       ng-model="employee.dateOfBirth"  validate="date" errorLabel="#dateOfBirthError" ng-readonly="!editEmployeeInput"/>
+                <!--<input type="date" class="form-control input-size" name="date-of-birth" id="date-of-birth"-->
+                       <!--ng-model="employee.dateOfBirth"  validate="date" errorLabel="#dateOfBirthError" ng-readonly="!editEmployeeInput"/>-->
+                <p class="input-group">
+                    <input type="text" class="form-control input-size" datepicker-popup="dd.MM.yyyy"
+                           ng-model="employee.dateOfBirth" is-open="openedDateOfBirth" id="date-of-birth"
+                           name="date-of-birth" ng-readonly="!editEmployeeInput" validate="validateDate" errorLabel="#dateOfBirthError" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default input-size button-glyphicon-calendar-height" ng-click="openDateOfBirth($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
             </div>
         </div>
 
@@ -59,7 +67,7 @@
             <label class="control-label col-sm-4 label-font-size" for="email">Email</label>
             <div class="col-sm-8">
                 <input type="email" class="form-control input-size" id="email" name="email" ng-model="employee.email"
-                       placeholder="Введите email" validate="email" errorLabel="#emailError" ng-readonly="!editEmployeeInput"/>
+                       placeholder="Введите email" validate="validateEmail" errorLabel="#emailError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -79,7 +87,7 @@
             <label class="control-label col-sm-4 label-font-size" for="city">Город</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control  input-size" name="city" id="city" ng-model="employee.city"
-                       placeholder="Введите грод" validate="city" errorLabel="#cityError" ng-readonly="!editEmployeeInput"/>
+                       placeholder="Введите грод" validate="validateCity" errorLabel="#cityError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -88,7 +96,7 @@
             <label class="control-label col-sm-4 label-font-size" for="street">Улица</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="street" id="street" ng-model="employee.street"
-                       placeholder="Введите улицу" validate="street" errorLabel="#streetError" ng-readonly="!editEmployeeInput"/>
+                       placeholder="Введите улицу" validate="validateStreet" errorLabel="#streetError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -98,7 +106,7 @@
 
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="house" id="house" ng-model="employee.house"
-                       placeholder="Введите улицу" validate="house" errorLabel="#houseError" ng-readonly="!editEmployeeInput"/>
+                       placeholder="Введите улицу" validate="validateHouse" errorLabel="#houseError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -107,7 +115,7 @@
             <label class="control-label col-sm-4 label-font-size" for="flat">Квартира</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="flat" id="flat" ng-model="employee.flat"
-                       placeholder="Введите улицу" validate="flat" errorLabel="#flatError" ng-readonly="!editEmployeeInput"/>
+                       placeholder="Введите улицу" validate="validateFlat" errorLabel="#flatError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -143,8 +151,16 @@
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="contract-end-date">Дата окончания контракта</label>
             <div class="col-sm-8">
-                <input type="date" class="form-control input-size" name="contract-end-date" id="contract-end-date"
-                       ng-model="employee.dateContractEnd" validate="date" errorLabel="#dateContractEndError" ng-readonly="!editEmployeeInput"/>
+                <!--<input type="date" class="form-control input-size" name="contract-end-date" id="contract-end-date"-->
+                       <!--ng-model="employee.dateContractEnd" validate="date" errorLabel="#dateContractEndError" ng-readonly="!editEmployeeInput"/>-->
+                <p class="input-group">
+                    <input type="text" class="form-control input-size" datepicker-popup="dd.MM.yyyy"
+                           ng-model="employee.dateContractEnd" is-open="openedContractEnd" id="contract-end-date"
+                           name="contract-end-date" ng-readonly="!editEmployeeInput" validate="date" errorLabel="#dateContractEndError" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default input-size button-glyphicon-calendar-height" ng-click="openDateContractEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
             </div>
         </div>
 
@@ -154,7 +170,7 @@
 
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="login" id="login" ng-model="employee.login"
-                       placeholder="Введите логин" validate="username" errorLabel="#loginError" ng-readonly="!editEmployeeInput"/>
+                       placeholder="Введите логин" validate="validateUsername" errorLabel="#loginError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 
@@ -164,7 +180,7 @@
 
             <div class="col-sm-8">
                 <input type="password" class="form-control input-size" name="password" id="password" ng-model="employee.password"
-                       placeholder="Введите пароль" validate="password" errorLabel="#passwordError" ng-readonly="!editEmployeeInput"/>
+                       placeholder="Введите пароль" validate="validatePassword" errorLabel="#passwordError" ng-readonly="!editEmployeeInput"/>
             </div>
         </div>
 

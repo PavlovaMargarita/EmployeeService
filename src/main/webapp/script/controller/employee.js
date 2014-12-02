@@ -128,6 +128,18 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
         reader.readAsDataURL($scope.photo);
     };
 
+    $scope.openDateOfBirth = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.openedDateOfBirth = true;
+    };
+    $scope.openDateContractEnd = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.openedContractEnd = true;
+    };
+
+
     var departments = $http({
         method: "get",
         url: "/EmployeeService/company/departmentList",

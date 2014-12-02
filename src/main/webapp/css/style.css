@@ -237,3 +237,7 @@ tr.red-color{
 tr.red-color:hover{
     background-color: #e7c3c3!important;
 }
+
+.button-glyphicon-calendar-height{
+    height: 34px;
+}

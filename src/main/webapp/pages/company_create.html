@@ -3,15 +3,17 @@
     <form class="form-horizontal" role="form" id="createCompanyForm">
 
         <div class="div-error error-font" id="companyNameError" align="right"></div>
-        <div class="form-group" >
+        <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="companyName">Название компании</label>
+
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="companyName" id="companyName"
-                       ng-model="company.companyName" placeholder="Введите название компании" validate="companyName" errorLabel="#companyNameError" ng-readonly="readonly"/>
+                       ng-model="company.companyName" placeholder="Введите название компании" validate="validateCompanyName"
+                       errorLabel="#companyNameError" ng-readonly="readonly"/>
             </div>
         </div>
 
-        <div class="form-group"  ng-show="showStatus">
+        <div class="form-group" ng-show="showStatus">
             <label class="control-label col-sm-4 label-font-size" for="status">Состояние</label>
 
             <div class="col-sm-8">
@@ -34,9 +36,11 @@
         <div class="div-error error-font" id="programCostError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="programCost">Стоимость программы</label>
+
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="programCost" id="programCost"
-                       ng-model="company.programCost" placeholder="Введите стоимость программы"  validate="programCost" errorLabel="#programCostError"/>
+                       ng-model="company.programCost" placeholder="Введите стоимость программы" validate="validateProgramCost"
+                       errorLabel="#programCostError"/>
             </div>
         </div>
 
@@ -45,45 +49,76 @@
                 пополнения</label>
 
             <div class="col-sm-8" id="child">
-                <input type="date" class="form-control input-size" name="dateBoundaryRefill" id="dateBoundaryRefill"
-                       ng-model="company.dateBoundaryRefill" readonly/>
+                <p class="input-group">
+                    <input type="text" class="form-control input-size" datepicker-popup="dd.MM.yyyy"
+                           ng-model="company.dateBoundaryRefill" ng-required="true"
+                           id="dateBoundaryRefill"
+                           name="dateBoundaryRefill" readonly/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default input-size button-glyphicon-calendar-height"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
             </div>
         </div>
         <br/>
+
         <h3 align="center">Сведения о руководителе</h3>
+
         <div class="div-error error-font" id="secondNameError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="last_name">Фамилия</label>
+
             <div class="col-sm-8">
-                <input type="text" class="form-control input-size" name="last_name" id="last_name" ng-model="employee.last_name"
-                       placeholder="Введите фамилию" validate="second_name" errorLabel="#secondNameError" ng-readonly="readonly"/>
+                <input type="text" class="form-control input-size" name="last_name" id="last_name"
+                       ng-model="employee.last_name"
+                       placeholder="Введите фамилию" validate="validateSecondName" errorLabel="#secondNameError"
+                       ng-readonly="readonly"/>
             </div>
         </div>
 
         <div class="div-error error-font" id="firstNameError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="first_name">Имя</label>
+
             <div class="col-sm-8">
-                <input type="text" class="form-control input-size" id="first_name" name="first_name" ng-model="employee.first_name"
-                       placeholder="Введите имя" validate="first_name" errorLabel="#firstNameError" ng-readonly="readonly"/>
+                <input type="text" class="form-control input-size" id="first_name" name="first_name"
+                       ng-model="employee.first_name"
+                       placeholder="Введите имя" validate="validateFirstName" errorLabel="#firstNameError"
+                       ng-readonly="readonly"/>
             </div>
         </div>
 
         <div class="div-error error-font" id="dateOfBirthError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="date-of-birth">Дата рождения</label>
+
             <div class="col-sm-8">
-                <input type="date" class="form-control input-size" name="date-of-birth" id="date-of-birth"
-                       ng-model="employee.dateOfBirth"  validate="date" errorLabel="#dateOfBirthError" ng-readonly="readonly"/>
+                <!--<input type="date" class="form-control input-size" name="date-of-birth" id="date-of-birth"-->
+                       <!--ng-model="employee.dateOfBirth" validate="date" errorLabel="#dateOfBirthError"-->
+                       <!--ng-readonly="readonly"/>-->
+                <p class="input-group">
+                    <input type="text" class="form-control input-size" datepicker-popup="dd.MM.yyyy"
+                           ng-model="employee.dateOfBirth" is-open="opened" ng-required="true"
+                           id="date-of-birth"
+                           name="date-of-birth" ng-readonly="readonly" validate="validateDate" errorLabel="#dateOfBirthError" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default input-size button-glyphicon-calendar-height" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
             </div>
+
+
+
         </div>
 
         <div class="div-error error-font" id="sexSelectError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="sex">Пол</label>
+
             <div class="col-sm-8">
                 <select class="form-control input-size" name="sex" id="sex" data-ng-model="employee.sex"
-                        ng-options="s.sexEnum as s.sexRussian for s in sexList" validate="sex-select" errorLabel="#sexSelectError" ng-readonly="readonly">
+                        ng-options="s.sexEnum as s.sexRussian for s in sexList" validate="sex-select"
+                        errorLabel="#sexSelectError" ng-readonly="readonly">
                 </select>
             </div>
         </div>
@@ -91,18 +126,21 @@
         <div class="div-error error-font" id="emailError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="email">Email</label>
+
             <div class="col-sm-8">
                 <input type="email" class="form-control input-size" id="email" name="email" ng-model="employee.email"
-                       placeholder="Введите email" validate="email" errorLabel="#emailError" ng-readonly="readonly"/>
+                       placeholder="Введите email" validate="validateEmail" errorLabel="#emailError" ng-readonly="readonly"/>
             </div>
         </div>
 
         <div class="div-error error-font" id="countrySelectError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="country">Страна</label>
+
             <div class="col-sm-8">
                 <select class="form-control input-size" name="country" id="country" data-ng-model="country.id"
-                        ng-options="c.id as c.country for c in countries"  validate="country-select" errorLabel="#countrySelectError" ng-readonly="readonly">
+                        ng-options="c.id as c.country for c in countries" validate="country-select"
+                        errorLabel="#countrySelectError" ng-readonly="readonly">
                 </select>
             </div>
         </div>
@@ -111,18 +149,20 @@
         <div class="div-error error-font" id="cityError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="city">Город</label>
+
             <div class="col-sm-8">
                 <input type="text" class="form-control  input-size" name="city" id="city" ng-model="employee.city"
-                       placeholder="Введите грод" validate="city" errorLabel="#cityError" ng-readonly="readonly"/>
+                       placeholder="Введите грод" validate="validateCity" errorLabel="#cityError" ng-readonly="readonly"/>
             </div>
         </div>
 
         <div class="div-error error-font" id="streetError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="street">Улица</label>
+
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="street" id="street" ng-model="employee.street"
-                       placeholder="Введите улицу" validate="street" errorLabel="#streetError" ng-readonly="readonly"/>
+                       placeholder="Введите улицу" validate="validateStreet" errorLabel="#streetError" ng-readonly="readonly"/>
             </div>
         </div>
 
@@ -132,16 +172,17 @@
 
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="house" id="house" ng-model="employee.house"
-                       placeholder="Введите улицу" validate="house" errorLabel="#houseError" ng-readonly="readonly"/>
+                       placeholder="Введите улицу" validate="validateHouse" errorLabel="#houseError" ng-readonly="readonly"/>
             </div>
         </div>
 
         <div class="div-error error-font" id="flatError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="flat">Квартира</label>
+
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="flat" id="flat" ng-model="employee.flat"
-                       placeholder="Введите улицу" validate="flat" errorLabel="#flatError" ng-readonly="readonly"/>
+                       placeholder="Введите улицу" validate="validateFlat" errorLabel="#flatError" ng-readonly="readonly"/>
             </div>
         </div>
         <div class="div-error error-font" id="loginError" align="right"></div>
@@ -150,7 +191,7 @@
 
             <div class="col-sm-8">
                 <input type="text" class="form-control input-size" name="login" id="login" ng-model="employee.login"
-                       placeholder="Введите логин" validate="username" errorLabel="#loginError" ng-readonly="readonly"/>
+                       placeholder="Введите логин" validate="validateUsername" errorLabel="#loginError" ng-readonly="readonly"/>
             </div>
         </div>
 
@@ -159,17 +200,21 @@
             <label class="control-label col-sm-4 label-font-size" for="password">Пароль</label>
 
             <div class="col-sm-8">
-                <input type="password" class="form-control input-size" name="password" id="password" ng-model="employee.password"
-                       placeholder="Введите пароль" validate="password" errorLabel="#passwordError" ng-readonly="readonly"/>
+                <input type="password" class="form-control input-size" name="password" id="password"
+                       ng-model="employee.password"
+                       placeholder="Введите пароль" validate="validatePassword" errorLabel="#passwordError"
+                       ng-readonly="readonly"/>
             </div>
         </div>
 
         <div class="div-error error-font" id="roleSelectError" align="right"></div>
         <div class="form-group">
             <label class="control-label col-sm-4 label-font-size" for="role">Роль</label>
+
             <div class="col-sm-8">
                 <select class="form-control input-size" name="role" id="role" data-ng-model="employee.role"
-                        ng-options="r.roleEnum as r.roleRussian for r in roleList" validate="role-select" errorLabel="#roleSelectError" ng-readonly="readonly">
+                        ng-options="r.roleEnum as r.roleRussian for r in roleList" validate="role-select"
+                        errorLabel="#roleSelectError" ng-readonly="readonly">
                 </select>
             </div>
         </div>

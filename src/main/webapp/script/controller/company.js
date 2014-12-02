@@ -68,8 +68,14 @@ app.controller("companyCreateController", function ($scope, $rootScope, $http, $
     $scope.employee = {};
     var currentDate = new Date();
     currentDate.setMonth(currentDate.getMonth() + 1);
-    var newMonth = currentDate.getMonth() + 1;
-    $scope.company.dateBoundaryRefill = currentDate.getFullYear() + "-" + newMonth + "-" + currentDate.getDate();
+    $scope.company.dateBoundaryRefill = currentDate;
+
+    $scope.open = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.opened = true;
+    };
+
     var countries = $http({
         method: "get",
         url: "/EmployeeService/country/countryList",
@@ -114,8 +120,8 @@ app.controller("companyCreateController", function ($scope, $rootScope, $http, $
                     method: "post",
                     url: "/EmployeeService/employee/saveEmployeeCreateCEO",
                     data: {
-                        f_name: $scope.employee.f_name,
-                        s_name: $scope.employee.s_name,
+                        first_name: $scope.employee.first_name,
+                        last_name: $scope.employee.last_name,
                         sex: $scope.employee.sex,
                         dateOfBirth: $scope.employee.dateOfBirth,
                         countryId: $scope.country.id,
@@ -247,11 +253,3 @@ app.controller("companyCorrectController", function ($scope, $http, $routeParams
         $location.replace();
     }
 });
-
-function showModalAddSum() {
-    $('#modal-add-sum').modal('showStandardPhotoAndFiredButton');
-}
-
-function hideModalAddSum() {
-    $('#modal-add-sum').modal('hide');
-}

@@ -1,23 +1,26 @@
-package com.itechart.model;
+package com.itechart.model.hibernate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "country")
-public class Country {
+@Table(name = "project")
+public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "INT unsigned")
     private Long id;
 
     @Column(nullable = false)
-    private String country;
+    private String projectName;
 
-    @OneToMany(mappedBy = "country")
+    @ManyToMany(mappedBy = "projectList")
     private List<Employee> employeeList;
 
-    public Country(){}
+    public Project(){
+        employeeList = new ArrayList<Employee>();
+    }
 
     public Long getId() {
         return id;
@@ -27,12 +30,12 @@ public class Country {
         this.id = id;
     }
 
-    public String getCountry() {
-        return country;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public List<Employee> getEmployeeList() {

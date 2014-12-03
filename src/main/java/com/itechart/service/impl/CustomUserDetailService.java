@@ -1,6 +1,6 @@
 package com.itechart.service.impl;
 
-import com.itechart.model.Employee;
+import com.itechart.model.hibernate.Employee;
 import com.itechart.repository.EmployeeRepository;
 import com.itechart.sessionclass.AuthenticatedEmployee;
 import org.springframework.beans.factory.annotation.Autowired;

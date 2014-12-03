@@ -1,6 +1,6 @@
 package com.itechart.service.impl;
 
-import com.itechart.model.Vacancy;
+import com.itechart.model.mongo.Vacancy;
 import com.itechart.params.SecurityWrapper;
 import com.itechart.service.VacancyService;
 import com.mongodb.*;
@@ -29,7 +29,7 @@ public class VacancyServiceImpl implements VacancyService {
 
             cursorVacancyIdList = collectionCompanyOpenVacancy.find(querySearchByCompanyId);
 
-            if (cursorVacancyIdList.hasNext()) {
+            if (cursorVacancyIdList != null && cursorVacancyIdList.hasNext()) {
                 DBObject companyObject = cursorVacancyIdList.next();
 
                 BasicDBList vacancyIdListObject = (BasicDBList) companyObject.get("vacancy_id_list");
@@ -237,11 +237,12 @@ public class VacancyServiceImpl implements VacancyService {
         DBCursor cursor = collection.find();
         if (cursor.hasNext()) {
             DBObject lastIdMongoObject = cursor.next();
-            long lastId = Long.parseLong(lastIdMongoObject.get("last_id").toString());
             DBObject modifier = new BasicDBObject("last_id", 1);
             DBObject incQuery = new BasicDBObject("$inc", modifier);
-            collection.update(new BasicDBObject("last_id", lastId), incQuery);
-            return lastId + 1;
+            DBObject result = collection.findAndModify(lastIdMongoObject,(DBObject)null, (DBObject)null, false, incQuery,true, false);
+//            System.out.println(test);
+            long lastId = Long.parseLong(result.get("last_id").toString());
+            return lastId;
         } else {
             DBObject lastIdMongoObject = new BasicDBObject();
             long lastId = 1;

@@ -72,15 +72,15 @@ app.factory('ServerHttpResponseInterceptor', function($q, ErrorPopupService) {
                         ErrorPopupService.showErrorMessage("У вас нет прав доступа, или вы не авторизированы");
                         break;
                     }
-                    case 400:{
-                        ErrorPopupService.showErrorMessage("Введены некорректные данные.");
-                        break;
-                    }
-                    default:{
-                        ErrorPopupService.showErrorMessage("При использовании программы произошла ошибка\r\n" +
-                        "Повторите попытку позже.");
-                        break;
-                    }
+                    //case 400:{
+                    //    ErrorPopupService.showErrorMessage("Введены некорректные данные.");
+                    //    break;
+                    //}
+                    //default:{
+                    //    ErrorPopupService.showErrorMessage("При использовании программы произошла ошибка\r\n" +
+                    //    "Повторите попытку позже.");
+                    //    break;
+                    //}
                 }
                 return $q.reject(response);
             });

@@ -11,13 +11,13 @@
         <!--<property name="hibernate.hbm2ddl.auto">update</property>-->
         <!--<property name="hibernate.show_sql">true</property>-->
         <!--<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>-->
-        <mapping class="com.itechart.model.Company" />
-        <mapping class="com.itechart.model.Department" />
-        <mapping class="com.itechart.model.Address" />
-        <mapping class="com.itechart.model.Employee" />
-        <mapping class="com.itechart.model.PositionInCompany" />
-        <mapping class="com.itechart.model.Project" />
-        <mapping class="com.itechart.model.Country" />
-        <mapping class="com.itechart.model.AccountNumber" />
+        <mapping class="com.itechart.model.hibernate.Company" />
+        <mapping class="com.itechart.model.hibernate.Department" />
+        <mapping class="com.itechart.model.hibernate.Address" />
+        <mapping class="com.itechart.model.hibernate.Employee" />
+        <mapping class="com.itechart.model.hibernate.PositionInCompany" />
+        <mapping class="com.itechart.model.hibernate.Project" />
+        <mapping class="com.itechart.model.hibernate.Country" />
+        <mapping class="com.itechart.model.hibernate.AccountNumber" />
     </session-factory>
 </hibernate-configuration>

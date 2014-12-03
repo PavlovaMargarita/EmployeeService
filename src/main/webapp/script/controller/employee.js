@@ -260,11 +260,14 @@ app.controller("employeeCreateController", function ($scope, $rootScope, $http, 
                         headers: {'Content-Type': undefined},
                         data: fd,
                         transformRequest: angular.identity
-                    })
-                        .success(function () {
-                            $location.path('/employeeList');
-                            $location.replace();
-                        });
+                    });
+                        //.success(function () {
+                        //    $location.path('/employeeList');
+                        //    $location.replace();
+                        //});
+                } else{
+                    $location.path('/employeeList');
+                    $location.replace();
                 }
             });
         }

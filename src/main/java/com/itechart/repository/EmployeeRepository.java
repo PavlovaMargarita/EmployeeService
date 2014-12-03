@@ -1,6 +1,6 @@
 package com.itechart.repository;
 
-import com.itechart.model.Employee;
+import com.itechart.model.hibernate.Employee;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

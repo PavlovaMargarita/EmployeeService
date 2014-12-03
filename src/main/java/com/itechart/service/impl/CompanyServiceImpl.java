@@ -3,7 +3,7 @@ package com.itechart.service.impl;
 import com.itechart.model.dto.*;
 import com.itechart.enumProperty.CompanyStatusEnum;
 import com.itechart.enumProperty.SexEnum;
-import com.itechart.model.*;
+import com.itechart.model.hibernate.*;
 import com.itechart.params.SecurityWrapper;
 import com.itechart.repository.AccountNumberRepository;
 import com.itechart.repository.CompanyRepository;

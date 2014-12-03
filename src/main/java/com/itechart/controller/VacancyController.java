@@ -1,6 +1,6 @@
 package com.itechart.controller;
 
-import com.itechart.model.Vacancy;
+import com.itechart.model.mongo.Vacancy;
 import com.itechart.service.VacancyService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

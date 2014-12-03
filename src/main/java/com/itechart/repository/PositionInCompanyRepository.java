@@ -1,6 +1,6 @@
 package com.itechart.repository;
 
-import com.itechart.model.PositionInCompany;
+import com.itechart.model.hibernate.PositionInCompany;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

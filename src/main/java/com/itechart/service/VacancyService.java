@@ -1,6 +1,6 @@
 package com.itechart.service;
 
-import com.itechart.model.Vacancy;
+import com.itechart.model.mongo.Vacancy;
 
 import java.net.UnknownHostException;
 import java.util.List;

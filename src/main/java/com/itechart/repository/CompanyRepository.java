@@ -1,6 +1,8 @@
 package com.itechart.repository;
 
-import com.itechart.model.*;
+import com.itechart.model.hibernate.Address;
+import com.itechart.model.hibernate.Company;
+import com.itechart.model.hibernate.Department;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

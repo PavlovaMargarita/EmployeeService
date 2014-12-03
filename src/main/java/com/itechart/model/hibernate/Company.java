@@ -1,4 +1,4 @@
-package com.itechart.model;
+package com.itechart.model.hibernate;
 
 import com.itechart.enumProperty.CompanyStatusEnum;
 

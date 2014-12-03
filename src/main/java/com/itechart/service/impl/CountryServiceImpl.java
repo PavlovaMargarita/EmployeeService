@@ -1,7 +1,7 @@
 package com.itechart.service.impl;
 
 import com.itechart.model.dto.CountryDTO;
-import com.itechart.model.Country;
+import com.itechart.model.hibernate.Country;
 import com.itechart.repository.CountryRepository;
 import com.itechart.service.CountryService;
 import org.apache.log4j.Logger;
